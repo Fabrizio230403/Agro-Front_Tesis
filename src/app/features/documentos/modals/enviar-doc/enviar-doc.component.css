@@ -1,0 +1,192 @@
+ /* Superposición del modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Contenido del modal */
+.modal-content {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transform: translateY(-10px);
+  opacity: 0;
+  animation: modal-in 0.3s ease-out forwards;
+}
+
+/* Animación del modal */
+@keyframes modal-in {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Título del modal */
+.modal-title {
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #333;
+  text-align: center;
+}
+
+/* Detalles del documento */
+.document-details {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
+.document-details p {
+  margin: 8px 0;
+}
+
+.document-details strong {
+  color: #333;
+}
+
+/* Opciones de envío */
+.send-options {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+/* Botones de envío */
+.btn {
+  padding: 12px 20px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  flex: 1 1 calc(50% - 10px); /* Dos botones por fila */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.btn:hover {
+  transform: scale(1.05);
+}
+
+/* Botones específicos */
+.btn-whatsapp {
+  background-color: #25d366;
+  color: #fff;
+}
+
+.btn-whatsapp:hover {
+  background-color: #1ebe57;
+}
+
+.btn-gmail {
+  background-color: #d93025;
+  color: #fff;
+}
+
+.btn-gmail:hover {
+  background-color: #b1271e;
+}
+
+.btn-drive {
+  background-color: #4285f4;
+  color: #fff;
+}
+
+.btn-drive:hover {
+  background-color: #356acb;
+}
+
+.btn-sms {
+  background-color: #f4b400;
+  color: #fff;
+}
+
+.btn-sms:hover {
+  background-color: #d69900;
+}
+
+/* Formularios condicionales */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+label {
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #555;
+}
+
+input,
+textarea {
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+textarea {
+  resize: none;
+}
+
+button[type="submit"] {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+/* Cancelar botón */
+.btn-cancel {
+  background-color: #f1f1f1;
+  color: #555;
+  border: 1px solid #ccc;
+}
+
+.btn-cancel:hover {
+  background-color: #e2e2e2;
+  transform: scale(1.05);
+}
+
+/* Acciones del modal */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}

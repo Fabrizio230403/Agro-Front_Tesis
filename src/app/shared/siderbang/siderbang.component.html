@@ -1,0 +1,48 @@
+<aside class="sidebar w-64 flex-shrink-0 h-full overflow-y-auto bg-gray-100 flex flex-col shadow-lg">
+    <div class="p-4 text-center">
+        <img src="../../../assets/images/perfilFoto.png" alt="Foto de perfil" class="rounded-3xl"
+            style="width: 180px; height: 180px;">
+        <h3 class="mt-2 font-semibold text-lg">{{ username }}</h3>
+        <p class="text-sm text-gray-400">{{ rol }}</p>
+        <a routerLink="/perfil" class="text-blue-400 text-sm underline">Ver Perfil</a>
+    </div>
+
+    <nav class="mt-10 flex-1">
+        <a routerLink="/dashboard" class="sidebar-link" [class.active]="isActive('/dashboard')">
+            <i class="fas fa-tachometer-alt"></i> DASHBOARD
+        </a>
+        <a routerLink="/user" class="sidebar-link" [class.active]="isActive('/user')">
+            <i class="fas fa-user-shield"></i> USUARIOS
+        </a>
+        <a routerLink="/roles" class="sidebar-link" [class.active]="isActive('/roles')">
+            <i class="fas fa-user-shield"></i> ROLES
+        </a>
+        <a routerLink="/clientes" class="sidebar-link" [class.active]="isActive('/clientes')">
+            <i class="fas fa-users"></i> CLIENTES
+        </a>
+        <a routerLink="/productos" class="sidebar-link" [class.active]="isActive('/productos')">
+            <i class="fas fa-box"></i> PRODUCTOS
+        </a>
+        <a routerLink="/categorias" class="sidebar-link" [class.active]="isActive('/categorias')">
+            <i class="fas fa-th-large"></i> CATEGORÍAS
+        </a>
+        <a routerLink="/inventario" class="sidebar-link" [class.active]="isActive('/inventario')">
+            <i class="fas fa-warehouse"></i> INVENTARIO
+        </a>
+        <a routerLink="/proveedores" class="sidebar-link" [class.active]="isActive('/proveedores')">
+            <i class="fas fa-truck"></i> PROVEEDORES
+        </a>
+        <a routerLink="/ventas" class="sidebar-link" [class.active]="isActive('/ventas')">
+            <i class="fas fa-shopping-cart"></i> NUEVA VENTA
+        </a>
+        <a routerLink="/reportes" class="sidebar-link" [class.active]="isActive('/reportes')">
+            <i class="fas fa-chart-line"></i> REPORTES
+        </a>
+         <a routerLink="/gestion" class="sidebar-link" [class.active]="isActive('/gestion')">
+            <i class="fas fa-cogs"></i> GESTIÓN
+        </a>
+        <a (click)="logout()" class="sidebar-link logout" [class.active]="isActive('/cerrarSesion')">
+            <i class="fas fa-sign-out-alt"></i>CERRAR SESIÓN
+        </a>
+    </nav>
+</aside>

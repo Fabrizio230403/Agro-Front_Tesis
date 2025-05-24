@@ -1,0 +1,64 @@
+<!-- Sidebar Component HTML -->
+<div class="w-64 min-h-screen bg-gray-800 text-white flex flex-col">
+  <!-- Profile Section -->
+  <div class="flex flex-col items-center p-6">
+    <div class="w-24 h-24 rounded-full overflow-hidden mb-4">
+      <img
+        src="/api/placeholder/96/96"
+        alt="Profile"
+        class="w-full h-full object-cover"
+      />
+    </div>
+    <h2 class="text-xl font-medium mb-1">Mateo Fénandez</h2>
+    <p class="text-gray-400 text-sm">Administrador</p>
+  </div>
+
+  <!-- Navigation Menu -->
+  <nav class="flex-1 px-4 py-2">
+    <ul class="space-y-2">
+      <!-- Dashboard Menu Item -->
+      <li>
+        <button
+          class="w-full flex items-center p-3 rounded-lg bg-yellow-500 hover:opacity-90 transition-opacity"
+        >
+          <svg
+            class="w-5 h-5 mr-3"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M12 8v4l3 3"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+            />
+          </svg>
+          <span class="font-medium">Dashboard</span>
+        </button>
+      </li>
+      <!-- CLIENTES Menu Item -->
+      <li>
+        <button
+          class="w-full flex items-center p-3 rounded-lg bg-blue-500 hover:opacity-90 transition-opacity"
+        >
+          <svg
+            class="w-5 h-5 mr-3"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M18 11.999a6 6 0 11-12 0"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+            />
+          </svg>
+          <span class="font-medium">CLIENTES</span>
+        </button>
+      </li>
+      <!-- Repeat similar structure for each item -->
+    </ul>
+  </nav>
+</div>

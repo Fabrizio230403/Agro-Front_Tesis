@@ -1,0 +1,28 @@
+ <div *ngIf="isModalOpen" class="modal">
+  <div class="modal-content">
+    <h3>Roles for {{ user?.username }}</h3>
+    <input 
+      type="text" 
+      placeholder="Buscar por rol" 
+      class="search-input" 
+      [(ngModel)]="searchRole" 
+      (input)="filterRoles()" />
+    
+    <table class="role-table">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Permisos</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let role of filteredRoles">
+          <td>{{ role.name }}</td>
+          <td>{{ role.permissions }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <button (click)="closeModal()">Cerrar</button>
+  </div>
+</div>

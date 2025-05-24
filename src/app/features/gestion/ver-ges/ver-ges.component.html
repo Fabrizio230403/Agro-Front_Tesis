@@ -1,0 +1,16 @@
+<div class="custom-modal-backdrop" *ngIf="visible">
+  <div class="custom-modal-window">
+    <div class="custom-modal-header">
+      <h3>Vista previa del Documento</h3>
+      <button class="close-btn" (click)="cerrarModal()">×</button>
+    </div>
+    <div class="custom-modal-body">
+      <iframe
+        [src]="pdfUrl "
+        width="100%"
+        height="100%"
+        frameborder="0"
+      ></iframe>
+    </div>
+  </div>
+</div>

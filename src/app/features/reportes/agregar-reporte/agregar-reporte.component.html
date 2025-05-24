@@ -1,0 +1,127 @@
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+  <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-4xl">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-bold">Agregar Reporte</h2>
+      <button (click)="closeModal()" class="text-gray-600 hover:text-gray-800 text-lg font-bold">&times;</button>
+    </div>
+    <form (ngSubmit)="saveReport()">
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block font-medium mb-1">Nombre del Reporte</label>
+          <input type="text" [(ngModel)]="report.name" name="name" class="block w-full border rounded-md p-2">
+        </div>
+        <div>
+          <label class="block font-medium mb-1">Tipo de Reporte</label>
+          <div class="flex items-center">
+            <input type="text" [(ngModel)]="selectedReportType" name="type" class="block w-full border rounded-md p-2"
+              readonly placeholder="Selecciona un tipo de reporte">
+            <button type="button" (click)="openTipoReporteModal()"
+              class="bg-indigo-500 text-white px-4 py-2 rounded-md ml-2">
+              Seleccionar
+            </button>
+          </div>
+        </div>
+        <div>
+          <label class="block font-medium mb-1">Fecha de Registro</label>
+          <input type="date" [(ngModel)]="report.date" name="date" class="block w-full border rounded-md p-2">
+        </div>
+        <div>
+          <label class="block font-medium mb-1">Estado del Reporte</label>
+          <select [(ngModel)]="report.status" name="status" class="block w-full border rounded-md p-2">
+            <option value="" disabled selected hidden>Selecciona un estado</option> <!-- Actúa como un placeholder -->
+            <option value="Activo">Activo</option>
+            <option value="Inactivo">Inactivo</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-medium mb-1">Dirección Fiscal</label>
+          <input type="text" [(ngModel)]="report.address" name="address" class="block w-full border rounded-md p-2">
+        </div>
+        <div>
+          <label class="block font-medium mb-1">Permisos de Visualización</label>
+          <input type="text" [(ngModel)]="report.permission" name="permission"
+            class="block w-full border rounded-md p-2">
+        </div>
+        <div class="col-span-2">
+          <label class="block font-medium mb-1">Descripción</label>
+          <textarea [(ngModel)]="report.description" name="description" rows="3"
+            class="block w-full border rounded-md p-2"></textarea>
+        </div>
+         <!-- Pestañas solo si es reporte 'Ventas' -->
+        <div *ngIf="selectedReportType === 'Ventas'" class="col-span-2 mt-4">
+          <div class="border-b border-gray-300 mb-4">
+            <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+              <button
+                type="button"
+                (click)="activeTab = 'facturas'"
+                [class.border-indigo-500]="activeTab === 'facturas'"
+                [class.text-indigo-600]="activeTab === 'facturas'"
+                class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-gray-500 hover:text-indigo-600 hover:border-indigo-500 focus:outline-none"
+              >
+                Facturas
+              </button>
+              <button
+                type="button"
+                (click)="activeTab = 'boletas'"
+                [class.border-indigo-500]="activeTab === 'boletas'"
+                [class.text-indigo-600]="activeTab === 'boletas'"
+                class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-gray-500 hover:text-indigo-600 hover:border-indigo-500 focus:outline-none"
+              >
+                Boletas
+              </button>
+              <button
+                type="button"
+                (click)="activeTab = 'resumen'"
+                [class.border-indigo-500]="activeTab === 'resumen'"
+                [class.text-indigo-600]="activeTab === 'resumen'"
+                class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-gray-500 hover:text-indigo-600 hover:border-indigo-500 focus:outline-none"
+              >
+                Resumen
+              </button>
+            </nav>
+          </div>
+
+          <div>
+            <div *ngIf="activeTab === 'facturas'" class="grid grid-cols-3 gap-4">
+              <div>
+                <label class="block font-medium mb-1">Subtotal Facturas</label>
+                <input type="number" [(ngModel)]="report.subTotal" name="subTotal" class="block w-full border rounded-md p-2" readonly />
+              </div>
+              <div>
+                <label class="block font-medium mb-1">IGV</label>
+                <input type="number" [(ngModel)]="report.igv" name="igv" class="block w-full border rounded-md p-2" readonly />
+              </div>
+              <div>
+                <label class="block font-medium mb-1">Total Facturas</label>
+                <input type="number" [(ngModel)]="report.totalFacturas" name="totalFacturas" class="block w-full border rounded-md p-2" readonly />
+              </div>
+            </div>
+            <div *ngIf="activeTab === 'boletas'" class="grid grid-cols-1 gap-4">
+              <div>
+                <label class="block font-medium mb-1">Total Boletas</label>
+                <input type="number" [(ngModel)]="report.totalBoletas" name="totalBoletas" class="block w-full border rounded-md p-2" readonly />
+              </div>
+            </div>
+            <div *ngIf="activeTab === 'resumen'" class="grid grid-cols-1 gap-4">
+              <div>
+                <label class="block font-medium mb-1">Total General</label>
+                <input type="number" [(ngModel)]="report.total" name="total" class="block w-full border rounded-md p-2" readonly />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-end mt-4">
+        <button type="button" (click)="closeModal()"
+          class="bg-gray-500 text-white px-4 py-2 rounded-md">Cancelar</button>
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md ml-2">Guardar</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Modal Secundario: Tipo de Reporte -->
+  <app-tipo-reporte *ngIf="isTipoReporteModalOpen" [tableData]="tableData" [selectedReportType]="selectedReportType"
+    (onClose)="closeTipoReporteModal()" (onSelect)="handleReportTypeSelection($event)">
+  </app-tipo-reporte>
+</div>

@@ -1,0 +1,541 @@
+.dashboard-layout {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+  }
+  
+  .main-container {
+    display: flex;
+    flex: 1;
+  }
+  
+  
+  .clientes-container {
+    flex-grow: 1;
+    padding: 15px;
+    background-color: #f4f7fa;
+    transition: margin-left 0.3s ease, width 0.3s ease;
+    overflow-y: auto;
+    display: flex; /* <<< NECESARIO: Para que grid-container con flex-grow funcione */
+    flex-direction: column;
+  }
+
+  .clientes-container1 {
+    flex-grow: 1;
+  background-color: #f4f7fa;
+  transition: margin-left 0.3s ease, width 0.3s ease;
+  overflow-y: auto;
+  display: flex; /* <<< NECESARIO: Para que grid-container con flex-grow funcione */
+  flex-direction: column;
+  }
+  
+  .title {
+    font-size: 44px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .filter-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .filter-input,
+  .filter-select {
+    padding: 8px;
+    font-size: 14px;
+  }
+  
+  .filter-button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 8px 12px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .add-button-container {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+  }
+  
+  .add-button {
+    background-color: #28a745;
+    color: #fff;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+  }
+  
+  .clientes-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .clientes-table th,
+  .clientes-table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: center;
+  }
+  
+  .clientes-table th {
+    background-color: #f8f9fa;
+  }
+  
+  .foto-cliente {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+  
+  .estado-disponible {
+    color: green;
+  }
+  
+  .estado-no-disponible {
+    color: red;
+  }
+  
+  .acciones .btn {
+    margin: 0 5px;
+    cursor: pointer;
+  }
+  
+  .pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .pagination-button {
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .button {
+    --main-focus: #3aa856; 
+    --font-color: #ffffff;
+    --bg-color-sub: #56b870; 
+    --bg-color: #4caf50; 
+    --main-color: #3aa856;
+    
+    position: relative;
+    width: 150px;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    border: 2px solid var(--main-color);
+    box-shadow: 4px 4px var(--main-color);
+    background-color: var(--bg-color);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  
+  .button, .button__icon, .button__text {
+    transition: all 0.3s;
+  }
+  
+  .button .button__text {
+    transform: translateX(22px);
+    color: var(--font-color);
+    font-weight: 600;
+  }
+  
+  .button .button__icon {
+    position: absolute;
+    transform: translateX(109px);
+    height: 100%;
+    width: 39px;
+    background-color: var(--bg-color-sub);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .button .svg {
+    width: 20px;
+    stroke: #ffffff;
+  }
+  
+  .button:hover {
+    background: var(--bg-color);
+  }
+  
+  .button:hover .button__text {
+    color: transparent;
+  }
+  
+  .button:hover .button__icon {
+    width: 148px;
+    transform: translateX(0);
+  }
+  
+  .button:active {
+    transform: translate(3px, 3px);
+    box-shadow: 0px 0px var(--main-color);
+  }
+
+  /* Estilo de boton eliminar */
+.bin-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 35px; 
+  height: 35px;
+  border-radius: 10px; /* Bordes redondeados */
+  background-color: rgb(255, 95, 95);
+  cursor: pointer;
+  border: 2px solid rgb(255, 201, 201);
+  transition-duration: 0.3s;
+}
+
+.bin-bottom {
+  width: 12px;
+}
+
+.bin-top {
+  width: 14px;
+  transform-origin: right;
+  transition-duration: 0.3s;
+}
+
+.bin-button:hover .bin-top {
+  transform: rotate(45deg);
+}
+
+.bin-button:hover {
+  background-color: rgb(255, 0, 0);
+}
+
+.bin-button:active {
+  transform: scale(0.9);
+}
+
+/* Ajustes de la tabla y estilos adicionales */
+.clientes-table td.acciones {
+  display: flex;
+  gap: 5px;
+}
+
+.acciones .bin-button {
+  margin: 0;
+  padding: 0;
+}
+
+.acciones .bin-button:hover {
+  background-color: rgb(255, 0, 0);
+}
+
+/* Estilo para boton editar */
+.editBtn {
+  width: 35px; 
+  height: 35px; 
+  border-radius: 10px; 
+  border: 2px solid rgb(255, 204, 0); 
+  background-color: rgb(255, 204, 0); 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.123);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+
+.editBtn::before {
+  content: "";
+  width: 200%;
+  height: 200%;
+  background-color: rgba(255, 255, 0, 0.5);
+  position: absolute;
+  z-index: 1;
+  transform: scale(0);
+  transition: all 0.3s;
+  border-radius: 50%;
+  filter: blur(10px);
+}
+
+.editBtn:hover::before {
+  transform: scale(1);
+}
+
+.editBtn:hover {
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.336);
+}
+
+.editBtn svg {
+  height: 17px;
+  fill: white; 
+  z-index: 3;
+  transition: all 0.2s;
+  transform-origin: bottom;
+}
+
+.editBtn:hover svg {
+  transform: rotate(-15deg) translateX(5px);
+}
+
+.editBtn::after {
+  content: "";
+  width: 25px;
+  height: 1.5px;
+  position: absolute;
+  top: 29px; 
+  left: 5px; 
+  background-color: white; 
+  border-radius: 2px;
+  z-index: 2;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s ease-out;
+}
+
+.editBtn:hover::after {
+  transform: scaleX(1);
+  left: 0px;
+  transform-origin: right;
+}
+
+.editBtn:active {
+  transform: scale(0.9); 
+}
+
+/* Estilo para boton ver detalles */
+.detailBtn {
+  width: 35px; /* Mismo tamaño que los otros botones */
+  height: 35px; /* Mismo tamaño que los otros botones */
+  border-radius: 10px; /* Bordes redondeados */
+  border: 2px solid rgb(0, 128, 255); /* Borde azul */
+  background-color: rgb(0, 204, 255); /* Color de fondo azul claro */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.123);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+
+.detailBtn::before {
+  content: "";
+  width: 200%;
+  height: 200%;
+  background-color: rgba(0, 153, 255, 0.5); 
+  position: absolute;
+  z-index: 1;
+  transform: scale(0);
+  transition: all 0.3s;
+  border-radius: 50%;
+  filter: blur(10px);
+}
+
+.detailBtn:hover::before {
+  transform: scale(1);
+}
+
+.detailBtn:hover {
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.336);
+}
+
+.detailBtn svg {
+  height: 17px; 
+  fill: white; 
+  z-index: 3;
+  transition: all 0.2s;
+}
+
+.detailBtn:hover svg {
+  transform: scale(1.1); 
+}
+
+.detailBtn:active {
+  transform: scale(0.9); 
+}
+
+/*Estilo de boton de paginacion*/
+/* Botón Anterior */
+.cssbuttons-io-button-left {
+  background: #a370f0;
+  color: white;
+  font-family: inherit;
+  padding: 0.35em;
+  padding-left: 3.3em; /* Espacio a la izquierda */
+  padding-right: 1.2em;
+  font-size: 17px;
+  font-weight: 500;
+  border-radius: 0.9em;
+  border: none;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  box-shadow: inset 0 0 1.6em -0.6em #714da6;
+  overflow: hidden;
+  position: relative;
+  height: 2.8em;
+  cursor: pointer;
+  margin: 0 5px;
+}
+
+.cssbuttons-io-button-left .icon-left {
+  background: white;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.2em;
+  width: 2.2em;
+  border-radius: 0.7em;
+  left: 0.3em;
+  box-shadow: 0.1em 0.1em 0.6em 0.2em #7b52b9;
+  transition: all 0.3s;
+}
+
+.cssbuttons-io-button-left:hover .icon-left {
+  width: calc(100% - 0.6em);
+}
+
+.cssbuttons-io-button-left .icon-left svg {
+  width: 1.1em;
+  transition: transform 0.3s;
+  color: #7b52b9;
+}
+
+.cssbuttons-io-button-left:hover .icon-left svg {
+  transform: translateX(-0.1em);
+}
+
+/* Botón Siguiente */
+.cssbuttons-io-button-right {
+  background: #a370f0;
+  color: white;
+  font-family: inherit;
+  padding: 0.35em;
+  padding-left: 1.2em;
+  padding-right: 3.3em; /* Espacio a la derecha */
+  font-size: 17px;
+  font-weight: 500;
+  border-radius: 0.9em;
+  border: none;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
+  box-shadow: inset 0 0 1.6em -0.6em #714da6;
+  overflow: hidden;
+  position: relative;
+  height: 2.8em;
+  cursor: pointer;
+  margin: 0 5px;
+}
+
+.cssbuttons-io-button-right .icon-right {
+  background: white;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.2em;
+  width: 2.2em;
+  border-radius: 0.7em;
+  right: 0.3em;
+  box-shadow: 0.1em 0.1em 0.6em 0.2em #7b52b9;
+  transition: all 0.3s;
+}
+
+.cssbuttons-io-button-right:hover .icon-right {
+  width: calc(100% - 0.6em);
+}
+
+.cssbuttons-io-button-right .icon-right svg {
+  width: 1.1em;
+  transition: transform 0.3s;
+  color: #7b52b9;
+}
+
+.cssbuttons-io-button-right:hover .icon-right svg {
+  transform: translateX(0.1em);
+}
+
+/* Efecto activo para ambos botones */
+.cssbuttons-io-button-left:active .icon-left,
+.cssbuttons-io-button-right:active .icon-right {
+  transform: scale(0.95);
+}
+
+/*Boton de filtrar*/
+.button-with-icon {
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #0f988e;
+  font-family: "Istok Web", sans-serif;
+  letter-spacing: 1px;
+  padding: 0 12px;
+  text-align: center;
+  width: 120px;
+  height: 40px;
+  font-size: 14px;
+  text-transform: uppercase;
+  font-weight: normal;
+  border-radius: 3px;
+  outline: none;
+  user-select: none;
+  cursor: pointer;
+  transform: translateY(0px);
+  position: relative;
+  box-shadow:
+    inset 0 30px 30px -15px rgba(255, 255, 255, 0.1),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.3),
+    inset 0 1px 20px rgba(0, 0, 0, 0),
+    0 3px 0 #0f988e,
+    0 3px 2px rgba(0, 0, 0, 0.2),
+    0 5px 10px rgba(0, 0, 0, 0.1),
+    0 10px 20px rgba(0, 0, 0, 0.1);
+  background: #15ccbe;
+  color: white;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
+  transition: 150ms all ease-in-out;
+}
+
+.button-with-icon .icon {
+  margin-right: 8px;
+  width: 24px;
+  height: 24px;
+  transition: all 0.5s ease-in-out;
+}
+
+.button-with-icon:active {
+  transform: translateY(3px);
+  box-shadow:
+    inset 0 16px 2px -15px rgba(0, 0, 0, 0),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.15),
+    inset 0 1px 20px rgba(0, 0, 0, 0.1),
+    0 0 0 #0f988e,
+    0 0 0 2px rgba(255, 255, 255, 0.5),
+    0 0 0 rgba(0, 0, 0, 0),
+    0 0 0 rgba(0, 0, 0, 0);
+}
+
+.button-with-icon:hover .text {
+  transform: translateX(80px);
+}
+
+.button-with-icon:hover .icon {
+  transform: translate(35px, 0); 
+}
+
+.text {
+  transition: all 0.5s ease-in-out;
+}

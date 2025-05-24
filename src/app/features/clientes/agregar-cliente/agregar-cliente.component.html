@@ -1,0 +1,182 @@
+<!-- Modal -->
+<div *ngIf="showModal" class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+  <div class="bg-white rounded-lg w-full max-w-4xl p-6 relative">
+    <!-- Botón para cerrar el modal -->
+    <button (click)="cancelar()" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+
+    <!-- Título del modal -->
+    <h2 class="text-2xl font-semibold text-center mb-6">Datos del Cliente</h2>
+
+    <form #clienteForm="ngForm" novalidate>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Nombre -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Nombre</label>
+          <input
+            type="text"
+            name="name"
+            [(ngModel)]="name"
+            #nameField="ngModel"
+            required
+            minlength="3"
+            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+          />
+          <div *ngIf="nameField.invalid && nameField.touched" class="text-red-600 text-sm mt-1">
+            <div *ngIf="nameField.errors?.['required']">El nombre es obligatorio.</div>
+            <div *ngIf="nameField.errors?.['minlength']">Debe tener al menos 3 caracteres.</div>
+          </div>
+        </div>
+
+        <!-- Tipo de Cliente -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Tipo de Cliente</label>
+          <select
+            name="typeCustomer"
+            [(ngModel)]="typeCustomer"
+            #typeCustomerField="ngModel"
+            required
+            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+          >
+            <option value="" disabled>Seleccione tipo</option>
+            <option value="INDIVIDUAL">INDIVIDUAL</option>
+            <option value="EMPRESA">EMPRESA</option>
+          </select>
+          <div *ngIf="typeCustomerField.invalid && typeCustomerField.touched" class="text-red-600 text-sm mt-1">
+            El tipo de cliente es obligatorio.
+          </div>
+        </div>
+
+        <!-- Tipo de Documento -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Tipo de Documento</label>
+          <select
+            name="documentType"
+            [(ngModel)]="documentType"
+            #documentTypeField="ngModel"
+            required
+            (ngModelChange)="limpiarNumeroDocumento()"
+            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+          >
+            <option value="" disabled>Seleccione tipo de documento</option>
+            <option *ngIf="typeCustomer === 'EMPRESA'" value="RUC">RUC</option>
+            <option *ngIf="typeCustomer === 'INDIVIDUAL'" value="DNI">DNI</option>
+            <option *ngIf="typeCustomer === 'INDIVIDUAL'" value="Carné de Extranjería">Carné de Extranjería</option>
+            <option *ngIf="typeCustomer === 'INDIVIDUAL'" value="Pasaporte">Pasaporte</option>
+          </select>
+          <div *ngIf="documentTypeField.invalid && documentTypeField.touched" class="text-red-600 text-sm mt-1">
+            El tipo de documento es obligatorio.
+          </div>
+        </div>
+
+        <!-- Número de Documento -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Número de Documento</label>
+          <input
+            type="text"
+            name="documentNumber"
+            [(ngModel)]="documentNumber"
+            #documentNumberField="ngModel"
+            required
+            [pattern]="getDocumentoPattern()"
+            [maxlength]="getDocumentoMaxLength()"
+            (keypress)="onKeyPress($event)"
+            (paste)="onPaste($event)"
+            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+          />
+          <div *ngIf="documentNumberField.invalid && documentNumberField.touched" class="text-red-600 text-sm mt-1">
+            <div *ngIf="documentNumberField.errors?.['required']">El número de documento es obligatorio.</div>
+            <div *ngIf="documentNumberField.errors?.['pattern']">
+              <ng-container *ngIf="documentType === 'RUC'">El RUC debe tener 11 dígitos.</ng-container>
+              <ng-container *ngIf="documentType === 'DNI'">El DNI debe tener 8 dígitos.</ng-container>
+              <ng-container *ngIf="documentType === 'Carné de Extranjería' || documentType === 'Pasaporte'">Debe ser válido (alfanumérico).</ng-container>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dirección -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Dirección</label>
+          <input
+            type="text"
+            name="address"
+            [(ngModel)]="address"
+            #addressField="ngModel"
+            required
+            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+          />
+          <div *ngIf="addressField.invalid && addressField.touched" class="text-red-600 text-sm mt-1">
+            La dirección es obligatoria.
+          </div>
+        </div>
+
+        <!-- Teléfono -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Teléfono</label>
+          <input
+            type="tel"
+            name="phone"
+            [(ngModel)]="phone"
+            #phoneField="ngModel"
+            required
+            pattern="^\d{9}$"
+            maxlength="9"
+            (keypress)="onTelefonoKeyPress($event)"
+            (paste)="onTelefonoPaste($event)"
+            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+          />
+          <div *ngIf="phoneField.invalid && phoneField.touched" class="text-red-600 text-sm mt-1">
+            El teléfono es obligatorio y debe tener 9 dígitos.
+          </div>
+        </div>
+
+        <!-- Correo Electrónico -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Correo Electrónico</label>
+          <input
+            type="email"
+            name="email"
+            [(ngModel)]="email"
+            #emailField="ngModel"
+            required
+            email
+            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+          />
+          <div *ngIf="emailField.invalid && emailField.touched" class="text-red-600 text-sm mt-1">
+            El correo electrónico es obligatorio y debe ser válido.
+          </div>
+        </div>
+      </div>
+
+      <!-- Botones -->
+      <div class="mt-6 flex justify-end space-x-3">
+        <button
+          (click)="agregarCliente()"
+          [disabled]="clienteForm.invalid"
+          class="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Guardar Cliente
+        </button>
+        <button (click)="cancelar()" class="bg-gray-300 px-4 py-2 rounded-md hover:bg-gray-400">
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal de confirmación -->
+<div *ngIf="showConfirmationModal" class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+  <div class="bg-white rounded-lg w-full max-w-md p-6 relative">
+    <h2 class="text-xl font-semibold text-center mb-4">Registro guardado</h2>
+    <p class="text-center mb-4">El cliente ha sido guardado correctamente.</p>
+    <div class="text-center">
+      <button (click)="closeConfirmation()" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
+        ¡Ok!
+      </button>
+    </div>
+  </div>
+</div>

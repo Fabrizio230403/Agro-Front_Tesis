@@ -1,0 +1,86 @@
+<!-- assign-permissions.component.html -->
+<!-- Tabla Principal -->
+<div class="container mx-auto p-6">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold text-gray-800">Gestión de Roles</h1>
+    <button (click)="openCreateRoleModal()"
+      class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 flex items-center gap-2">
+      <span class="material-icons text-sm">add</span>
+      Nuevo Rol
+    </button>
+  </div>
+
+  <table class="min-w-full bg-white rounded-lg overflow-hidden shadow-lg">
+    <thead class="bg-gray-50">
+      <tr>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          Nombre del Rol
+        </th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          Módulos
+        </th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          Permisos Asociados
+        </th>
+        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+          Acciones
+        </th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-200">
+      <tr *ngFor="let role of rolesData">
+        <td class="px-6 py-4 whitespace-nowrap">
+          <div class="text-sm font-medium text-gray-900">{{role.role_name}}</div>
+        </td>
+        <td class="px-6 py-4">
+          <div class="flex flex-wrap gap-1">
+            <span *ngFor="let module of role.modules"
+              class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
+              {{module.module_name}}
+            </span>
+          </div>
+        </td>
+        <td class="px-6 py-4">
+          <div class="flex flex-wrap gap-1">
+            <span *ngFor="let module of role.modules">
+              <span *ngFor="let permission of module.permissions"
+                class="px-2 py-1 text-xs font-medium bg-green-100 text-green-800 rounded-full">
+                {{permission.permission_name}}
+              </span>
+            </span>
+          </div>
+        </td>
+        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+          <div class="flex justify-end gap-2">
+            <button (click)="openSettings(role.role_id)" class="text-blue-600 hover:text-blue-900">
+              <span class="material-icons">settings</span>
+            </button>
+            <button (click)="editRole(role.role_id)" class="text-green-600 hover:text-green-900">
+              <span class="material-icons">edit</span>
+            </button>
+            <button (click)="deleteRole(role.role_id)" class="text-red-600 hover:text-red-900">
+              <span class="material-icons">delete</span>
+            </button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Mantener los modales existentes -->
+<!-- Modal de Asignar Permisos -->
+<div *ngIf="isPermissionModalOpen" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+  <!-- ... (mantener el contenido existente del modal) ... -->
+</div>
+
+<!-- Modal para Crear Nuevo Permiso -->
+<div *ngIf="isCreatePermissionModalOpen"
+  class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+  <!-- ... (mantener el contenido existente del modal) ... -->
+</div>
+
+<!-- Modal para Crear Nuevo Rol -->
+<div *ngIf="isCreateRoleModalOpen" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+  <!-- ... (mantener el contenido existente del modal) ... -->
+</div>

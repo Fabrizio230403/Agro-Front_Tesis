@@ -1,0 +1,184 @@
+<div class="dashboard-layout flex flex-col h-screen">
+
+  <div class="main-container flex flex-grow">
+    <!-- Sidebar -->
+    <app-siderbang *ngIf="isSidebarVisible" class="siderbang"></app-siderbang>
+    <!-- Contenedor de productos -->
+    <div class="content-area flex flex-col flex-grow overflow-y-auto min-w-0">
+
+      <!-- Cabecera (Header) -->
+      <app-header (sidebarToggle)="toggleSidebar()"></app-header>
+
+      <!-- Contenedor del Contenido Específico (Clientes) con Padding -->
+      <div class="p-4" [ngClass]="{ 'expanded': !isSidebarVisible }">
+
+        <!-- Título (Como en la imagen) -->
+        <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6">Clientes</h1>
+        <!-- Cambiado de Usuarios a Clientes -->
+
+        <!-- Sección de Filtros (Estilo de la imagen) -->
+        <div class="filter-section mb-6 flex flex-col md:flex-row items-center gap-3 ">
+
+          <!-- Dropdown Campo de Búsqueda -->
+          <div class="w-full md:w-auto md:flex-shrink-0 relative">
+            <select id="searchField" name="searchField" [(ngModel)]="filtroCampo"
+              class="appearance-none w-full bg-white border border-gray-300 text-gray-600 py-2 px-4 pr-8 rounded-lg leading-tight focus:outline-none focus:bg-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150 shadow-sm">
+              <option value="" disabled selected>Seleccione un campo</option>
+              <option value="name">Razón Social</option>
+              <option value="documentNumber">Nro. Documento</option>
+              <option value="typeCustomer">Tipo Cliente</option>
+            </select>
+
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
+              <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+              </svg>
+            </div>
+          </div>
+
+
+          <!-- Input de Búsqueda -->
+          <div class="w-full md:flex-grow">
+            <input type="text" id="searchTerm" name="searchTerm" [(ngModel)]="filtroTermino" placeholder="Buscar..."
+              (keyup)="filtrarClientes()" (input)="validateInput($event)"
+              class="w-full bg-white border border-gray-300 rounded-lg py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 placeholder-gray-500 transition ease-in-out duration-150 shadow-sm">
+          </div>
+
+          <!-- Botón Filtrar (Estilo de la imagen)  
+          <div class="w-full md:w-auto md:flex-shrink-0">
+            <button
+              class="w-full md:w-auto flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-5 rounded-lg shadow-sm transition duration-150 ease-in-out"
+              (click)="filtrarClientes()">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd"
+                  d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L13 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 019 17v-5.586L4.293 6.707A1 1 0 014 6V3z"
+                  clip-rule="evenodd" />
+              </svg>
+              Filtrar
+            </button>
+          </div> --><!-- Fin Sección de Filtros -->
+        </div>
+
+
+
+        <!-- Botón Agregar Cliente -->
+        <div class="add-button-container mb-6 flex justify-end">
+          <button
+            class="inline-flex items-center justify-center bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out"
+            (click)="openAgregarUsuarioModal()"> <!-- Mantiene tu función original -->
+            <svg class="h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd"
+                d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                clip-rule="evenodd" />
+            </svg>
+            Agregar Cliente
+          </button>
+        </div>
+
+
+        <!-- Contenedor de la Tabla con Sombra y Bordes Redondeados -->
+        <div class="table-container bg-white shadow-md rounded-lg overflow-x-auto">
+          <table class="clientes-table w-full min-w-full divide-y divide-gray-200">
+            <thead class="bg-gray-100">
+              <tr>
+                <!-- Encabezados originales con estilo Tailwind -->
+                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Razón Social</th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Tipo Cliente</th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Tipo Doc.</th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Nro. Doc.</th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Dirección</th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Teléfono</th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Correo</th>
+                <th scope="col"
+                  class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              <!-- Filas de datos (manteniendo tu lógica *ngFor) -->
+              <tr *ngFor="let cliente of getClientesPorPagina()"
+                class="hover:bg-gray-50 transition-colors duration-150">
+                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700">{{ cliente.name }}</td>
+                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{{ cliente.typeCustomer }}</td>
+                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{{ cliente.documentType }}</td>
+                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{{ cliente.documentNumber }}</td>
+                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500 truncate max-w-xs"
+                  title="{{ cliente.address }}">{{ cliente.address }}</td> <!-- Truncate para direcciones largas -->
+                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500">{{ cliente.phone }}</td>
+                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500 truncate max-w-xs"
+                  title="{{ cliente.email }}">{{ cliente.email }}</td> <!-- Truncate para correos largos -->
+                <!-- Acciones (manteniendo tus botones originales si prefieres, o usa los ejemplos de Tailwind) -->
+                <td class="px-4 py-3 whitespace-nowrap text-center text-sm font-medium">
+                  <div class="flex items-center justify-center space-x-1 md:space-x-2">
+                    <!-- Mantén tus botones originales o adáptalos. Ejemplo adaptado: -->
+                    <button
+                      class="p-1 text-blue-600 hover:text-blue-800 hover:bg-blue-100 rounded transition-colors duration-150"
+                      title="Editar" (click)="openEditarClienteModal(cliente)">
+                      <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                          d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z">
+                        </path>
+                      </svg>
+                    </button>
+                    <button
+                      class="p-1 text-red-600 hover:text-red-800 hover:bg-red-100 rounded transition-colors duration-150"
+                      title="Eliminar" (click)="openConfirmDeleteModal(cliente.id)">
+                      <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                          d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                          clip-rule="evenodd"></path>
+                      </svg>
+                    </button>
+                    <button
+                      class="p-1 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded transition-colors duration-150"
+                      title="Detalles" (click)="openDetalleClienteModal(cliente)">
+                      <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd"
+                          d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                          clip-rule="evenodd"></path>
+                      </svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <!-- Mensaje si no hay clientes -->
+              <tr *ngIf="getClientesPorPagina().length === 0">
+                <td colspan="8" class="px-6 py-4 text-center text-gray-500">
+                  No se encontraron clientes.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div> <!-- Fin Contenedor Tabla -->
+
+        <!-- Paginación (Estilo de la imagen, lógica tuya) -->
+        <div class="pagination mt-6 flex justify-center items-center space-x-2">
+          <button
+            class="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+            [disabled]="currentPage === 1" (click)="cambiarPagina('anterior')">
+            Anterior
+          </button>
+
+          <!-- Aquí necesitarías lógica para mostrar números de página si lo deseas -->
+          <span class="px-3 py-1 text-sm text-gray-700">
+            Página {{ currentPage }} de {{ getTotalPaginas() }}
+          </span>
+          <!-- -->
+
+          <button
+            class="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+            [disabled]="currentPage === getTotalPaginas()" (click)="cambiarPagina('siguiente')">
+            Siguiente
+          </button>
+        </div><!-- Fin Paginación -->
+
+      </div> <!-- Fin clientes-container -->
+    </div> <!-- Fin content-area -->
+  </div> <!-- Fin main-container -->
+</div> <!-- Fin dashboard-layout -->

@@ -1,0 +1,159 @@
+/* Modal - Fondo y contenedor */
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Contenedor de la tabla */
+.table-container {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  max-width: 900px;
+  width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+  border: 1px solid #ddd; /* Borde para la tabla */
+}
+
+/* Estilo de los encabezados */
+th {
+  background-color: #f1f1f1;
+  color: #333;
+  font-weight: bold;
+  text-align: center;
+  padding: 12px 15px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+/* Estilo de las celdas */
+td {
+  text-align: center;
+  padding: 12px 15px;
+  font-size: 14px;
+  color: #555;
+}
+
+/* Contenedor de la tabla */
+.table-container {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 12px;
+  max-width: 900px;
+  width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+}
+
+/* Estilos de la tabla */
+
+
+td img.img-category {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid #f1f1f1;
+}
+
+.actions-container {
+  display: flex;
+  gap: 12px;
+}
+
+button {
+  padding: 8px 18px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+button.bg-yellow {
+  background-color: #f1c40f;
+  color: white;
+}
+
+button.bg-yellow:hover {
+  background-color: #f39c12;
+}
+
+button.bg-red {
+  background-color: #e74c3c;
+  color: white;
+}
+
+button.bg-red:hover {
+  background-color: #c0392b;
+}
+
+.add-category-button {
+  padding: 12px 20px;
+  background-color: #2ecc71;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 18px;
+  display: block;
+  margin-top: 25px;
+  width: 100%;
+  text-align: center;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.add-category-button:hover {
+  background-color: #27ae60;
+}
+
+.close-modal-button:focus {
+  outline: none; /* Elimina el borde del foco */
+}
+
+/* Estilo para las filas de la tabla */
+tbody tr {
+  border-bottom: 1px solid #e0e0e0; /* Borde gris suave entre filas */
+}
+
+/* Estilo para filas impares (para alternar colores y hacer la tabla más legible) */
+tbody tr:nth-child(odd) {
+  background-color: #f9f9f9; /* Fondo más claro para filas impares */
+}
+
+tbody tr:nth-child(even) {
+  background-color: #fff; /* Fondo blanco para filas pares */
+}
+
+/* Responsive - Ajustes en pantallas pequeñas */
+@media (max-width: 768px) {
+  .table-container {
+    padding: 20px;
+  }
+
+  th, td {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .add-category-button {
+    font-size: 16px;
+    padding: 10px 18px;
+  }
+
+  .close-modal-button {
+    font-size: 20px;
+  }
+}

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Probar CORS</title>
+</head>
+<body>
+  <script>
+    const username = 'luis@example.com';
+    const password = '123456';
+
+// Codificar los datos en el formato x-www-form-urlencoded
+    const formData = new URLSearchParams();
+    formData.append('username', username);
+    formData.append('password', password);
+
+
+    fetch('http://127.0.0.1:8091/login', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: formData.toString(),  // Convertir el objeto en una cadena codificada
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`Error en la solicitud: ${response.status}`);
+      }
+      console.log('Código de estado:', response.status); // Agregar esta línea para depuración
+      if (!response.ok) {
+        throw new Error(`Error en la solicitud: ${response.status}`);
+      }
+      // Verifica si la respuesta es HTML o JSON
+      const contentType = response.headers.get('Content-Type');
+      if (contentType && contentType.includes('text/html')) {
+        return response.text(); // Si es HTML, maneja el HTML
+      } else if (contentType && contentType.includes('application/json')) {
+        return response.json(); // Si es JSON, maneja el JSON
+      } else {
+        return response;
+        throw new Error('Tipo de respuesta no esperado');
+      }
+    })
+    .then(data => {
+      console.log('Respuesta del servidor:', data);
+      if (data) {
+        console.log('Usuario encontrado');
+        console.log(formData.toString());
+        // Aquí puedes manejar la respuesta de acuerdo a lo que regrese el servidor
+      } else {
+        console.error('Usuario no encontrado o error en los datos');
+      }
+    })
+    .catch(error => {
+      console.error('Error en la petición:', error);
+    });
+  </script>
+</body>
+</html>

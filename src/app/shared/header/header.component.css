@@ -1,0 +1,35 @@
+/* Estilos del header */
+header {
+    height: 64px; /* Ajusta la altura según sea necesario */
+    background: #bdbdbd;
+    color: white; /* Color del texto */
+    display: flex; /* Usar flexbox para alinear el contenido */
+    justify-content: space-between; /* Espacio entre los elementos */
+    align-items: center; /* Centrar verticalmente */
+    padding: 0 20px; /* Espaciado interno a los lados */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra para profundidad */
+    position: relative; /* Posicionamiento relativo */
+    z-index: 1000; /* Asegúrate de que esté por encima de otros elementos */
+}
+
+/* Opcional: Resetear márgenes y paddings por defecto del body */
+body {
+    margin: 0; /* Eliminar margen por defecto */
+    padding: 0; /* Eliminar padding por defecto */
+}
+
+/* Transición para el cambio de ícono */
+button i {
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Rotación suave cuando cambia el ícono */
+button i.fa-bars {
+    transform: rotate(0deg);
+    opacity: 1;
+}
+
+button i.fa-times {
+    transform: rotate(180deg); /* Ajusta el grado de rotación según prefieras */
+    opacity: 1;
+}

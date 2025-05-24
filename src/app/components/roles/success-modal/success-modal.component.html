@@ -1,0 +1,25 @@
+<div *ngIf="isOpen" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
+    <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4" (click)="$event.stopPropagation()">
+      <header class="px-6 py-4 border-b border-gray-200">
+        <h3 class="text-lg font-medium text-gray-900">{{ title }}</h3>
+      </header>
+  
+      <div class="px-6 py-4">
+        <input 
+          [(ngModel)]="inputValue"
+          type="text"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          [placeholder]="placeholder"
+        />
+      </div>
+  
+      <footer class="px-6 py-4 bg-gray-50 flex justify-end space-x-3">
+        <button (click)="closeModal()" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
+          Cancelar
+        </button>
+        <button (click)="saveModal()" class="px-4 py-2 bg-indigo-600 text-white rounded-md text-sm font-medium hover:bg-indigo-700">
+          Guardar
+        </button>
+      </footer>
+    </div>
+  </div>

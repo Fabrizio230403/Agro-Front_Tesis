@@ -1,0 +1,66 @@
+ <div class="modal-backdrop">
+    <div class="modal-container">
+      <h2>Editar Documento</h2>
+      <form (ngSubmit)="guardarCambios()">
+        <div class="form-group">
+          <label for="fechaEmision">Fecha de Emisión</label>
+          <input
+            id="fechaEmision"
+            type="date"
+            [(ngModel)]="documentoEditado.fechaEmision"
+            name="fechaEmision"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="numeroDocumento">Número de Documento</label>
+          <input
+            id="numeroDocumento"
+            type="text"
+            [(ngModel)]="documentoEditado.numeroDocumento"
+            name="numeroDocumento"
+            required
+            readonly
+          />
+        </div>
+        <div class="form-group">
+          <label for="cliente">Cliente</label>
+          <input
+            id="cliente"
+            type="text"
+            [(ngModel)]="documentoEditado.cliente"
+            name="cliente"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="montoTotal">Monto Total</label>
+          <input
+            id="montoTotal"
+            type="number"
+            step="0.01"
+            [(ngModel)]="documentoEditado.montoTotal"
+            name="montoTotal"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="estadoPago">Estado de Pago</label>
+          <select
+            id="estadoPago"
+            [(ngModel)]="documentoEditado.estadoPago"
+            name="estadoPago"
+            required
+          >
+            <option value="Activo">Activo</option>
+            <option value="Archivado">Archivado</option>
+          </select>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="cancel-btn" (click)="cerrar()">Cancelar</button>
+          <button type="submit" class="save-btn">Guardar Cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  

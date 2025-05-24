@@ -1,0 +1,277 @@
+<div class="dashboard-layout flex flex-col h-screen">
+  <!-- Contenedor principal -->
+  <div class="main-container flex flex-grow overflow-hidden"> <!-- Añadido overflow-hidden -->
+    <!-- Sidebar -->
+    <app-siderbang *ngIf="isSidebarVisible" class="siderbang w-64 h-full flex-shrink-0"></app-siderbang>
+
+    <!-- Contenedor de productos -->
+    <div class="content-area flex flex-col flex-grow overflow-y-auto min-w-0">
+
+
+      <!-- Área de Contenido Principal (con scroll si es necesario) -->
+      <div class="content-area flex-grow overflow-y-auto"> <!-- Añadido overflow-y-auto -->
+        <app-header (sidebarToggle)="toggleSidebar()"></app-header>
+        <div class="p-4">
+
+          <!-- Sección: Título y Botón Agregar -->
+          <div class="mb-6 flex flex-col md:flex-row justify-between items-center space-y-3 md:space-y-0">
+            <h2 class="text-2xl md:text-3xl font-bold tracking-wide text-gray-800 text-center md:text-left">Usuarios
+            </h2>
+          </div>
+
+          <div class="mb-6 flex flex-col md:flex-row items-center gap-3">
+            <!-- Dropdown Campo de Búsqueda -->
+            <div class="w-full md:w-auto md:flex-shrink-0 relative">
+              <select id="searchField" name="searchField" [(ngModel)]="filtroCampo" (change)="onCampoFiltroChange()"
+                class="appearance-none w-full bg-white border border-gray-300 text-gray-600 py-2 px-4 pr-8 rounded-lg leading-tight focus:outline-none focus:bg-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition ease-in-out duration-150 shadow-sm">
+                <option value="" disabled selected>Seleccione un campo</option>
+                <option value="username">Nombre de Usuario</option>
+                <option value="email">Correo</option>
+                <option value="telefono">Teléfono</option>
+                <option value="role">Rol</option>
+              </select>
+              <!-- Icono de flecha para el select -->
+              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
+                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                  <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                </svg>
+              </div>
+            </div>
+
+            <!-- Input de Búsqueda -->
+            <div class="w-full md:flex-grow">
+              <input *ngIf="filtroCampo !== 'role'" type="text" id="searchTerm" name="searchTerm"
+                [(ngModel)]="filtroTermino" placeholder="Buscar..." (keyup)="filtrarUsuarios()"
+                (input)="validateInput($event)"
+                class="w-full bg-white border border-gray-300 rounded-lg py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 placeholder-gray-500 transition ease-in-out duration-150 shadow-sm">
+
+              <!-- Select para 'role' -->
+              <select *ngIf="filtroCampo === 'role'" id="roleSelect" name="roleSelect" [(ngModel)]="filtroTermino"
+                (change)="filtrarUsuarios()"
+                class="w-full bg-white border border-gray-300 rounded-lg py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-blue-500 focus:ring-1 focus:ring-blue-500 placeholder-gray-500 transition ease-in-out duration-150 shadow-sm">
+                <option value="" disabled selected>Seleccione un rol</option>
+                <option *ngFor="let role of roles" [value]="role.roleName">{{ role.roleName }}</option>
+              </select>
+            </div>
+
+            <!-- Botón Filtrar -->
+            <!--<div class="w-full md:w-auto md:flex-shrink-0">
+              <button
+                class="w-full md:w-auto flex items-center justify-center bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-5 rounded-lg shadow-sm transition duration-150 ease-in-out">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd"
+                    d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L13 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 019 17v-5.586L4.293 6.707A1 1 0 014 6V3z"
+                    clip-rule="evenodd" />
+                </svg>
+                Filtrar
+              </button>
+            </div>-->
+          </div>
+
+          <div *ngIf="loading" class="flex justify-center items-center h-64 p-6">
+            <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500"></div>
+          </div>
+
+          <!-- ******** SECCIÓN MODIFICADA ******** -->
+          <div *ngIf="!loading && users.length > 0"
+            class="mb-5 flex flex-col md:flex-row items-center justify-center gap-3">
+            <!-- Contenedor de la cuadrícula -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+              <!-- Tarjeta de usuario (dentro del bucle *ngFor) -->
+              <div *ngFor="let user of usersFiltrados"
+                class="card-container rounded-xl overflow-hidden border border-gray-200 bg-white shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col">
+                <!-- Contenedor del Avatar y Estado (Similar a la imagen 2) -->
+                <!-- Sección Superior: Imagen y Estado -->
+                <div class="relative">
+                  <!-- Imagen del Avatar -->
+                  <img src="../../../assets/images/perfilFoto.png" alt="Avatar de {{ user.username }}"
+                    class="w-full h-36 object-cover"> <!-- Ajusta h-32 según necesites -->
+
+                  <!-- Badge de Estado -->
+                  <span *ngIf="user.enabled"
+                    class="absolute top-2 right-2 bg-white px-2.5 py-1 rounded-full text-xs font-medium text-gray-700 shadow-sm flex items-center">
+                    <span class="inline-block h-2 w-2 bg-green-500 rounded-full mr-1.5"></span>
+                    Activo
+                  </span>
+                  <!-- Opcional: Badge Inactivo -->
+                  <span *ngIf="!user.enabled"
+                    class="absolute top-2 right-2 bg-white px-2.5 py-1 rounded-full text-xs font-medium text-gray-700 shadow-sm flex items-center">
+                    <span class="inline-block h-2 w-2 bg-red-500 rounded-full mr-1.5"></span>
+                    Inactivo
+                  </span>
+                </div>
+                <div class="p-4 text-center flex flex-col flex-grow">
+                  <!-- Información del Usuario -->
+                  <h3 class="text-lg font-semibold text-gray-800 mb-1">{{ user.username }}</h3>
+                  <!-- Opcional: Añadir Rol si tienes esa data -->
+                  <p class="text-sm text-gray-500 mb-2">{{ user?.rol?.roleName ?? 'No asignado' }}</p>
+                  <p class="text-sm text-gray-600 mb-3"><span class="font-medium">Correo:</span> {{ user.email }}</p>
+                  <p class="text-sm text-gray-600 mb-4"><span class="font-medium">Teléfono:</span> {{ user.telefono }}
+                  </p>
+
+                  <!-- Acciones (botones) -->
+                  <div class="flex justify-center space-x-2 mt-auto w-full">
+                    <!-- Botón Editar -->
+                    <button (click)="handleEditUser(user)" title="Editar Usuario"
+                      class="bg-yellow-400 hover:bg-yellow-500 text-white p-2 rounded-lg transition-colors duration-300 flex-grow flex items-center justify-center text-sm font-bold">
+                      <!-- Ícono de lápiz sólido (negrita) -->
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
+                        <path fill-rule="evenodd" d="M2 15a1 1 0 011-1h11a1 1 0 110 2H3a1 1 0 01-1-1z"
+                          clip-rule="evenodd" />
+                      </svg>
+                    </button>
+
+                    <!-- Botón Roles -->
+                    <button (click)="viewRolesPermissions(user)" title="Ver Roles y Permisos"
+                      class="bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-lg transition-colors duration-300 flex-grow flex items-center justify-center text-sm font-bold">
+                      <!-- Ícono de usuarios (mejor entendible) -->
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path
+                          d="M13 7a3 3 0 11-6 0 3 3 0 016 0zM4 14a4 4 0 018 0v1H4v-1zm10.707-4.293a1 1 0 010 1.414L14.414 12l.293.293a1 1 0 01-1.414 1.414L13 13.414l-.293.293a1 1 0 01-1.414-1.414L11.586 12l-.293-.293a1 1 0 011.414-1.414L13 10.586l.293-.293a1 1 0 011.414 0z" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <!-- Fin de la tarjeta de usuario -->
+
+            </div>
+            <!-- Fin del contenedor de la cuadrícula -->
+          </div>
+          <!-- ******** FIN SECCIÓN MODIFICADA ******** -->
+
+          <!-- Mensaje si no hay usuarios -->
+          <div *ngIf="!loading && users.length === 0" class="p-10 text-center text-gray-500">
+            No se encontraron usuarios.
+          </div>
+
+          <!-- PAGINACIÓN (Ejemplo Básico - Añade tu lógica aquí) -->
+          <div *ngIf="!loading && users.length > 0" class="mt-8 flex justify-center">
+            <!-- Aquí iría tu componente o lógica de paginación -->
+            <nav aria-label="Page navigation">
+              <ul class="inline-flex items-center -space-x-px">
+                <li>
+                  <a
+                    class="py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700">Anterior</a>
+                </li>
+                <li>
+                  <a aria-current="page"
+                    class="py-2 px-3 text-blue-600 bg-blue-50 border border-gray-300 hover:bg-blue-100 hover:text-blue-700">1</a>
+                </li>
+                <li>
+                  <a
+                    class="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">2</a>
+                </li>
+                <li>
+                  <a
+                    class="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">...</a>
+                </li>
+                <li>
+                  <a
+                    class="py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700">10</a>
+                </li>
+                <li>
+                  <a
+                    class="py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700">Siguiente</a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+          <!-- FIN PAGINACIÓN -->
+
+        </div> <!-- Fin container -->
+
+
+
+      </div> <!-- Fin bg-gradient -->
+
+    </div> <!-- Fin main-container -->
+
+
+    <!-- Modal Components (sin cambios) -->
+    <app-add-user *ngIf="isAddingUser" (userAdded)="handleUserAdded($event)" (cancel)="isAddingUser = false">
+    </app-add-user>
+
+    <app-edit-user *ngIf="editingUser" [user]="editingUser" (userUpdated)="handleUserUpdated($event)"
+      (cancel)="editingUser = null">
+    </app-edit-user>
+
+    <app-delete-user *ngIf="userToDelete" [user]="userToDelete" (userDeleted)="handleUserDeleted($event)"
+      (cancel)="userToDelete = null">
+    </app-delete-user>
+
+
+    <!-- Roles Modal -->
+    <div *ngIf="userRolesPermissions" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+      (click.self)="closeRolesModal()">
+      <div class="bg-white w-11/12 md:w-2/3 lg:w-1/2 rounded-lg shadow-lg max-h-[90vh] flex flex-col p-6">
+
+        <!-- Título y botón cerrar -->
+        <div class="flex justify-between items-start mb-6">
+          <h3 class="text-2xl font-bold text-gray-800">Roles de {{ userRolesPermissions?.username }}</h3>
+          <button (click)="closeRolesModal()" class="text-blue-600 hover:text-blue-800">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Contenido del modal -->
+        <div class="flex flex-col gap-6 overflow-y-auto">
+
+          <!-- Fila con info a la izquierda y foto a la derecha -->
+          <div class="flex justify-start items-center">
+
+            <!-- Información del Rol (izquierda) -->
+            <div class="max-w-[70%]">
+              <h4 class="text-lg font-semibold text-gray-700 mb-3">Información del Rol:</h4>
+              <p class="mb-2"><span class="font-semibold text-gray-800">Nombre:</span>
+                {{ userRolesPermissions?.rol?.roleName ?? 'No asignado' }}</p>
+              <p><span class="font-semibold text-gray-800">Descripción:</span>
+                {{ userRolesPermissions?.rol?.description ?? 'Sin descripción' }}</p>
+            </div>
+
+            <!-- Imagen (derecha) -->
+            <div class="flex-shrink-0 ml-32">
+              <img src="https://via.placeholder.com/100" alt="Foto del rol"
+                class="w-24 h-24 rounded-full object-cover border border-gray-300" />
+            </div>
+          </div>
+
+          <!-- Botones debajo, centrados y en fila -->
+          <div class="flex justify-center gap-4 mt-8"> <!-- margen arriba para separar de la info+imagen -->
+            <button
+              class="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-1"
+              (click)="openEditPermissionsModal(userRolesPermissions?.rol?.id, userRolesPermissions?.rol?.permissions)">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" />
+              </svg>
+              Asignar Permisos
+            </button>
+            <button
+              class="bg-yellow-400 hover:bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-1"
+              (click)="openEditRoleModal(userRolesPermissions?.id, userRolesPermissions?.rol)">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
+                <path fill-rule="evenodd" d="M2 15a1 1 0 011-1h11a1 1 0 110 2H3a1 1 0 01-1-1z" clip-rule="evenodd" />
+              </svg>
+              Editar Rol
+            </button>
+          </div>
+
+          <app-edit-role-modal *ngIf="showEditRoleModal" [currentRole]="selectedUserRole" [allRoles]="roles"
+            (close)="showEditRoleModal = false" (save)="handleSaveRole($event)"
+            (backToPrevious)="handleBackFromEditRole()"></app-edit-role-modal>
+
+          <app-edit-permissions-modal *ngIf="showEditPermissionsModal" [roleId]="selectedRoleId"
+            [userExistingPermissions]="selectedUserPermissions" (close)="showEditPermissionsModal = false"
+            (save)="handleSavePermissions($event)">
+          </app-edit-permissions-modal>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

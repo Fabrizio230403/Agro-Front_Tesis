@@ -1,0 +1,274 @@
+<div class="dashboard-layout flex flex-col h-screen">
+  <app-header (sidebarToggle)="toggleSidebar()"></app-header>
+  <div class="main-container flex flex-grow">
+    <app-siderbang *ngIf="isSidebarVisible" class="siderbang w-64"></app-siderbang>
+    <div class="container mx-auto p-4">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-3xl font-semibold">Roles del Sistema</h2>
+
+        <div class="flex space-x-4">
+          <button (click)="goToUsers()"
+            class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors">
+            🔙 Regresar a Usuarios
+          </button>
+          <button (click)="openCreateRoleModal()"
+            class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+            ➕ Crear Nuevo Rol
+          </button>
+          <button (click)="goToPermissions()"
+            class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">
+            🔒 Ver Permisos
+          </button>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto shadow-lg rounded-lg">
+        <table class="min-w-full bg-white border border-gray-200">
+          <thead>
+            <tr>
+              <th class="px-6 py-3 text-left font-medium">Nombre del Rol</th>
+              <th class="px-6 py-3 text-left font-medium">Descripción</th>
+              <th class="px-6 py-3 text-left font-medium">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let role of roles | paginate: { itemsPerPage: 10, currentPage: p }" class="hover:bg-gray-50">
+              <td class="px-6 py-4">{{ role.role_name }}</td>
+              <td class="px-6 py-4">{{ role.description }}</td>
+              <!--<td class="px-6 py-4">
+                <div *ngFor="let permission of role.permissions">
+                  <span class="inline-block bg-blue-100 px-2 py-1 rounded text-sm">
+                    {{ permission.permission_name || 'Sin permisos' }}
+                  </span>
+                </div> 
+              </td>-->
+              <td class="px-6 py-4 flex space-x-2">
+                <!-- Botón Otorgar Permiso -->
+                <button (click)="openEditPermissionsModal(role.id, role.permissions)"
+                  class="bg-cyan-500 text-white px-3 py-1 rounded-lg hover:bg-cyan-600 flex items-center gap-1">
+                  🔒 Otorgar Permiso
+                </button>
+                <!-- Botón Editar -->
+                <button (click)="openEditRoleModal(role)"
+                  class="bg-yellow-500 text-white px-3 py-1 rounded-lg hover:bg-yellow-600 flex items-center gap-1">
+                  ✏️ Editar
+                </button>
+                <!-- Botón Ver Detalles -->
+                <button (click)="openDetailRoleModal(role)"
+                  class="bg-blue-500 text-white px-3 py-1 rounded-lg hover:bg-blue-600 flex items-center gap-1">
+                  👁 Ver Detalles
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="flex justify-center mt-4">
+          <pagination-controls (pageChange)="p = $event" previousLabel="← Anterior" nextLabel="Siguiente →"
+            class="pagination-controls" [responsive]="true">
+          </pagination-controls>
+        </div>
+        <!-- Modal de permisos -->
+        <app-edit-permissions-modal *ngIf="showEditPermissionsModal" [roleId]="selectedRoleId"
+          [userExistingPermissions]="selectedUserPermissions" (close)="showEditPermissionsModal = false"
+          (save)="handleSavePermissions($event)">
+        </app-edit-permissions-modal>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="isCreateRoleModalOpen" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+    <h3 class="text-xl font-semibold mb-4">Crear Nuevo Rol</h3>
+
+    <label class="block mb-2">Nombre del Rol</label>
+    <input [(ngModel)]="newRole.roleName" class="w-full p-2 border rounded mb-4" placeholder="Ej. ROLE_ADMIN" />
+
+    <label class="block mb-2">Descripción</label>
+    <input [(ngModel)]="newRole.description" class="w-full p-2 border rounded mb-4"
+      placeholder="Ej. Administrador con acceso completo" />
+
+    <div class="flex justify-end space-x-2">
+      <button (click)="closeCreateRoleModal()" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600">
+        ❌ Cancelar
+      </button>
+      <button (click)="createRole()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+        ✅ Crear
+      </button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="isCreatingRole" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+  <div class="bg-white p-6 rounded-lg shadow-lg flex items-center space-x-4 w-80">
+    <div class="animate-spin h-6 w-6 border-4 border-gray-300 border-t-green-600 rounded-full"></div>
+    <p class="text-gray-700">Creando rol...</p>
+  </div>
+</div>
+
+<div *ngIf="isCreateSuccessModalOpen" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-80">
+    <h3 class="text-lg font-semibold text-green-600">✔ Rol Creado</h3>
+    <p class="text-gray-700">El rol se ha creado correctamente.</p>
+  </div>
+</div>
+
+<div *ngIf="isCreateErrorModalOpen" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-80">
+    <h3 class="text-lg font-semibold text-red-600">❌ Error al crear</h3>
+    <p class="text-gray-700">No se pudo crear el rol. Intenta nuevamente.</p>
+  </div>
+</div>
+
+ <div *ngIf="isDetailRoleModalOpen" class="fixed inset-0 flex items-start justify-center bg-black bg-opacity-50 z-50 pt-20 px-4">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-full max-w-[700px] max-h-[85vh] overflow-auto">
+    <!-- Título principal -->
+    <h3 class="text-2xl font-semibold mb-6 text-center">Detalles del Rol</h3>
+
+    <div class="flex flex-col md:flex-row gap-6 mb-6">
+      <!-- Izquierda: nombre y descripción -->
+      <div class="flex-1 space-y-4">
+        <div>
+          <label class="font-medium block mb-1">Nombre del Rol:</label>
+          <p class="p-2 border rounded bg-gray-100">{{ selectedRole?.role_name }}</p>
+        </div>
+        <div>
+          <label class="font-medium block mb-1">Descripción:</label>
+          <p class="p-2 border rounded bg-gray-100">{{ selectedRole?.description }}</p>
+        </div>
+      </div>
+
+      <!-- Derecha: foto -->
+      <div class="w-32 h-32 mx-auto md:mx-0 bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
+        <img *ngIf="selectedRole?.photo" [src]="selectedRole.photo" alt="Foto del rol"
+          class="object-cover w-full h-full rounded-lg" />
+        <span *ngIf="!selectedRole?.photo" class="text-gray-400">Sin foto</span>
+      </div>
+    </div>
+
+    <!-- Permisos asignados por módulo con paginación -->
+    <div class="mt-6 border-t pt-4 text-gray-700 text-sm text-center">
+      <strong class="text-base block mb-4">Lista de permisos asignados</strong>
+
+      <div *ngFor="let modulo of paginatedModules" class="bg-white border rounded-lg shadow-md p-4 mb-4">
+        <h3 class="text-blue-800 font-semibold text-base mb-3 flex items-center gap-2 justify-center">
+          <svg class="h-5 w-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-6h13v6H9z" />
+          </svg>
+          {{ modulo.moduleName }}
+        </h3>
+
+        <div class="flex flex-wrap justify-center gap-2">
+          <span *ngFor="let permiso of modulo.permissions" class="px-3 py-1 text-xs rounded-full font-medium border"
+            [ngClass]="permiso.assigned ? 'bg-green-100 text-green-700 border-green-200' : 'bg-gray-100 text-gray-500 border-gray-200'">
+            {{ permiso.permissionName }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Paginación -->
+      <div class="flex justify-center items-center gap-4 mt-6">
+        <button type="button" (click)="prevPage(); $event.stopPropagation()" [disabled]="currentPage === 1"
+          class="px-4 py-2 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded disabled:opacity-50">
+          Anterior
+        </button>
+
+        <span class="text-sm text-gray-600">Página {{ currentPage }} de {{ totalPages }}</span>
+
+        <button type="button" (click)="nextPage(); $event.stopPropagation()" [disabled]="currentPage === totalPages"
+          class="px-4 py-2 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded disabled:opacity-50">
+          Siguiente
+        </button>
+      </div>
+
+      <!-- Botón Cerrar -->
+      <div class="mt-6">
+        <button type="button" (click)="closeDetailRoleModal()"
+          class="px-6 py-2 bg-red-600 hover:bg-red-700 text-white rounded shadow font-semibold">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<div *ngIf="isDeleteRoleModalOpen" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+    <h3 class="text-xl font-semibold mb-4 text-red-600">⚠️ Confirmar Eliminación</h3>
+    <p>¿Estás seguro de que deseas eliminar el rol <strong>{{ selectedRole?.role_name }}</strong>?</p>
+
+    <div class="flex justify-end space-x-2 mt-4">
+      <button (click)="closeDeleteRoleModal()" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600">
+        ❌ Cancelar
+      </button>
+      <button (click)="deleteRole(selectedRole.id)" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">
+        🗑 Eliminar
+      </button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="isDeletingRole" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+  <div class="bg-white p-6 rounded-lg shadow-lg flex items-center space-x-4 w-80">
+    <div class="animate-spin h-6 w-6 border-4 border-gray-300 border-t-red-600 rounded-full"></div>
+    <p class="text-gray-700">Eliminando rol...</p>
+  </div>
+</div>
+
+<div *ngIf="isDeleteSuccessModalOpen" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-80">
+    <h3 class="text-lg font-semibold text-green-600">✔ Rol Eliminado</h3>
+    <p class="text-gray-700">El rol se ha eliminado correctamente.</p>
+  </div>
+</div>
+
+<div *ngIf="isDeleteErrorModalOpen" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-80">
+    <h3 class="text-lg font-semibold text-red-600">❌ Error al eliminar</h3>
+    <p class="text-gray-700">No se pudo eliminar el rol. Intenta nuevamente.</p>
+  </div>
+</div>
+
+<div *ngIf="isEditRoleModalOpen" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+    <h3 class="text-xl font-semibold mb-4">Editar Rol</h3>
+
+    <label class="block mb-2">Nombre del Rol</label>
+    <input [(ngModel)]="editedRole.role_name" class="w-full p-2 border rounded mb-4" placeholder="Ej. ROLE_ADMIN" />
+
+    <label class="block mb-2">Descripción</label>
+    <input [(ngModel)]="editedRole.description" class="w-full p-2 border rounded mb-4"
+      placeholder="Ej. Administrador con acceso completo" />
+
+    <div class="flex justify-end space-x-2 mt-4">
+      <button (click)="closeEditRoleModal()" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600">
+        ❌ Cancelar
+      </button>
+      <button (click)="updateRole()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+        ✅ Actualizar
+      </button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="isEditingRole" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+  <div class="bg-white p-6 rounded-lg shadow-lg flex items-center space-x-4 w-80">
+    <div class="animate-spin h-6 w-6 border-4 border-gray-300 border-t-blue-600 rounded-full"></div>
+    <p class="text-gray-700">Actualizando rol...</p>
+  </div>
+</div>
+
+<div *ngIf="isEditSuccessModalOpen" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-80">
+    <h3 class="text-lg font-semibold text-blue-600">✔ Rol Actualizado</h3>
+    <p class="text-gray-700">El rol se ha actualizado correctamente.</p>
+  </div>
+</div>
+
+<div *ngIf="isEditErrorModalOpen" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-80">
+    <h3 class="text-lg font-semibold text-red-600">❌ Error al actualizar</h3>
+    <p class="text-gray-700">No se pudo actualizar el rol. Intenta nuevamente.</p>
+  </div>
+</div>

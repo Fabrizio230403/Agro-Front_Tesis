@@ -1,0 +1,20 @@
+{
+  "routes": [
+    "/clientes",
+    "/dashboard",
+    "/documento",
+    "/inventario",
+    "/login",
+    "/permisos/crear",
+    "/productos",
+    "/proveedores",
+    "/register",
+    "/reportes",
+    "/role",
+    "/roles",
+    "/roles/ajustes",
+    "/roles/crear",
+    "/user",
+    "/ventas"
+  ]
+}

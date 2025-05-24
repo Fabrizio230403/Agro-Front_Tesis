@@ -1,0 +1,11 @@
+<!-- Modal para confirmar la eliminación -->
+<div class="modal" *ngIf="showDeleteModal">
+  <div class="modal-content">
+    <h2>¿Estás seguro de que deseas eliminar esta categoría?</h2>
+    <p>Esta acción no se puede deshacer.</p>
+    <div class="modal-actions">
+      <button type="button" (click)="eliminarCategoria()">Eliminar</button>
+      <button type="button" (click)="cerrarDeleteModal()">Cancelar</button>
+    </div>
+  </div>
+</div>

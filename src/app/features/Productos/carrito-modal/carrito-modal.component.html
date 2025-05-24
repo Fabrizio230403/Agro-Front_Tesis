@@ -1,0 +1,73 @@
+<!-- Modal para Ver Carrito -->
+
+
+<div *ngIf="carritoVisible" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
+  <div [@modalAnimation]
+    class="bg-white rounded-lg p-8 w-[30rem] max-w-lg relative overflow-hidden shadow-lg border border-gray-300">
+
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-semibold text-gray-900">Carrito de Compras</h2>
+      <button (click)="cerrarCarrito()"
+        class="text-gray-600 hover:text-white hover:bg-red-500 border border-gray-400 rounded-full w-8 h-8 flex items-center justify-center transition duration-200 ease-in-out"
+        aria-label="Cerrar carrito">
+        &times;</button>
+    </div>
+
+    <!-- Lista de Productos en el Carrito -->
+    <ul class="mb-6 max-h-80 overflow-y-auto pr-2">
+      <li *ngFor="let item of carrito; trackBy: trackById" class="flex flex-col border-b border-gray-200 py-4">
+        <div
+          class="flex justify-between items-center bg-white hover:shadow-xl border border-gray-300 rounded-xl p-4 transition duration-300 relative">
+
+          <button (click)="eliminarProducto(item)"
+            class="absolute top-2 right-2 text-red-600 text-2xl font-bold hover:text-red-800 focus:outline-none"
+            title="Eliminar producto">
+            &times;
+          </button>
+
+          <img [src]="item.image" alt="{{ item.name }}"
+            class="w-20 h-20 rounded-lg object-cover border-2 border-gray-200 shadow-sm" />
+
+          <div class="flex flex-col ml-4 flex-grow">
+            <span class="text-lg font-semibold text-gray-800">{{ item.name }}</span>
+            <span class="text-sm text-gray-600">Proveedor: {{ item.supplier?.name }}</span>
+            <span class="text-sm text-blue-600 mt-2">Precio: S/.{{ item.salePrice.toFixed(2) }}</span>
+            <span class="text-sm text-red-600 font-semibold mt-1">Total: S/.{{ (item.salePrice * item.cantidad).toFixed(2) }}</span>
+          </div>
+
+          <div class="flex items-center space-x-2 ml-4">
+            <button (click)="decrementarCantidad(item)"
+              class="w-8 h-8 bg-gray-200 text-gray-800 rounded-full hover:bg-gray-300 focus:outline-none">−</button>
+            <span class="text-lg font-semibold">{{ item.cantidad }}</span>
+            <button (click)="incrementarCantidad(item)"
+              class="w-8 h-8 bg-gray-200 text-gray-800 rounded-full hover:bg-gray-300 focus:outline-none">+</button>
+          </div>
+
+        </div>
+      </li>
+      <li *ngIf="carrito.length === 0" class="text-center text-gray-500 py-10">
+        <p>Tu carrito está vacío.</p>
+        <button (click)="seguirComprando()"
+          class="mt-4 bg-blue-600 text-white py-2 px-5 rounded-lg hover:bg-blue-700 transition-all duration-200">
+          Seguir Comprando
+        </button>
+      </li>
+    </ul>
+
+
+    <!-- Sección de Finalizar Compra y Subtotal -->
+    <div class="flex justify-between items-center mt-4">
+      <button (click)="aceptarCarrito()" [disabled]="carrito.length === 0"
+        class="flex items-center gap-2 bg-green-600 text-white py-2 px-5 rounded-lg hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all duration-200">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+        </svg>
+        Finalizar Compra
+      </button>
+
+      <div class="text-lg font-bold text-green-700">Subtotal: S/.{{ subtotal().toFixed(2) }}</div>
+    </div>
+
+  </div>
+</div>

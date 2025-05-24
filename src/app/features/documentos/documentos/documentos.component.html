@@ -1,0 +1,108 @@
+<div class="dashboard-layout flex flex-col h-screen">
+  <!-- Header -->
+  <header>
+    <app-header (sidebarToggle)="toggleSidebar()"></app-header>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-container flex flex-grow">
+    <!-- Sidebar -->
+    <aside *ngIf="isSidebarVisible" class="sidebar">
+      <app-siderbang class="siderbang"></app-siderbang>
+    </aside>
+
+    <!-- Content Section -->
+    <section class="content-container flex-grow p-4">
+      <div class="document-management">
+        <!-- Title -->
+        <h1 class="title">Gestión de Documentos</h1>
+
+        <!-- Search and Filter -->
+        <div class="search-filter-container flex justify-between items-center">
+          <!-- Search Bar -->
+          <div class="search-bar">
+            <input type="text" placeholder="Buscar por nombre o cliente" [(ngModel)]="searchQuery"
+              (input)="filterDocuments()" class="search-input" />
+            <button class="search-button">
+              <svg xmlns="http://www.w3.org/2000/svg" class="search-icon" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M10.5 0C4.699 0 0 4.699 0 10.5S4.699 21 10.5 21c2.337 0 4.5-.791 6.227-2.111l5.623 5.623c.078.078.174.144.285.174.117.03.237.042.353.028.117-.014.224-.058.313-.137.077-.079.121-.189.137-.307.017-.118.002-.238-.028-.353-.03-.111-.096-.207-.174-.285l-5.623-5.623C20.709 14 21.5 11.837 21.5 10.5 21.5 4.699 16.801 0 10.5 0zm0 3c4.034 0 7.5 3.466 7.5 7.5S14.534 18 10.5 18 3 14.534 3 10.5 6.466 3 10.5 3z" />
+              </svg>
+            </button>
+          </div>
+
+          <!-- Filter by Date -->
+          <div class="filter-container flex items-center gap-4">
+            <label>Rango de fechas:</label>
+            <input type="date" class="date-input" [(ngModel)]="fechaInicial" />
+            <input type="date" class="date-input" [(ngModel)]="fechaFinal" />
+            <button class="button" (click)="filterDocuments()">Aplicar</button>
+          </div>
+
+          <!-- Add Document Button -->
+          <button (click)="abrirModalAgregarDoc()"
+            class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-200">
+            + Agregar Documento
+          </button>
+        </div>
+
+        <!-- Table -->
+        <table class="documentos-table">
+          <thead>
+            <tr>
+              <th>FECHA DE EMISIÓN</th>
+              <th>NÚMERO DOCUMENTO</th>
+              <th>CLIENTE</th>
+              <th>MONTO TOTAL B/F</th>
+              <th>ESTADO DE PAGO</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let documento of filteredDocuments">
+              <td>{{ documento.fechaEmision }}</td>
+              <td>{{ documento.numeroDocumento }}</td>
+              <td>{{ documento.cliente }}</td>
+              <td>{{ documento.montoTotal | currency: 'VEF' }}</td>
+              <td [ngClass]="{
+                'estado-activo': documento.estadoPago === 'Activo',
+                'estado-archivado': documento.estadoPago === 'Archivado'
+              }">
+                {{ documento.estadoPago }}
+              </td>
+              <td>
+                <button class="action-btn download-btn">Descargar</button>
+                <button class="action-btn delete-btn" (click)="abrirModalEliminar(documento)">
+                  Eliminar
+                </button>
+                <button class="action-btn update-btn edit-btn" (click)="abrirModalEditar(documento)">
+                  Editar
+                </button>
+                <button class="action-btn send-btn" (click)="abrirModalEnviar(documento)">
+                  Enviar
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- Modals -->
+<app-agregar-doc *ngIf="modalAgregarDocVisible" (cerrarModal)="cerrarModalAgregarDoc()"
+  (agregarDocumento)="agregarDocumento($event)">
+</app-agregar-doc>
+
+<app-editar-doc *ngIf="modalEditarDocVisible" [documento]="documentoSeleccionado" (cerrarModal)="cerrarModalEditar()"
+  (editarDocumento)="actualizarDocumento($event)">
+</app-editar-doc>
+
+<app-enviar-doc *ngIf="modalEnviarDocVisible" [documento]="documentoSeleccionado" (cerrarModal)="cerrarModalEnviar()"
+  (enviarDocumento)="enviarDocumento($event)">
+</app-enviar-doc>
+
+<app-eliminar-doc *ngIf="modalEliminarDocVisible" [documentoSeleccionado]="documentoSeleccionado"
+  (cerrarModal)="cerrarModalEliminar()" (eliminarDocumentoEvent)="eliminarDocumento($event)">
+</app-eliminar-doc>

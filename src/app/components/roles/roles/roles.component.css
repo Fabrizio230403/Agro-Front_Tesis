@@ -1,0 +1,24 @@
+/* roles.component.css */
+.alert-heading {
+    font-size: 1.5em;
+    color: red;
+  }
+  
+  .text-center {
+    text-align: center;
+  }
+  
+  .btn {
+    padding: 10px;
+    font-weight: bold;
+  }
+  
+  .btn-success {
+    background-color: blue;
+    color: white;
+  }
+  
+  .btn-danger {
+    background-color: red;
+    color: white;
+  }

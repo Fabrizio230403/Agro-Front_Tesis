@@ -1,0 +1,70 @@
+ <div class="modal-overlay" (click)="cerrarModal.emit()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h2 class="modal-title">Enviar Documento</h2>
+
+    <!-- Detalles del Documento -->
+    <div class="document-details">
+      <p><strong>Cliente:</strong> {{ documento.cliente }}</p>
+      <p><strong>Número de Documento:</strong> {{ documento.numeroDocumento }}</p>
+      <p><strong>Fecha de Emisión:</strong> {{ documento.fechaEmision }}</p>
+      <p><strong>Monto Total:</strong> {{ documento.montoTotal | currency: 'USD' }}</p>
+    </div>
+
+    <!-- Opciones de envío -->
+    <div class="send-options" *ngIf="!formularioActivo">
+      <button class="btn btn-whatsapp" (click)="mostrarFormulario('whatsapp')">WhatsApp</button>
+      <button class="btn btn-gmail" (click)="mostrarFormulario('gmail')">Gmail</button>
+      <button class="btn btn-drive" (click)="mostrarFormulario('drive')">Google Drive</button>
+      <button class="btn btn-sms" (click)="mostrarFormulario('sms')">Número de Celular</button>
+    </div>
+
+    <!-- Formularios Condicionales -->
+    <div *ngIf="formularioActivo === 'whatsapp'">
+      <h3>Enviar por WhatsApp</h3>
+      <form (ngSubmit)="enviarWhatsApp()">
+        <label for="mensaje">Mensaje:</label>
+        <textarea id="mensaje" [(ngModel)]="mensaje" name="mensaje" rows="3" required></textarea>
+        <button class="btn btn-send" type="submit">Enviar</button>
+        <button class="btn btn-cancel" type="button" (click)="cerrarFormulario()">Cancelar</button>
+      </form>
+    </div>
+
+    <div *ngIf="formularioActivo === 'gmail'">
+      <h3>Enviar por Gmail</h3>
+      <form (ngSubmit)="enviarGmail()">
+        <label for="correo">Correo Electrónico:</label>
+        <input id="correo" [(ngModel)]="correo" name="correo" type="email" required />
+        <label for="asunto">Asunto:</label>
+        <input id="asunto" [(ngModel)]="asunto" name="asunto" type="text" required />
+        <label for="mensaje">Mensaje:</label>
+        <textarea id="mensaje" [(ngModel)]="mensaje" name="mensaje" rows="3" required></textarea>
+        <button class="btn btn-send" type="submit">Enviar</button>
+        <button class="btn btn-cancel" type="button" (click)="cerrarFormulario()">Cancelar</button>
+      </form>
+    </div>
+
+    <div *ngIf="formularioActivo === 'drive'">
+      <h3>Subir a Google Drive</h3>
+      <p>Funcionalidad en desarrollo.</p>
+      <button class="btn btn-cancel" type="button" (click)="cerrarFormulario()">Cancelar</button>
+    </div>
+
+    <div *ngIf="formularioActivo === 'sms'">
+      <h3>Enviar SMS</h3>
+      <form (ngSubmit)="enviarSms()">
+        <label for="telefono">Número de Celular:</label>
+        <input id="telefono" [(ngModel)]="telefono" name="telefono" type="tel" required />
+        <label for="mensaje">Mensaje:</label>
+        <textarea id="mensaje" [(ngModel)]="mensaje" name="mensaje" rows="3" required></textarea>
+        <button class="btn btn-send" type="submit">Enviar</button>
+        <button class="btn btn-cancel" type="button" (click)="cerrarFormulario()">Cancelar</button>
+
+      </form>
+    </div>
+
+    <!-- Acción para cerrar -->
+    <div class="modal-actions" *ngIf="!formularioActivo">
+      <button class="btn btn-cancel" (click)="cerrarModal.emit()">Cancelar</button>
+    </div>
+  </div>
+</div>

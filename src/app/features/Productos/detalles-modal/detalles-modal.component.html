@@ -1,0 +1,92 @@
+<!-- Modal para Detalles del Producto -->
+<div *ngIf="verDetalleVisible" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-full sm:max-w-4xl mx-auto flex flex-col sm:flex-row relative">
+    
+    <!-- Botón para cerrar el modal -->
+    <button (click)="cerrarDetallesModal()" class="absolute top-4 right-4 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-red-600">
+      &times;
+    </button>
+    
+    <!-- Imagen del producto -->
+    <div class="flex flex-col items-center space-y-4 w-full sm:w-1/3 mb-4 sm:mb-0">
+      <img [src]="producto.image" alt="Imagen del producto" class="w-36 sm:w-48 h-auto rounded-lg object-cover">
+      <span class="text-gray-500 font-semibold">Stock: {{ producto.amount }}</span>
+      <span [ngClass]="getClasePorStock(producto.amount)" class="text-white px-3 py-1 rounded-full">{{ getEstadoPorStock(producto.amount) }}</span>
+      
+      <!-- Composición -->
+      <div class="bg-gray-100 rounded-lg p-4 mt-8 w-full">
+        
+      </div>
+    </div>
+    
+    <!-- Detalles del Producto -->
+    <div class="flex-1 sm:ml-6">
+      <h3 class="text-xl font-semibold text-gray-900 mb-3">{{ producto.nombre }}</h3>
+      <p class="text-gray-500">{{ producto.categoria }}</p>
+      <p class="text-sm text-gray-600 mt-2">Codígo de producto: <span class="font-bold">{{ producto.codeProduct }}</span></p>
+      <p class="text-sm text-gray-600 mt-2">Costo Inicial: <span class="font-bold">{{ producto.purchasePrice }}</span></p>
+      <p class="text-sm text-gray-600 mt-2">Precio de Venta: <span class="font-bold">{{ producto.salePrice }}</span></p>
+      <p class="text-sm text-gray-600 mt-2">Proveedor: <span class="font-bold">{{ producto.supplier.name }}</span></p>
+      <p class="text-sm text-gray-600 mt-2">Ubicación: <span class="font-bold">{{ producto.ubicacion }}</span></p>
+      <p class="text-sm text-gray-600 mt-2">Fecha de Ingreso: <span class="font-bold">{{ producto.fechaIngreso }}</span></p>
+      <p class="text-sm text-gray-600 mt-2">Descripción: <span class="font-bold">{{ producto.description }}</span></p>
+      <h4 class="font-semibold text-lg mb-2">Composición</h4>
+      <table class="w-full border border-gray-300 text-gray-700">
+        <tr>
+          <td class="border px-4 py-2 font-semibold">Isoprothiolane</td>
+          <td class="border px-4 py-2">{{ producto.composicionIsoprothiolane }}</td>
+        </tr>
+        <tr>
+          <td class="border px-4 py-2 font-semibold">Aditivos</td>
+          <td class="border px-4 py-2">{{ producto.composicionAditivos }}</td>
+        </tr>
+      </table>
+      <!-- Acciones -->
+      <div class="flex items-center space-x-2 mt-6">
+        <button (click)="abrirEditarModal(producto)" class="bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-600">
+          Editar
+        </button>
+        <button (click)="abrirEliminarModal(producto)" class="bg-red-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-600">
+          Eliminar
+        </button>
+        <button (click)="cerrarDetallesModal()" class="bg-gray-300 text-black px-4 py-2 rounded-lg hover:bg-gray-400">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de edición -->
+<app-editar-modal
+  *ngIf="editarModalVisible"
+  [productoSeleccionado]="productoSeleccionado"
+  [editarModalVisible]="editarModalVisible"
+  (cerrarModal)="cerrarEditarModal()"
+  (actualizarProducto)="onActualizarProducto($event)">
+</app-editar-modal>
+
+<!-- Modal de Eliminar -->
+<div *ngIf="eliminarModalAbierto" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50">
+  <div class="modal-content bg-white p-6 rounded-lg shadow-lg w-full max-w-md sm:max-w-lg">
+    <span class="close text-gray-500 text-3xl cursor-pointer absolute top-2 right-2" (click)="cerrarEliminarModal()">&times;</span>
+    
+    <h2 class="text-xl font-semibold mb-4 text-center">Eliminar Producto</h2>
+    <div *ngIf="productoSeleccionado">
+      <img [src]="productoSeleccionado.image" alt="Producto" class="w-1/2 h-auto mb-4 rounded-md object-cover mx-auto"/>
+      <h3 class="text-lg font-medium text-center">{{ productoSeleccionado.name }}</h3>
+      <p class="text-gray-600 text-center">Precio: {{ productoSeleccionado.salePrice }}</p>
+      <p class="text-gray-600 mb-4 text-center">Descripción: {{ productoSeleccionado.description }}</p>
+      
+      <!-- Botones para eliminar o cerrar -->
+      <div class="flex justify-center space-x-4">
+        <button (click)="eliminarProducto()" class="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700">
+          Eliminar Producto
+        </button>
+        <button (click)="cerrarEliminarModal()" class="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

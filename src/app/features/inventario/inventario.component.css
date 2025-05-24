@@ -1,0 +1,206 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 20px;
+}
+.title {
+  font-size: 2.5rem; /* Tamaño de fuente mayor (ajusta según lo necesites) */
+  text-decoration: underline; /* Subraya el texto */
+  font-weight: bold; /* Opcional, para hacerlo más destacado */
+}
+
+
+input[type="text"] {
+  padding: 10px;
+  margin-right: 10px;
+  font-size: 1em;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #f4f4f4;
+}
+
+img {
+  max-width: 100px;
+  height: auto;
+}
+
+.loading {
+  font-size: 1.2em;
+  color: #555;
+}
+.delete-button {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.delete-button:hover {
+  background-color: #c82333;
+}
+
+.delete-button i {
+  font-size: 18px;
+}
+.category-search-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.search-category-button {
+  background-color: #007bff;
+  color: rgb(176, 28, 28);
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.search-category-button:hover {
+  background-color: #0056b3;
+}
+/* General Layout */
+.main-container {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  background-color: #f8f9fa; /* Fondo claro */
+}
+
+.container {
+  flex-grow: 1;
+  padding: 20px;
+  background-color: #fff; /* Fondo blanco */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.text-center {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Search and Action Buttons */
+.search-and-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  gap: 15px;
+}
+
+.search-container input {
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  width: 250px;
+}
+
+.search-container .btn {
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+.category-selector select {
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  width: 200px;
+}
+
+.action-buttons button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  font-size: 14px;
+  border-radius: 4px;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.action-buttons .btn-danger {
+  background-color: #dc3545;
+}
+
+.action-buttons .btn-primary {
+  background-color: #37af0c;
+}
+
+.action-buttons .btn-secondary {
+  background-color: #ff0000;
+}
+
+/* Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  font-size: 14px;
+  background-color: #fff;
+}
+
+table thead th {
+  background-color: #f1f3f5;
+  color: #495057;
+  text-align: center;
+  font-weight: bold;
+  padding: 10px;
+  border: 1px solid #dee2e6;
+}
+
+table tbody td {
+  text-align: center;
+  padding: 10px;
+  border: 1px solid #dee2e6;
+}
+
+table tbody img {
+  border-radius: 4px;
+}
+
+table tbody tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+table tbody tr:hover {
+  background-color: #e9ecef;
+}
+.action-buttons {
+  display: flex;
+  gap: 0.5rem; /* Espacio entre botones */
+  justify-content: flex-start; /* Opcional: Alinear los botones a la izquierda */
+}
+
+.delete-button {
+  margin-right: auto; /* Opcional: para separar el botón "Eliminar" del resto */
+}
+

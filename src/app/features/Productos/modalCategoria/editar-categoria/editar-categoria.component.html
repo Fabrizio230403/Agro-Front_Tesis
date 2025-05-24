@@ -1,0 +1,24 @@
+<div class="modal">
+    <form (ngSubmit)="editarCategoria()">
+      <h2>Editar Categoría</h2>
+      <label for="name">Nombre de la Categoría</label>
+      <input id="name" [(ngModel)]="categoriaSeleccionada.name" name="name" required />
+  
+      <label for="description">Descripción</label>
+      <textarea id="description" [(ngModel)]="categoriaSeleccionada.description" name="description" required></textarea>
+  
+      
+  
+      <label for="image">Imagen</label>
+      <input id="image" type="file" (change)="onFileSelected($event)" />
+  
+      <div *ngIf="imagePreview">
+        <h4>Vista Previa:</h4>
+        <img [src]="imagePreview" alt="Vista previa de la imagen" style="max-width: 200px;" />
+      </div>
+  
+      <button type="submit">Actualizar Categoría</button>
+      <button type="button" (click)="cerrarEditarCategoriaModal()">Cancelar</button>
+    </form>
+  </div>
+  

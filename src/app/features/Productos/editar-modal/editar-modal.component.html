@@ -1,0 +1,180 @@
+<!-- Modal para Editar Producto -->
+<div
+  *ngIf="editarModalVisible"
+  class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50"
+>
+  <div class="bg-white rounded-lg p-6 w-full max-w-3xl shadow-lg">
+    <h2 class="text-lg font-semibold mb-4 text-gray-700">Editar Producto</h2>
+    <form (ngSubmit)="editarProducto()">
+      <!-- Campo para subir la foto -->
+      <div
+        class="col-span-1 sm:col-span-2 md:col-span-3 mb-4 w-full flex flex-col items-center"
+      >
+        <input
+          type="file"
+          (change)="onFileSelected($event)"
+          id="file-input-edit"
+          class="hidden"
+          accept="image/*"
+        />
+        <label
+          for="file-input-edit"
+          class="flex items-center justify-center cursor-pointer text-white rounded-lg w-full h-32 transition duration-150"
+        >
+          <div class="flex flex-col items-center justify-center">
+            <img
+              [src]="productoSeleccionado.image || 'assets/images/Editar.jpg'"
+              alt="Imagen referente"
+              class="h-40 mb-2 object-cover"
+            />
+            <span class="text-sm">Seleccionar imagen</span>
+          </div>
+        </label>
+      </div>
+
+      <!-- Campos del producto -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Nombre del Producto -->
+        <div>
+          <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nombre del Producto</label>
+          <input 
+            [(ngModel)]="productoSeleccionado.name" 
+            id="name" 
+            name="name" 
+            required 
+            class="border border-gray-300 rounded-md w-full p-2 focus:ring-blue-500 focus:border-blue-500" 
+            placeholder="Ingresa el nombre" 
+          />
+        </div>
+
+        <!-- Precio de Compra -->
+        <div>
+          <label for="purchasePrice" class="block text-sm font-medium text-gray-700 mb-1">Precio de Compra</label>
+          <input 
+            [(ngModel)]="productoSeleccionado.purchasePrice" 
+            id="purchasePrice" 
+            name="purchasePrice" 
+            required 
+            class="border border-gray-300 rounded-md w-full p-2 focus:ring-blue-500 focus:border-blue-500" 
+            placeholder="Costo de compra" 
+          />
+        </div>
+
+        <!-- Precio de Venta -->
+        <div>
+          <label for="salePrice" class="block text-sm font-medium text-gray-700 mb-1">Precio de Venta</label>
+          <input 
+            [(ngModel)]="productoSeleccionado.salePrice" 
+            id="salePrice" 
+            name="salePrice" 
+            required 
+            class="border border-gray-300 rounded-md w-full p-2 focus:ring-blue-500 focus:border-blue-500" 
+            placeholder="Precio de venta" 
+          />
+        </div>
+
+        <!-- Categoría -->
+        <div>
+          <label for="categories_products_id" class="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
+          <select
+            [(ngModel)]="productoSeleccionado.categoryProducts.id"
+            id="categories_products_id"
+            name="categories_products_id"
+            required
+            class="border border-gray-300 rounded-md w-full p-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="" disabled selected>Seleccione una categoría</option>
+            <option *ngFor="let categoria of categorias" [value]="categoria.id">
+              {{ categoria.name }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Ubicación -->
+        <div>
+          <label for="ubicacion" class="block text-sm font-medium text-gray-700 mb-1">Ubicación</label>
+          <input 
+            [(ngModel)]="productoSeleccionado.ubicacion" 
+            id="ubicacion" 
+            name="ubicacion" 
+            required 
+            class="border border-gray-300 rounded-md w-full p-2 focus:ring-blue-500 focus:border-blue-500" 
+            placeholder="Ubicación del producto" 
+          />
+        </div>
+
+        <!-- Descripción -->
+        <div class="col-span-full">
+          <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
+          <textarea 
+            [(ngModel)]="productoSeleccionado.description" 
+            id="description" 
+            name="description" 
+            required 
+            class="border border-gray-300 rounded-md w-full p-2 focus:ring-blue-500 focus:border-blue-500" 
+            placeholder="Descripción del producto"
+          ></textarea>
+        </div>
+
+        <!-- Stock -->
+        <div>
+          <label for="stock" class="block text-sm font-medium text-gray-700 mb-1">Stock</label>
+          <input 
+            [(ngModel)]="productoSeleccionado.amount" 
+            id="stock" 
+            name="stock" 
+            required 
+            class="border border-gray-300 rounded-md w-full p-2 focus:ring-blue-500 focus:border-blue-500" 
+            placeholder="Cantidad en stock" 
+          />
+        </div>
+
+        <!-- Descuento -->
+        <div>
+          <label for="descuento" class="block text-sm font-medium text-gray-700 mb-1">Descuento</label>
+          <input 
+            [(ngModel)]="productoSeleccionado.descuento" 
+            id="descuento" 
+            name="descuento" 
+            required 
+            class="border border-gray-300 rounded-md w-full p-2 focus:ring-blue-500 focus:border-blue-500" 
+            placeholder="Descuento" 
+          />
+        </div>
+
+        <!-- Modelo -->
+        <div>
+          <label for="supplier_id" class="block text-sm font-medium text-gray-700 mb-1">Proveedor</label>
+          <select
+            [(ngModel)]="productoSeleccionado.supplier.id"
+            id="supplier_id"
+            name="supplier_id"
+            required
+            class="border border-gray-300 rounded-md w-full p-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="" disabled selected>Seleccione un proveedor</option>
+            <option *ngFor="let supplier of suppliers" [value]="supplier.id">
+              {{ supplier.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="flex justify-end space-x-4 mt-4">
+        <button 
+          type="button" 
+          (click)="cerrarEditarModal()" 
+          class="px-4 py-2 bg-gray-300 rounded-md text-sm text-gray-700"
+        >
+          Cancelar
+        </button>
+        <button 
+          type="submit" 
+          class="px-4 py-2 bg-blue-500 text-white rounded-md text-sm"
+        >
+          Actualizar Producto
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,177 @@
+/* Base Styles (Mantener sin cambios) */
+:host { display: block; background-color: #f4f7fa; min-height: 100vh; }
+.dashboard-layout { display: flex; flex-direction: column; min-height: 100vh; }
+.main-container { display: flex; flex-grow: 1; min-height: 0; /* Crucial para flex-grow */ }
+.siderbang { flex-shrink: 0; transition: width 0.3s ease, margin-left 0.3s ease; }
+
+/* Área de Contenido Principal */
+.dashboard-content-area {
+    flex-grow: 1;
+    padding: 15px;
+    background-color: #f4f7fa;
+    transition: margin-left 0.3s ease, width 0.3s ease;
+    overflow-y: auto;
+    display: flex; /* <<< NECESARIO: Para que grid-container con flex-grow funcione */
+    flex-direction: column;
+}
+
+.dashboard-content-area1 {
+  flex-grow: 1;
+  padding: 1px;
+  background-color: #f4f7fa;
+  transition: margin-left 0.3s ease, width 0.3s ease;
+  overflow-y: auto;
+  display: flex; /* <<< NECESARIO: Para que grid-container con flex-grow funcione */
+  flex-direction: column;
+}
+
+.dashboard-content-area.expanded { margin-left: 0; }
+.dashboard-title { font-size: 2rem; font-weight: bold; color: #333; margin-bottom: 25px; flex-shrink: 0; }
+
+/* --- Grid Layout --- */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    /* --- DEFINICIÓN EXPLÍCITA DE FILAS --- */
+    grid-template-rows: minmax(0, 150px) minmax(0, 150px) minmax(0, 150px) minmax(0, 250px) minmax(0, 1fr);
+    gap: 20px; /* Espacio entre celdas */
+    grid-template-areas:
+      "total-sales  total-sales  sales-day     sales-count"
+      "total-sales  total-sales  invoice-status monthly-in"
+      "low-stock    low-stock    invoice-status monthly-out"
+      "low-stock    low-stock    top-products  top-products"
+      "low-stock    low-stock    top-products  top-products";
+    flex-grow: 1;         /* <<< NECESARIO: Para que el grid ocupe espacio en dashboard-content-area */
+    min-height: 0;        /* Ayuda a flex-grow */
+}
+
+/* Asignación de Áreas (Mantener sin cambios) */
+#total-sales    { grid-area: total-sales; }
+#sales-day      { grid-area: sales-day; }
+#sales-count    { grid-area: sales-count; }
+#invoice-status { grid-area: invoice-status; }
+#monthly-in     { grid-area: monthly-in; }
+#monthly-out    { grid-area: monthly-out; }
+#low-stock      { grid-area: low-stock; }
+#top-products   { grid-area: top-products; }
+
+/* --- Outer Card Styling --- */
+.card {
+    background-color: #ECECEC;
+    border-radius: 12px;
+    padding: 20px 20px 10px 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    height: 100%;           /* <<< MANTENER: Card llena su celda asignada */
+    overflow: hidden;
+    min-height: 0; /* Ayuda a flexbox dentro de celdas grid */
+}
+
+/* Títulos (Mantener sin cambios) */
+.card h2, .card h3 { margin-top: 0; margin-bottom: 15px; font-size: 1rem; font-weight: 600; color: #444; padding-left: 5px; flex-shrink: 0; }
+.card h3 { font-size: 0.9rem; }
+
+/* --- Inner Content Container Styling --- */
+.card-content {
+    background-color: #ffffff;
+    border-radius: 8px;
+    border: 1px solid #e7eaf3;
+    padding: 15px;
+    margin-bottom: 10px;
+    flex-grow: 1;             /* <<< MANTENER: Contenido blanco llena el card */
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    min-height: 0;
+}
+
+/* Contenido dentro de card-content (Mantener sin cambios) */
+.card-content p { margin: 0 0 5px 0; font-size: 0.85rem; color: #666; line-height: 1.5; text-align: left; width: 100%; }
+.card-content p:last-child { margin-bottom: 0; }
+.card-content p.amount { font-size: 1.4rem; font-weight: 600; color: #333; text-align: center; margin-bottom: 0; }
+
+/* --- General Chart Styling --- */
+.card-content apx-chart {
+    display: block;
+    width: 100%;
+    min-height: 150px; /* Evita que desaparezcan si el contenedor es muy pequeño */
+    flex-grow: 1;      /* <<< MANTENER: Gráfico llena el card-content */
+}
+
+/* --- Specific Card Type Adjustments --- */
+.info-card .card-content { justify-content: center; align-items: center; }
+.info-card .card-content p:not(.amount) { text-align: left; width: auto; }
+.chart-card .card-content { padding: 15px; align-items: stretch; /* Asegura que apx-chart pueda estirarse */ }
+
+/* --- REGLA .card-small REINCORPORADA --- */
+.card-small {
+    max-height: 150px; /* O la altura mínima deseada */
+    /* Cuidado: height: 100% en .card general podría sobreescribir esto
+       si la fila del grid es más alta. `min-height` es más seguro. */
+ }
+
+ /* --- REGLA .card-small REINCORPORADA --- */
+ .circular {
+    max-height: 320px; /* O la altura mínima deseada */
+    /* Cuidado: height: 100% en .card general podría sobreescribir esto
+       si la fila del grid es más alta. `min-height` es más seguro. */
+ }
+ 
+ .bajostock {
+  max-height: 440px; /* O la altura mínima deseada */
+  /* Cuidado: height: 100% en .card general podría sobreescribir esto
+     si la fila del grid es más alta. `min-height` es más seguro. */
+}
+
+.masvendidos {
+  max-height: 270px; /* O la altura mínima deseada */
+  /* Cuidado: height: 100% en .card general podría sobreescribir esto
+     si la fila del grid es más alta. `min-height` es más seguro. */
+}
+
+
+ 
+
+/* --- Responsive Adjustments (Ajustados para grid-template-rows) --- */
+@media (max-width: 1100px) {
+    .grid-container {
+        grid-template-columns: repeat(2, 1fr);
+        /* Mantener filas explícitas si se usan en desktop */
+        grid-template-rows: auto auto auto auto minmax(0, 1fr);
+        grid-template-areas:
+            "total-sales    total-sales"
+            "sales-day      sales-count"
+            "invoice-status monthly-in"
+            "invoice-status monthly-out"
+            "low-stock      low-stock"
+            "top-products   top-products";
+         align-items: stretch;
+    }
+
+     #invoice-status { grid-row: span 2; }
+     #monthly-in { align-self: start; }
+     #monthly-out { align-self: end; }
+     .grid-container { flex-grow: 1; }
+}
+
+@media (max-width: 768px) {
+  .grid-container {
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;     /* <<< VOLVER A auto PARA MÓVIL */
+    grid-template-rows: none; /* <<< ANULAR filas explícitas */
+    grid-template-areas:
+      "total-sales" "sales-day" "sales-count" "invoice-status"
+      "monthly-in" "monthly-out" "low-stock" "top-products";
+    align-items: stretch;
+  }
+  #invoice-status { grid-row: auto; }
+  #monthly-in { align-self: auto; }
+  #monthly-out { align-self: auto; }
+
+  .dashboard-content-area { padding: 15px; display: block; /* Volver a block si flex da problemas */ }
+  .dashboard-title { font-size: 1.5rem; margin-bottom: 15px; }
+  .card { padding: 15px 15px 5px 15px; height: auto; min-height: 90px; }
+  .card-content apx-chart { margin-left: 0; margin-right: 0; max-width: 100%; flex-grow: 1; min-height: 150px; }
+}

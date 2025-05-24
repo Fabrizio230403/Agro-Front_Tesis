@@ -1,0 +1,30 @@
+<div class="modal-content">
+    <div *ngIf="!isDeleted; else deletedTemplate">
+        <div class="icon">
+            <i class="material-icons" style="font-size: 48px; color: #FFC107;">warning</i>
+        </div>
+        <h2>¿Seguro que deseas eliminar este registro?</h2>
+        <p>Esta acción no se puede deshacer. El cliente será eliminado permanentemente.</p>
+        <div class="modal-actions">
+            <button mat-button (click)="onCancel()" class="cancel-button" style="background-color: #F44336; color: white;">
+                No, Cancelar
+            </button>
+            <button mat-raised-button (click)="onConfirm()" class="confirm-button" style="background-color: #2196F3; color: white;">
+                Sí, Eliminar
+            </button>
+        </div>
+    </div>
+ 
+    <ng-template #deletedTemplate>
+        <div class="icon">
+            <i class="material-icons" style="font-size: 48px; color: #4CAF50;">check_circle</i>
+        </div>
+        <h2>¡Eliminado!</h2>
+        <p>El cliente se ha eliminado correctamente.</p>
+        <div class="modal-actions" style="justify-content: center;">
+            <button mat-button (click)="onClose()" style="color: white; background-color: #2196F3;">
+                Ok
+            </button>
+        </div>
+    </ng-template>
+</div>

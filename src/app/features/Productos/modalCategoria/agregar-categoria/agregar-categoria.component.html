@@ -1,0 +1,59 @@
+<div class="modal">
+  <form (ngSubmit)="agregarCategoria()" class="modal-form">
+    <!-- Campo para el nombre de la categoría -->
+    <h2>Agregar Categoría</h2>
+    <div class="form-group">
+      <label for="name">Nombre de la Categoría</label>
+      <input
+        id="name"
+        [(ngModel)]="nuevaCategoria.name"
+        name="name"
+        required
+        placeholder="Ingrese el nombre de la categoría"
+        class="border border-gray-300 rounded-md w-full p-2 focus:ring-blue-500 focus:border-blue-500"
+      />
+    </div>
+
+    <!-- Campo para la descripción -->
+    <div class="form-group">
+      <label for="description">Descripción</label>
+      <textarea
+        id="description"
+        [(ngModel)]="nuevaCategoria.description"
+        name="description"
+        required
+        placeholder="Ingrese la descripción"
+        class="form-control"
+      ></textarea>
+    </div>
+
+
+
+    <!-- Campo para la imagen -->
+    <div class="form-group">
+      <label for="image">Imagen</label>
+      <input
+        id="image"
+        type="file"
+        (change)="onFileSelected($event)"
+        class="form-control-file"
+      />
+    </div>
+
+    <!-- Vista previa de la imagen -->
+    <div *ngIf="imagePreview" class="image-preview">
+      <h4>Vista Previa:</h4>
+      <img
+        [src]="imagePreview"
+        alt="Vista previa de la imagen"
+        class="max-w-[200px] border border-gray-300 p-2.5 mt-2.5"
+      />
+    </div>
+
+    <!-- Botones -->
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Agregar Categoría</button>
+      <button type="button" class="btn btn-secondary" (click)="cerrar()">Cancelar</button>
+    </div>
+  </form>
+</div>

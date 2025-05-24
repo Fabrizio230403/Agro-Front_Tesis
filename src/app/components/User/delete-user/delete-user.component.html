@@ -1,0 +1,34 @@
+<div class="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
+    <div class="relative w-full max-w-md mx-auto my-6">
+      <div class="relative flex flex-col w-full bg-white border-0 rounded-xl shadow-2xl outline-none focus:outline-none">
+        <!-- Modal Header -->
+        <div class="flex items-center justify-between p-5 border-b border-solid rounded-t border-blueGray-200 bg-red-50">
+          <h3 class="text-2xl font-semibold text-red-800">Confirm Deletion</h3>
+        </div>
+        
+        <!-- Modal Body -->
+        <div class="relative flex-auto p-6">
+          <p class="my-4 text-lg leading-relaxed text-gray-600">
+            Are you sure you want to delete the user 
+            <span class="font-bold text-red-600">{{ user.username }}</span>?
+          </p>
+        </div>
+  
+        <!-- Modal Footer -->
+        <div class="flex items-center justify-end p-6 border-t border-solid rounded-b border-blueGray-200">
+          <button 
+            (click)="cancelDelete()" 
+            class="px-6 py-2 mb-1 mr-4 text-sm font-bold text-gray-600 uppercase transition-all duration-150 ease-linear bg-transparent rounded outline-none hover:bg-gray-100 focus:outline-none"
+          >
+            Cancel
+          </button>
+          <button 
+            (click)="deleteUser()" 
+            class="px-6 py-2 mb-1 text-sm font-bold text-white uppercase transition-all duration-150 ease-linear bg-red-600 rounded shadow outline-none hover:bg-red-700 hover:shadow-lg focus:outline-none"
+          >
+            Yes, Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,35 @@
+ <div class="modal">
+    <div class="modal-content">
+      <h3>Agregar Documento</h3>
+      <form (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label for="fechaEmision">Fecha de Emisión:</label>
+          <input id="fechaEmision" type="date" [(ngModel)]="nuevoDocumento.fechaEmision" name="fechaEmision" required />
+        </div>
+        <div class="form-group">
+          <label for="numeroDocumento">Número de Documento:</label>
+          <input id="numeroDocumento" type="text" [(ngModel)]="nuevoDocumento.numeroDocumento" name="numeroDocumento" required />
+        </div>
+        <div class="form-group">
+          <label for="cliente">Cliente:</label>
+          <input id="cliente" type="text" [(ngModel)]="nuevoDocumento.cliente" name="cliente" required />
+        </div>
+        <div class="form-group">
+          <label for="montoTotal">Monto Total:</label>
+          <input id="montoTotal" type="number" [(ngModel)]="nuevoDocumento.montoTotal" name="montoTotal" required />
+        </div>
+        <div class="form-group">
+          <label for="estadoPago">Estado de Pago:</label>
+          <select id="estadoPago" [(ngModel)]="nuevoDocumento.estadoPago" name="estadoPago">
+            <option value="Activo">Activo</option>
+            <option value="Archivado">Archivado</option>
+          </select>
+        </div>
+        <div class="modal-actions">
+          <button type="submit" class="btn-primary">Agregar</button>
+          <button type="button" class="btn-secondary" (click)="cerrarmodal()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  

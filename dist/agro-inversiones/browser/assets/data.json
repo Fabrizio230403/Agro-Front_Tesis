@@ -1,0 +1,74 @@
+[
+  {
+    "codigo": "A123",
+    "nombre": "Aceite",
+    "total": 10,
+    "precioUnitario": 5,
+    "precioTotal": 50,
+    "fechaRegistro": "2021-01-27 06:24:23"
+  },
+  {
+    "codigo": "A321",
+    "nombre": "Arroz",
+    "total": 8,
+    "precioUnitario": 3,
+    "precioTotal": 24,
+    "fechaRegistro": "2020-06-27 10:24:23"
+  },
+  {
+    "codigo": "A876",
+    "nombre": "Vela",
+    "total": 5,
+    "precioUnitario": 3,
+    "precioTotal": 15,
+    "fechaRegistro": "2023-08-10 01:24:23"
+  },
+  {
+    "codigo": "A871",
+    "nombre": "Alcohol",
+    "total": 9,
+    "precioUnitario": 12,
+    "precioTotal": 108,
+    "fechaRegistro": "2022-11-12 10:24:23"
+  },
+  {
+    "codigo": "M234",
+    "nombre": "Lampara",
+    "total": 10,
+    "precioUnitario": 10,
+    "precioTotal": 100,
+    "fechaRegistro": "2022-11-12 10:24:23"
+  },
+  {
+    "codigo": "J674",
+    "nombre": "Mouse",
+    "total": 50,
+    "precioUnitario": 13,
+    "precioTotal": 650,
+    "fechaRegistro": "2022-11-12 10:24:23"
+  },
+  {
+    "codigo": "L003",
+    "nombre": "Regla",
+    "total": 27,
+    "precioUnitario": 3,
+    "precioTotal": 81,
+    "fechaRegistro": "2022-11-12 10:24:23"
+  },
+  {
+    "codigo": "X009",
+    "nombre": "Gancho",
+    "total": 27,
+    "precioUnitario": 3,
+    "precioTotal": 81,
+    "fechaRegistro": "2022-11-12 10:24:23"
+  },
+  {
+    "codigo": "P456",
+    "nombre": "Papel",
+    "total": 15,
+    "precioUnitario": 2,
+    "precioTotal": 30,
+    "fechaRegistro": "2024-11-26 09:15:00"
+  }
+]

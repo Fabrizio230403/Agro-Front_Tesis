@@ -1,0 +1,88 @@
+/* Style the sidebar */
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Ocupa toda la altura de la pantalla */
+    width: 16rem;
+    color: white;
+    padding: 20px;
+    background-color: #343434; /* Fondo oscuro */
+    font-family: 'Arial', sans-serif;
+}
+
+/* Perfil de usuario */
+.sidebar img {
+    width: 100px;
+    height: 100px;
+    border-radius: 9999px;
+    object-fit: cover;
+    margin: 0 auto;
+}
+
+.sidebar h3 {
+    margin-top: 10px;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.sidebar p {
+    font-size: 0.9rem;
+    color: #d1d5db;
+}
+
+.sidebar a {
+    text-decoration: none;
+}
+
+.sidebar .perfil-link {
+    color: #3B82F6;
+    font-size: 0.9rem;
+    margin-top: 4px;
+    display: inline-block;
+}
+
+/* Estilos para los enlaces de navegación */
+nav {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    color: white;
+    font-size: 0.95rem;
+    background-color: #007bff; /* Azul botones */
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.sidebar-link i {
+    width: 18px;
+    text-align: center;
+}
+
+.sidebar-link:hover {
+    background-color: #0056b3;
+    transform: translateX(5px);
+}
+
+/* Enlace activo */
+.sidebar-link.active {
+    background-color: #f4b400; /* Amarillo para activo */
+    color: white;
+    font-weight: bold;
+}
+
+/* Botón de cerrar sesión distinto */
+.sidebar-link.logout {
+    background-color: #1751a8;
+}
+
+.sidebar-link.logout:hover {
+    background-color: #084298;
+}

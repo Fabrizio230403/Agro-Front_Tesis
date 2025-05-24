@@ -1,0 +1,93 @@
+[
+  {
+    "id": 1,
+    "photo": "https://www.shutterstock.com/image-vector/person-icon-logo-solid-vector-260nw-1671875080.jpg",
+    "username": "Alfredo Martinez",
+    "email": "example1@gmail.com",
+    "phone": "+51961182778",
+    "status": "Active",
+    "dateJoined": "2023-01-15T00:00:00Z",
+    "lastLogin": "2023-10-18T23:15:00Z",
+    "roles": ["Admin", "User"],
+    "modules": ["Dashboard", "Users", "Reports"],
+    "permissions": ["View", "Create", "Edit", "Delete"]
+  },
+  {
+    "id": 2,
+    "photo": "https://www.shutterstock.com/image-vector/person-icon-logo-solid-vector-260nw-1671875080.jpg",
+    "username": "Luis Casanlis",
+    "email": "example2@gmail.com",
+    "phone": "+51910827271",
+    "status": "Active",
+    "dateJoined": "2023-01-15T00:00:00Z",
+    "lastLogin": "2023-10-18T23:10:00Z",
+    "roles": ["User"],
+    "modules": ["Users", "Settings"],
+    "permissions": ["View", "Create"]
+  },
+  {
+    "id": 3,
+    "photo": "https://www.shutterstock.com/image-vector/person-icon-logo-solid-vector-260nw-1671875080.jpg",
+    "username": "Mario Colores",
+    "email": "example3@gmail.com",
+    "phone": "+51912344556",
+    "status": "Active",
+    "dateJoined": "2023-01-15T00:00:00Z",
+    "lastLogin": "2023-10-18T23:05:00Z",
+    "roles": ["User"],
+    "modules": ["Dashboard", "Reports"],
+    "permissions": ["View", "Edit"]
+  },
+  {
+    "id": 4,
+    "photo": "https://www.shutterstock.com/image-vector/person-icon-logo-solid-vector-260nw-1671875080.jpg",
+    "username": "José Gallo",
+    "email": "example4@gmail.com",
+    "phone": "+51961089727",
+    "status": "Active",
+    "dateJoined": "2023-01-15T00:00:00Z",
+    "lastLogin": "2023-10-18T22:50:00Z",
+    "roles": ["Admin"],
+    "modules": ["Dashboard", "Users", "Reports", "Settings"],
+    "permissions": ["View", "Create", "Edit", "Delete"]
+  },
+  {
+    "id": 5,
+    "photo": "https://www.shutterstock.com/image-vector/person-icon-logo-solid-vector-260nw-1671875080.jpg",
+    "username": "Dennis Delgado",
+    "email": "example5@gmail.com",
+    "phone": "+51924012377",
+    "status": "Active",
+    "dateJoined": "2021-05-12T00:00:00Z",
+    "lastLogin": "2023-10-18T21:20:00Z",
+    "roles": ["User"],
+    "modules": ["Users", "Reports"],
+    "permissions": ["View"]
+  },
+  {
+    "id": 6,
+    "photo": "https://www.shutterstock.com/image-vector/person-icon-logo-solid-vector-260nw-1671875080.jpg",
+    "username": "Martha Escobar",
+    "email": "example6@gmail.com",
+    "phone": "+51965381214",
+    "status": "Active",
+    "dateJoined": "2021-05-12T00:00:00Z",
+    "lastLogin": "2023-10-18T21:15:00Z",
+    "roles": ["Admin", "User"],
+    "modules": ["Users", "Settings"],
+    "permissions": ["View", "Create", "Delete"]
+  },
+  {
+    "id": 7,
+    "photo": "https://www.shutterstock.com/image-vector/person-icon-logo-solid-vector-260nw-1671875080.jpg",
+    "username": "Ángel Guzmán",
+    "email": "example7@gmail.com",
+    "phone": "+51910832778",
+    "status": "Active",
+    "dateJoined": "2021-10-04T00:00:00Z",
+    "lastLogin": "2023-10-18T20:50:00Z",
+    "roles": ["User"],
+    "modules": ["Dashboard", "Reports"],
+    "permissions": ["View"]
+  }
+]

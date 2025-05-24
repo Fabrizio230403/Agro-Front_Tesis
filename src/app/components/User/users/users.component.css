@@ -1,0 +1,10 @@
+/* your-user-component.component.css */
+
+.user-card {
+  min-height: 350px;
+} 
+
+/* Optional: Fine-tune aspect ratio for images if needed */
+.user-card img {
+  aspect-ratio: 4 / 3; 
+ } 

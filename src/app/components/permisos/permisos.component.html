@@ -1,0 +1,132 @@
+ <div class="dashboard-layout flex flex-col h-screen bg-gray-100">
+    <!-- Header -->
+    <app-header (sidebarToggle)="toggleSidebar()"></app-header>
+
+    <!-- Contenedor principal -->
+    <div class="main-container flex flex-grow">
+        <!-- Sidebar -->
+        <app-siderbang *ngIf="isSidebarVisible" class="siderbang w-64 bg-white shadow-md"></app-siderbang>
+
+        <!-- Contenido principal -->
+        <div class="container mx-auto p-6">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Gestión de Permisos</h2>
+
+            <!-- Botón para regresar -->
+            <button (click)="goToRoles()"
+                    class="flex items-center gap-2 bg-gray-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-gray-700 transition duration-300">
+                🔙 Regresar a Roles
+            </button>
+
+            <!-- Tabla de Permisos -->
+            <div class="mt-6 overflow-x-auto bg-white shadow-lg rounded-lg">
+                <table class="min-w-full border border-gray-200">
+                    <thead class="bg-gray-700 text-white">
+                        <tr>
+                            <th class="px-6 py-3 text-left font-medium">Nombre</th>
+                            <th class="px-6 py-3 text-left font-medium">Descripción</th>
+                            <th class="px-6 py-3 text-left font-medium text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr *ngFor="let permission of permissions" class="hover:bg-gray-50">
+                            <td class="px-6 py-4 font-semibold text-gray-700">{{ permission.permissionName }}</td>
+                            <td class="px-6 py-4 text-gray-600">{{ permission.description }}</td>
+                            <td class="px-6 py-4 text-center">
+                                <button (click)="deletePermission(permission.id)" 
+                                        class="bg-red-500 text-white px-3 py-1 rounded-lg shadow-md hover:bg-red-600 transition">
+                                    🗑 Eliminar
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Sección para asignar permisos a un rol -->
+            <div class="mt-8 p-6 bg-white shadow-lg rounded-lg">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">Asignar Permisos a un Rol</h3>
+                
+                <div class="flex flex-wrap gap-4">
+                    <!-- Selector de Roles -->
+                    <div class="flex-1">
+                        <label class="block text-gray-700 font-semibold mb-2">Seleccionar Rol:</label>
+                        <select [(ngModel)]="selectedRoleId" class="w-full border px-4 py-2 rounded-lg focus:ring-2 focus:ring-blue-500">
+                            <option *ngFor="let role of roles" [value]="role.id">{{ role.role_name }}</option>
+                        </select>
+                    </div>
+
+                    <!-- Selector de Permisos con Checkboxes -->
+                    <div class="flex-1">
+                        <label class="block text-gray-700 font-semibold mb-2">Seleccionar Permisos:</label>
+                        <div class="border px-4 py-2 rounded-lg bg-gray-50 shadow-md">
+                            <div *ngFor="let permission of permissions" class="flex items-center gap-2 py-2">
+                                <input type="checkbox" 
+                                    [value]="permission.id" 
+                                    (change)="togglePermission(permission.id, $event)"
+                                    [checked]="selectedPermissions.includes(permission.id)"
+                                    class="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                <label class="text-gray-700">{{ permission.permissionName }}</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botón Asignar -->
+                    <div class="flex items-end">
+                        <button (click)="assignPermissionsToRole()" 
+                                class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700 transition">
+                            ✅ Asignar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Cargando -->
+<div *ngIf="isLoading" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h3 class="text-lg font-semibold text-gray-800">Asignando permisos...</h3>
+        <div class="mt-4 flex justify-center">
+            <span class="animate-spin h-8 w-8 border-4 border-blue-500 border-t-transparent rounded-full"></span>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Éxito -->
+<div *ngIf="showSuccessModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h3 class="text-lg font-semibold text-green-700">✅ Permisos asignados correctamente</h3>
+    </div>
+</div>
+
+<!-- Modal de Error -->
+<div *ngIf="showErrorModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h3 class="text-lg font-semibold text-red-700">❌ Error al asignar permisos</h3>
+    </div>
+</div>
+
+<!-- Modal de Cargando al eliminar -->
+<div *ngIf="isDeleting" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h3 class="text-lg font-semibold text-gray-800">Eliminando permiso...</h3>
+        <div class="mt-4 flex justify-center">
+            <span class="animate-spin h-8 w-8 border-4 border-red-500 border-t-transparent rounded-full"></span>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Éxito al eliminar -->
+<div *ngIf="showDeleteSuccessModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h3 class="text-lg font-semibold text-green-700">✅ Permiso eliminado correctamente</h3>
+    </div>
+</div>
+
+<!-- Modal de Error al eliminar -->
+<div *ngIf="showDeleteErrorModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div class="bg-white p-6 rounded-lg shadow-lg">
+        <h3 class="text-lg font-semibold text-red-700">❌ Error al eliminar permiso</h3>
+    </div>
+</div>

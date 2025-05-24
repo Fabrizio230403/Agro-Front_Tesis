@@ -1,0 +1,130 @@
+<!-- dashboard.component.html -->
+<div class="dashboard-layout">
+
+  <!-- Contenedor principal -->
+  <div class="main-container">
+    <!-- Sidebar -->
+    <app-siderbang *ngIf="isSidebarVisible" class="siderbang"></app-siderbang>
+    
+    <!-- Contenedor de gráficos -->
+    <div class="content-area flex-grow overflow-y-auto">
+      <app-header (sidebarToggle)="toggleSidebar()"></app-header>
+      <div class="p-4" [ngClass]="{ 'expanded': !isSidebarVisible }">
+      <h1 class="dashboard-title">Dashboard</h1>
+
+      <div *ngIf="isLoading" class="loading-indicator">
+        Cargando datos del dashboard...
+      </div>
+
+      <div *ngIf="!isLoading" class="grid-container">
+
+        <!-- Total Sales Chart -->
+        <div id="total-sales" class="card chart-card">
+          <h2>Total de ventas de los últimos 6 meses</h2>
+          <div class="card-content">
+            <apx-chart #totalSalesChart
+                       [series]="charts[0].series"
+                       [chart]="charts[0].chart"
+                       [xaxis]="charts[0].xaxis"
+                       [yaxis]="charts[0].yaxis"
+                       [stroke]="charts[0].stroke"
+                       [tooltip]="charts[0].tooltip"
+                       [dataLabels]="charts[0].dataLabels"
+                       [grid]="charts[0].grid">
+            </apx-chart>
+          </div>
+        </div>
+
+        <!-- Sales Day Info Box -->
+        <div id="sales-day" class="card info-card card-small">
+          <h3>Ventas del día</h3>
+           <div class="card-content">
+             <!-- USA INTERPOLACIÓN Y PIPE CURRENCY -->
+             <p class="amount">{{ ventasDiaTotal | currency:'S/. ':'symbol':'1.2-2' }}</p>
+           </div>
+        </div>
+
+        <!-- Sales Count Info Box -->
+        <div id="sales-count" class="card info-card card-small">
+          <h3>Cantidad de ventas</h3>
+           <div class="card-content">
+             <!-- USA INTERPOLACIÓN -->
+             <p class="amount">{{ ventasDiaCantidad }}</p>
+           </div>
+        </div>
+
+        <!-- Invoice Status Chart -->
+        <div id="invoice-status" class="card chart-card">
+          <h2>Estados de Facturas</h2>
+           <div class="card-content">
+             <apx-chart #invoiceStatusChart
+                        [series]="charts[1].series"
+                        [chart]="charts[1].chart"
+                        [labels]="charts[1].labels"
+                        [plotOptions]="charts[1].plotOptions"
+                        [legend]="charts[1].legend"
+                        [colors]="charts[1].colors"
+                        [tooltip]="charts[1].tooltip"
+                        [dataLabels]="charts[1].dataLabels">
+              </apx-chart>
+           </div>
+        </div>
+
+        <!-- Monthly In Info Box -->
+         <div id="monthly-in" class="card info-card card-small">
+           <h3>Entradas del mes</h3>
+           <div class="card-content">
+             <!-- USA INTERPOLACIÓN Y PIPE CURRENCY -->
+             <p>Monto: {{ entradaMonto | currency:'S/. ':'symbol':'1.2-2' }}<br>Productos: {{ entradaProducto }}</p>
+            </div>
+         </div>
+
+         <!-- Monthly Out Info Box -->
+         <div id="monthly-out" class="card info-card card-small">
+           <h3>Salidas del mes</h3>
+            <div class="card-content">
+             <!-- USA INTERPOLACIÓN Y PIPE CURRENCY -->
+             <p>Monto: {{ salidaMonto | currency:'S/. ':'symbol':'1.2-2' }}<br>Productos: {{ salidaProducto }}</p>
+            </div>
+         </div>
+
+        <!-- Low Stock Chart -->
+        <div id="low-stock" class="card chart-card bajostock">
+          <h2>Productos con bajo stock</h2>
+          <div class="card-content">
+            <apx-chart #lowStockChart
+                       [series]="charts[2].series"
+                       [chart]="charts[2].chart"
+                       [xaxis]="charts[2].xaxis"
+                       [yaxis]="charts[2].yaxis"
+                       [plotOptions]="charts[2].plotOptions"
+                       [dataLabels]="charts[2].dataLabels"
+                       [colors]="charts[2].colors"
+                       [grid]="charts[2].grid">
+            </apx-chart>
+          </div>
+        </div>
+
+        <!-- Top Selling Products Chart -->
+        <div id="top-products" class="card chart-card masvendidos">
+          <h2>Productos mas vendidos del mes</h2>
+          <div class="card-content">
+            <apx-chart #topProductsChart
+                       [series]="charts[3].series"
+                       [chart]="charts[3].chart"
+                       [xaxis]="charts[3].xaxis"
+                       [yaxis]="charts[3].yaxis"
+                       [plotOptions]="charts[3].plotOptions"
+                       [dataLabels]="charts[3].dataLabels"
+                       [colors]="charts[3].colors"
+                       [grid]="charts[3].grid"
+                       [legend]="charts[3].legend"
+                       [tooltip]="charts[3].tooltip">
+            </apx-chart>
+          </div>
+        </div>
+
+      </div> <!-- End grid-container -->
+    </div>
+  </div> <!-- End dashboard-content-area -->
+</div> <!-- End main-container -->

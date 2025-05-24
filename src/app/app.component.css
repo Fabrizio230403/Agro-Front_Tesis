@@ -1,0 +1,9 @@
+.main-layout {
+    display: flex;
+    transition: margin-left 0.3s;
+  }
+  
+  .content {
+    flex-grow: 1;
+  }
+  

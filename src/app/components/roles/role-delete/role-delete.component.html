@@ -1,0 +1,9 @@
+<div *ngFor="let role of roles" class="flex justify-between items-center p-4 border-b border-gray-300">
+    <span class="text-lg font-semibold text-gray-800">{{ role.name }}</span>
+    <button 
+      (click)="deleteRole(role.id)"
+      class="bg-red-500 text-white hover:bg-red-600 py-2 px-4 rounded-md transition-all">
+      Eliminar
+    </button>
+  </div>
+  

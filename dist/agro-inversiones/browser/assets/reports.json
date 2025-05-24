@@ -1,0 +1,48 @@
+[
+    {
+      "name": "Informe de Ventas",
+      "type": "Informe Financiero",
+      "date": "2024-11-01",
+      "address": "Av. Giral, Lima, Perú",
+      "permission": "Solo Gerencia",
+      "status": "active",
+      "category": "Ventas"
+    },
+    {
+      "name": "Reporte de Inventario",
+      "type": "Reporte de Inventario",
+      "date": "2024-10-28",
+      "address": "Av. Giral, Lima, Perú",
+      "permission": "Todos los Usuarios",
+      "status": "active",
+      "category": "Inventario"
+    },
+    {
+      "name": "Análisis de Proveedores",
+      "type": "Análisis de Clientes",
+      "date": "2024-10-15",
+      "address": "Av. Giral, Lima, Perú",
+      "permission": "Solo Administradores",
+      "status": "inactive",
+      "category": "Clientes"
+    },
+    {
+      "name": "Estadísticas de Clientes",
+      "type": "Ventas por Categoría",
+      "date": "2024-11-08",
+      "address": "Av. Giral, Lima, Perú",
+      "permission": "Departamento de Finanzas",
+      "status": "active",
+      "category": "Proveedores"
+    },
+    {
+      "name": "Nuevas Ventas",
+      "type": "Reporte de Proveedores",
+      "date": "2024-12-17",
+      "address": "Av. Giral, Lima, Perú",
+      "permission": "Ventas y Marketing",
+      "status": "inactive",
+      "category": "Finanzas"
+    }
+  ]
+  

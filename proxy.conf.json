@@ -1,0 +1,9 @@
+{
+    "/api": {
+      "target": "https://agroinversiones-api-ffaxcadua6gwf0fs.canadacentral-01.azurewebsites.net",
+      "secure": true,
+      "changeOrigin": true,
+      "logLevel": "debug"
+    }
+  }
+  

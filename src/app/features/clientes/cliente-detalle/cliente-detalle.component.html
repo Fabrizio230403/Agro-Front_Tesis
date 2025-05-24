@@ -1,0 +1,20 @@
+ <div class="modal-content">
+  <div class="modal-header">
+    <i class="material-icons">info</i>
+    <h2>Detalles del Cliente</h2>
+  </div>
+
+  <div class="cliente-detalle">
+    <div class="detalle"><span>Razón Social:</span> {{ cliente.name }}</div>
+    <div class="detalle"><span>Tipo de Cliente:</span> {{ cliente.typeCustomer }}</div>
+    <div class="detalle"><span>Tipo de Documento:</span> {{ cliente.documentType }}</div>
+    <div class="detalle"><span>N° Documento:</span> {{ cliente.documentNumber }}</div>
+    <div class="detalle"><span>Dirección:</span> {{ cliente.address }}</div>
+    <div class="detalle"><span>Teléfono:</span> {{ cliente.phone }}</div>
+    <div class="detalle"><span>Correo:</span> {{ cliente.email }}</div>
+  </div>
+
+  <div class="modal-footer">
+    <button mat-button (click)="cerrarModal()">Cerrar</button>
+  </div>
+</div>

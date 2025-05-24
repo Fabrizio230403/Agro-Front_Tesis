@@ -1,0 +1,113 @@
+<div class="dashboard-layout">
+  <!-- Header -->
+  <app-header (sidebarToggle)="toggleSidebar()"></app-header>
+
+  <!-- Contenedor principal -->
+  <div class="main-container flex flex-grow">
+    <!-- Sidebar -->
+    <app-siderbang *ngIf="isSidebarVisible" class="siderbang w-64"></app-siderbang>
+
+    <div class="container">
+      <h1>Gestión de documentos electrónicos</h1>
+
+      <div class="filters-container">
+        <div class="search-container">
+          <input type="text" placeholder="Buscar por RUC / DNI" class="search-input" [(ngModel)]="searchTerm"
+            (imput)="buscarDocumentos()" />
+          <button class="search-button" (click)="buscarDocumentos()">
+            <i class="bi bi-search"></i>
+          </button>
+        </div>
+
+        <div class="date-filter-container">
+          <mat-form-field appearance="fill" class="custom-date-filter">
+            <mat-label>Filtrar por fecha</mat-label>
+            <input matInput [matDatepicker]="picker" [(ngModel)]="selectedDate"
+              (dateChange)="filtrarPorFecha(selectedDate)" placeholder="Selecciona una fecha" />
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="table-section">
+        <div class="table-header">
+
+        </div>
+
+        <table class="documents-table">
+          <thead>
+            <tr>
+              <th>FECHA DE EMISIÓN</th>
+              <th>TIPO DE DOCUMENTO</th>
+              <th>NÚMERO DOCUMENTO</th>
+              <th>CLIENTE</th>
+              <th>MONTO TOTAL B/F</th>
+              <th>ESTADO DE PAGO</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let doc of documentosPaginados">
+              <td>{{ doc.fechaEmision| date:'dd/MM/yyyy' }}</td>
+              <td>{{ doc.tipoDocumento }}</td>
+              <td>{{ doc.numeroDocumento }}</td>
+              <td>{{ doc.cliente }}</td>
+              <td>{{ doc.montoTotal }}</td>
+              <td>{{ doc.estado }}</td>
+              <td class="actions">
+                <button class="action-btn download-btn" (click)="imprimirDocumento(doc)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                    viewBox="0 0 24 24">
+                    <path
+                      d="m19,7h-1V2H6v5h-1c-1.65,0-3,1.35-3,3v7c0,1.1.9,2,2,2h2v3h12v-3h2c1.1,0,2-.9,2-2v-7c0-1.65-1.35-3-3-3Zm-11-3h8v3h-8v-3Zm8,16h-8v-4h8v4Zm4-3h-2v-3H6v3h-2v-7c0-.55.45-1,1-1h14c.55,0,1,.45,1,1v7Z">
+                    </path>
+                    <path d="M14 11H18V12H14z"></path>
+                  </svg>
+                </button>
+                <button class="action-btn edit-btn" (click)="abrirDocumento(doc)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <path
+                      d="M13.707 2.293A.996.996 0 0 0 13 2H6c-1.103 0-2 .897-2 2v16c0 1.103.897 2 2 2h12c1.103 0 2-.897 2-2V9a.996.996 0 0 0-.293-.707l-6-6zM6 4h6.586L18 9.414l.002 9.174-2.568-2.568c.35-.595.566-1.281.566-2.02 0-2.206-1.794-4-4-4s-4 1.794-4 4 1.794 4 4 4c.739 0 1.425-.216 2.02-.566L16.586 20H6V4zm6 12c-1.103 0-2-.897-2-2s.897-2 2-2 2 .897 2 2-.897 2-2 2z">
+                    </path>
+                  </svg>
+                </button>
+                <button class="action-btn send-btn" (click)="abrirModal()">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                    <path
+                      d="M20.56 3.34a1 1 0 0 0-1-.08l-17 8a1 1 0 0 0-.57.92 1 1 0 0 0 .6.9L8 15.45v6.72L13.84 18l4.76 2.08a.93.93 0 0 0 .4.09 1 1 0 0 0 .52-.15 1 1 0 0 0 .48-.79l1-15a1 1 0 0 0-.44-.89zM18.1 17.68l-5.27-2.31L16 9.17l-7.65 4.25-2.93-1.29 13.47-6.34z">
+                    </path>
+                  </svg>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="pagination">
+          <button class="page-btn prev-btn" (click)="cambiarPaginaAnterior()" [disabled]="paginaActual === 1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+              <path d="M12.707 17.293 8.414 13H18v-2H8.414l4.293-4.293-1.414-1.414L4.586 12l6.707 6.707z"></path>
+            </svg>
+            Anterior
+          </button>
+          <div class="page-buttons">
+            <button *ngFor="let page of pageNumbers()" (click)="cambiarPagina(page)" [disabled]="paginaActual === page">
+              {{ page }}
+            </button>
+          </div>
+
+          <button class="page-btn next-btn" (click)="cambiarPaginaSiguiente()"
+            [disabled]="paginaActual === totalPaginas()">
+            Siguiente
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+              <path d="m11.293 17.293 1.414 1.414L19.414 12l-6.707-6.707-1.414 1.414L15.586 11H6v2h9.586z"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-ver-ges #modalVerGes></app-ver-ges>
+<app-enviar-ges (cerrar)="cerrarModal()"></app-enviar-ges>

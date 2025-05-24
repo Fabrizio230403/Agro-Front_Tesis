@@ -1,0 +1,134 @@
+[
+    {
+        "ruc": "12345678901",
+        "nombre": "Tubermix S.A.C.",
+        "email": "contacto@tubermix.com",
+        "telefono": "01-5678901",
+        "direccion": "Av. Principal 123, Lima, Perú",
+        "categoria": "Fungicidas",
+        "fechaRegistro": "2024-10-10T00:00:00.000Z",
+        "estado": "Activo",
+        "selected": false
+    },
+    {
+        "ruc": "20458678912",
+        "nombre": "Construeste S.A.",
+        "email": "contacto@construeste.com",
+        "telefono": "01-5678901",
+        "direccion": "Av. Industrial 456, Lima, Perú",
+        "categoria": "Pesticidas",
+        "fechaRegistro": "2024-08-15T00:00:00.000Z",
+        "estado": "Inactivo",
+        "selected": false
+    },
+    {
+        "ruc": "20567890123",
+        "nombre": "AgroPeru S.A.",
+        "email": "info@agroperu.com",
+        "telefono": "01-6789012",
+        "direccion": "Calle Falsa 123, Lima, Perú",
+        "categoria": "Herbicidas",
+        "fechaRegistro": "2024-09-20T00:00:00.000Z",
+        "estado": "Activo",
+        "selected": false
+    },
+    {
+        "ruc": "20678901234",
+        "nombre": "Fertilizantes del Norte",
+        "email": "ventas@fertinorte.com",
+        "telefono": "01-7890123",
+        "direccion": "Av. Los Olivos 789, Trujillo, Perú",
+        "categoria": "Fertilizantes",
+        "fechaRegistro": "2024-07-10T00:00:00.000Z",
+        "estado": "Activo",
+        "selected": false
+    },
+    {
+        "ruc": "20789012345",
+        "nombre": "AgroAndes S.A.C.",
+        "email": "contacto@agroandes.com",
+        "telefono": "01-8901234",
+        "direccion": "Jr. Los Pinos 456, Arequipa, Perú",
+        "categoria": "Insecticidas",
+        "fechaRegistro": "2024-06-05T00:00:00.000Z",
+        "estado": "Inactivo",
+        "selected": false
+    },
+    {
+        "ruc": "20890123456",
+        "nombre": "AgroSur S.A.",
+        "email": "info@agrosur.com",
+        "telefono": "01-9012345",
+        "direccion": "Av. Sur 123, Cusco, Perú",
+        "categoria": "Fungicidas",
+        "fechaRegistro": "2024-05-15T00:00:00.000Z",
+        "estado": "Activo",
+        "selected": false
+    },
+    {
+        "ruc": "20901234567",
+        "nombre": "AgroNorte S.A.C.",
+        "email": "ventas@agronorte.com",
+        "telefono": "01-0123456",
+        "direccion": "Calle Norte 456, Piura, Perú",
+        "categoria": "Pesticidas",
+        "fechaRegistro": "2024-04-20T00:00:00.000Z",
+        "estado": "Inactivo",
+        "selected": false
+    },
+    {
+        "ruc": "21012345678",
+        "nombre": "AgroCentro S.A.",
+        "email": "info@agrocentro.com",
+        "telefono": "01-1234567",
+        "direccion": "Av. Centro 789, Huancayo, Perú",
+        "categoria": "Herbicidas",
+        "fechaRegistro": "2024-03-25T00:00:00.000Z",
+        "estado": "Activo",
+        "selected": false
+    },
+    {
+        "ruc": "21123456789",
+        "nombre": "AgroEste S.A.C.",
+        "email": "contacto@agroeste.com",
+        "telefono": "01-2345678",
+        "direccion": "Jr. Este 123, Ica, Perú",
+        "categoria": "Fertilizantes",
+        "fechaRegistro": "2024-02-10T00:00:00.000Z",
+        "estado": "Inactivo",
+        "selected": false
+    },
+    {
+        "ruc": "21234567890",
+        "nombre": "AgroOeste S.A.",
+        "email": "ventas@agrooeste.com",
+        "telefono": "01-3456789",
+        "direccion": "Av. Oeste 456, Chiclayo, Perú",
+        "categoria": "Insecticidas",
+        "fechaRegistro": "2024-01-15T00:00:00.000Z",
+        "estado": "Activo",
+        "selected": false
+    },
+    {
+        "ruc": "21345678901",
+        "nombre": "AgroSelva S.A.C.",
+        "email": "info@agroselva.com",
+        "telefono": "01-4567890",
+        "direccion": "Calle Selva 789, Tarapoto, Perú",
+        "categoria": "Fungicidas",
+        "fechaRegistro": "2023-12-20T00:00:00.000Z",
+        "estado": "Inactivo",
+        "selected": false
+    },
+    {
+        "ruc": "21456789012",
+        "nombre": "AgroMontaña S.A.",
+        "email": "contacto@agromontana.com",
+        "telefono": "01-5678901",
+        "direccion": "Jr. Montaña 123, Huaraz, Perú",
+        "categoria": "Pesticidas",
+        "fechaRegistro": "2023-11-15T00:00:00.000Z",
+        "estado": "Activo",
+        "selected": false
+    }
+]

@@ -1,0 +1,88 @@
+ /* Contenedor principal del modal */
+.modal-content {
+  width: 100%;
+  max-width: 600px;  /* Aumentamos el tamaño para hacerlo más espacioso */
+  background: #fff;
+  border-radius: 12px;  /* Bordes más suaves */
+  padding: 20px 30px;  /* Mayor espacio interior */
+  box-sizing: border-box;
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
+  font-family: 'Roboto', sans-serif;
+  margin: auto;
+  overflow: hidden;  /* Para evitar desbordes */
+}
+
+/* Header con ícono y título */
+.modal-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;  /* Espaciado adicional */
+  border-bottom: 2px solid #f0f0f0;  /* Línea sutil separadora */
+}
+
+.modal-header i {
+  font-size: 48px;
+  color: #1976D2;
+  margin-bottom: 12px;  /* Ajuste de espaciado */
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 26px;  /* Fuente más grande para el título */
+  font-weight: 600;
+  color: #1976D2;
+  letter-spacing: 0.5px;  /* Espaciado para mayor legibilidad */
+}
+
+/* Estilo de los detalles del cliente */
+.cliente-detalle {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;  /* Aumento de espacio entre cada detalle */
+  margin-top: 20px;
+}
+
+.detalle {
+  font-size: 16px;
+  color: #444;
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;  /* Línea separadora entre los elementos */
+}
+
+.detalle span {
+  font-weight: 500;  /* Peso de fuente ligeramente más bajo para mejorar la jerarquía */
+  color: #333;
+  min-width: 160px;  /* Ajuste en el ancho para mayor consistencia */
+  text-transform: capitalize;  /* Hacer las etiquetas más legibles */
+}
+
+/* Botón de acción */
+.modal-footer {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.modal-footer button {
+  background-color: #1976D2;
+  color: white;
+  border: none;
+  border-radius: 25px;  /* Bordes más redondeados para un aspecto más moderno */
+  padding: 14px 35px;  /* Aumento del tamaño para hacerlo más atractivo */
+  font-size: 18px;
+  font-weight: 500;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  cursor: pointer;
+}
+
+.modal-footer button:hover {
+  background-color: #0D47A1;
+  transform: scale(1.05);  /* Efecto de suavizado al pasar el mouse */
+}
+
+.modal-footer button:focus {
+  outline: none;
+}

@@ -1,0 +1,111 @@
+ <!-- Fondo oscuro -->
+<div class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+  <!-- Modal blanco -->
+  <div class="bg-white p-6 rounded-xl shadow-xl w-full max-w-4xl relative mt-16 max-h-[85vh] overflow-y-auto">
+
+    <!-- Botón de cerrar -->
+    <button type="button" (click)="onClose()"
+      class="absolute top-3 right-4 text-blue-600 hover:text-blue-800 text-2xl font-bold">
+      ×
+    </button>
+
+    <!-- Título centrado -->
+    <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Asignar Permisos</h2>
+
+    <!-- Botón Crear nuevo permiso -->
+    <div class="flex justify-end mb-4">
+      <button type="button"
+        class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M12 4v4m0 4v8m0-8h8m-8 0H4m10-8l4 4" />
+        </svg>
+        Crear nuevo permiso
+      </button>
+    </div>
+
+    <!-- Contenedor gris -->
+    <div class="bg-gray-100 p-4 rounded-lg">
+
+      <!-- Filtros -->
+      <div class="flex flex-col md:flex-row gap-4 mb-4">
+        <div class="relative w-full md:w-1/2">
+          <input type="text" [(ngModel)]="filtroModulo" placeholder="Buscar módulo"
+            class="pl-10 pr-4 py-2 rounded-full border border-gray-300 w-full focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          <svg xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
+
+        <div class="relative w-full md:w-1/2">
+          <input type="text" [(ngModel)]="filtroPermiso" placeholder="Buscar permiso"
+            class="pl-10 pr-4 py-2 rounded-full border border-gray-300 w-full focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          <svg xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- Módulos -->
+      <div class="space-y-6" style="max-height: 300px; overflow-y: auto; padding-right: 8px;">
+        <div *ngFor="let modulo of paginatedModules" class="bg-white border rounded-lg shadow p-4">
+          <h3 class="font-semibold text-blue-700 text-center mb-4">{{ modulo.moduleName }}</h3>
+
+          <!-- Permisos -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+            <label *ngFor="let permiso of modulo.paginatedPermissions"
+              class="text-sm flex items-center gap-2">
+              <input type="checkbox" [(ngModel)]="permiso.assigned" />
+              {{ permiso.permissionName }}
+            </label>
+          </div>
+
+          <!-- Paginación interna -->
+          <div class="flex justify-center items-center gap-3 mt-4">
+            <button type="button" (click)="prevPermissionPage(modulo)"
+              [disabled]="modulo.currentPermissionPage === 1"
+              class="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded disabled:opacity-50">
+              Anterior
+            </button>
+            <span class="text-sm text-gray-600">
+              Página {{ modulo.currentPermissionPage }} de {{ modulo.totalPermissionPages }}
+            </span>
+            <button type="button" (click)="nextPermissionPage(modulo)"
+              [disabled]="modulo.currentPermissionPage === modulo.totalPermissionPages"
+              class="px-3 py-1 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded disabled:opacity-50">
+              Siguiente
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Paginación general -->
+      <div class="flex justify-center items-center gap-4 mt-6">
+        <button type="button" (click)="prevPage()" [disabled]="currentPage === 1"
+          class="px-4 py-1 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded disabled:opacity-50">
+          Anterior módulo
+        </button>
+        <span class="text-sm text-gray-600">Página {{ currentPage }} de {{ totalPages }}</span>
+        <button type="button" (click)="nextPage()" [disabled]="currentPage === totalPages"
+          class="px-4 py-1 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded disabled:opacity-50">
+          Siguiente módulo
+        </button>
+      </div>
+    </div>
+
+    <!-- Botones finales -->
+    <div class="mt-6 flex justify-center gap-4">
+      <button type="button" (click)="onClose()"
+        class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Cancelar</button>
+      <button type="button" (click)="saveChanges()"
+        class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">Asignar Permisos</button>
+    </div>
+  </div>
+</div>

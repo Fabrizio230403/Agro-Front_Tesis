@@ -1,0 +1,15 @@
+<!-- Modal Overlay -->
+<div class="modal-overlay" (click)="cerrarModal.emit()">
+  <!-- Modal Content -->
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h2 class="modal-title">Eliminar Documento</h2>
+    <p>¿Estás seguro de que deseas eliminar el documento con el número de documento {{
+      documentoSeleccionado?.numeroDocumento }}?</p>
+
+    <!-- Modal Actions -->
+    <div class="modal-actions">
+      <button class="btn btn-cancel" (click)="cerrarModal.emit()">Cancelar</button>
+      <button class="btn btn-delete" (click)="eliminarDocumento()">Eliminar</button>
+    </div>
+  </div>
+</div>

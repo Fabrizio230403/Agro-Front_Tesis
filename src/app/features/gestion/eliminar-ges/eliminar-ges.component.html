@@ -1,0 +1,21 @@
+ <div class="modal-backdrop" *ngIf="visible">
+  <div class="modal-container">
+    <div class="modal-header">
+      <h2>Documentos Eliminados</h2>
+      <button class="cerrar-btn" (click)="cerrar()">×</button>
+    </div>
+
+    <div class="modal-body" *ngIf="documentosEliminados.length > 0; else noDocs">
+      <ul class="document-list">
+        <li *ngFor="let doc of documentosEliminados" class="document-item">
+          <span>{{ doc.numeroDocumento }} - {{ doc.cliente }}</span>
+          <button class="recuperar-btn" (click)="recuperar(doc)">Recuperar</button>
+        </li>
+      </ul>
+    </div>
+
+    <ng-template #noDocs>
+      <p class="no-docs-text">No hay documentos eliminados.</p>
+    </ng-template>
+  </div>
+</div>

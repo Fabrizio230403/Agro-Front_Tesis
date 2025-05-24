@@ -1,0 +1,134 @@
+<div class="modal-content">
+  <h2>Editar Cliente</h2>
+
+  <form #userForm="ngForm" class="form-content">
+
+    <!-- Fila 1 -->
+    <div class="form-row">
+      <mat-form-field appearance="fill" class="input-half">
+        <mat-label>Razón Social</mat-label>
+        <input matInput name="name" required minlength="3" [(ngModel)]="name" #nameField="ngModel"
+          [disabled]="userForm.submitted && (nameField.invalid ?? false)">
+        <mat-error *ngIf="nameField.invalid && nameField.touched">
+          La razón social es requerida y debe tener al menos 3 caracteres.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="input-half">
+        <mat-label>Tipo de Cliente</mat-label>
+        <mat-select name="typeCustomer" required [(ngModel)]="typeCustomer" #typeCustomerField="ngModel"
+          [disabled]="userForm.submitted && (typeCustomerField.invalid ?? false)">
+          <mat-option value="INDIVIDUAL">INDIVIDUAL</mat-option>
+          <mat-option value="EMPRESA">EMPRESA</mat-option>
+        </mat-select>
+        <mat-error *ngIf="typeCustomerField.invalid && typeCustomerField.touched">
+          El tipo de cliente es requerido.
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Fila 2 -->
+    <div class="form-row">
+      <mat-form-field appearance="fill" class="input-field">
+        <mat-label>Tipo Documento</mat-label>
+        <mat-select name="documentType" required [(ngModel)]="documentType" #documentTypeField="ngModel"
+          (ngModelChange)="limpiarNumeroDocumento()"
+          [disabled]="userForm.submitted && (documentTypeField.invalid ?? false)">
+          <mat-option *ngIf="typeCustomer === 'EMPRESA'" value="RUC">RUC</mat-option>
+          <mat-option *ngIf="typeCustomer === 'INDIVIDUAL'" value="DNI">DNI</mat-option>
+          <mat-option *ngIf="typeCustomer === 'INDIVIDUAL'" value="Carné de Extranjería">Carné de
+            Extranjería</mat-option>
+          <mat-option *ngIf="typeCustomer === 'INDIVIDUAL'" value="Pasaporte">Pasaporte</mat-option>
+        </mat-select>
+        <mat-error *ngIf="documentTypeField.invalid && documentTypeField.touched">
+          El tipo de documento es requerido.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="input-field">
+        <mat-label>Nro. Documento</mat-label>
+        <input matInput name="documentNumber" required [(ngModel)]="documentNumber" #documentNumberField="ngModel"
+          [disabled]="userForm.submitted && (documentNumberField.invalid ?? false)" [pattern]="getDocumentoPattern()"
+          [maxlength]="getDocumentoMaxLength()" (keypress)="onKeyPress($event)" (paste)="onPaste($event)">
+        <mat-error *ngIf="documentNumberField.invalid && documentNumberField.touched">
+          <ng-container *ngIf="documentType === 'RUC'">
+            El RUC debe tener 11 dígitos.
+          </ng-container>
+          <ng-container *ngIf="documentType === 'DNI'">
+            El DNI debe tener 8 dígitos.
+          </ng-container>
+          <ng-container *ngIf="documentType === 'Carné de Extranjería'">
+            El Carné de Extranjería debe ser válido (alfanumérico).
+          </ng-container>
+          <ng-container *ngIf="documentType === 'Pasaporte'">
+            El Pasaporte debe ser válido (alfanumérico).
+          </ng-container>
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Fila 3 -->
+    <div class="form-row">
+      <mat-form-field appearance="fill" class="input-field">
+        <mat-label>Dirección</mat-label>
+        <input matInput name="address" required [(ngModel)]="address" #addressField="ngModel"
+          [disabled]="userForm.submitted && (addressField.invalid ?? false)">
+        <mat-error *ngIf="addressField.invalid && addressField.touched">
+          La dirección es requerida.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill" class="input-field">
+        <mat-label>Teléfono</mat-label>
+        <input matInput type="tel" name="phone" required [(ngModel)]="phone" #phoneField="ngModel"
+          [disabled]="userForm.submitted && (phoneField.invalid ?? false)" pattern="^\d{9}$" maxlength="9"
+          (keypress)="onTelefonoKeyPress($event)" (paste)="onTelefonoPaste($event)">
+        <mat-error *ngIf="phoneField.invalid && phoneField.touched">
+          El teléfono es requerido y debe tener 9 dígitos.
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Fila 4 -->
+    <div class="form-row single-center">
+      <mat-form-field appearance="fill" class="input-field">
+        <mat-label>Correo</mat-label>
+        <input matInput type="email" name="email" required [(ngModel)]="email" #emailField="ngModel" email
+          [disabled]="userForm.submitted && (emailField.invalid ?? false)">
+        <mat-error *ngIf="emailField.invalid && emailField.touched">
+          El correo electrónico es requerido y debe ser válido.
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </form>
+
+  <!-- Botón para editar el cliente -->
+  <div class="modal-actions">
+    <button mat-button (click)="onCancel()" class="cancel-button">Cancelar</button>
+    <button mat-raised-button (click)="onEdit()" class="confirm-button">Actualizar Cliente</button>
+  </div>
+
+
+  <!-- Modales de éxito y error -->
+  <ng-template #successModal>
+    <div class="success-message">
+      <i class="material-icons success-icon">check_circle</i>
+      <p>Registro actualizado</p>
+      <p>El cliente ha sido actualizado correctamente.</p>
+      <button mat-button (click)="closeSuccessModal()">Ok</button>
+    </div>
+  </ng-template>
+
+  <ng-template #errorModal>
+    <div class="error-message">
+      <i class="material-icons error-icon">error</i>
+      <p>Cliente no Editado!</p>
+      <p>Faltan campos por completar</p>
+      <p>¿Rellenar de nuevo?</p>
+      <div class="modal-actions">
+        <button mat-button (click)="closeErrorModal()" class="cancel-button">No, Cancelar</button>
+        <button mat-raised-button (click)="retryEdit()" class="confirm-button">Sí, Editar</button>
+      </div>
+    </div>
+  </ng-template>
+</div>
