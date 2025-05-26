@@ -84,6 +84,9 @@ import { UserDetailsComponent } from './components/User/user-details/user-detail
 import { EditPermissionsModalComponent } from './components/User/edit-permissions-modal/edit-permissions-modal.component';
 import { EditRoleModalComponent } from './components/User/edit-role-modal/edit-role-modal.component';
 
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { TokenInterceptor } from './services/token.interceptor';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -175,6 +178,11 @@ import { EditRoleModalComponent } from './components/User/edit-role-modal/edit-r
   providers: [
     provideClientHydration(),
     provideAnimationsAsync(),
+    {
+    provide: HTTP_INTERCEPTORS,
+    useClass: TokenInterceptor,
+    multi: true,  // importante para permitir múltiples interceptores
+    }
   ],
   bootstrap: [AppComponent],
 })
