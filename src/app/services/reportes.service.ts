@@ -40,6 +40,14 @@ export class ReportesService {
     return this.http.get(`${this.baseUrl}/graficosDashboard`, this.getOptions());
   }
 
+  getReporteGraficosDashboardFinanzas(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/graficosDashboardFinanzas`, this.getOptions());
+  }
+
+  getReporteGraficosDashboardAdministrador(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/graficosDashboardAdministrador`, this.getOptions());
+  }
+
   getReporteFinanzas(date: string): Observable<any> {
     return this.http.get(`${this.baseUrl}/finanzas/${date}`, this.getOptions());
   }

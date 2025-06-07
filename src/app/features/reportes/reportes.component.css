@@ -3,3 +3,17 @@ apx-chart {
     margin: 0 auto;
   }
   
+  .modal-backdrop { /* If your modal has a separate backdrop element */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Or your Tailwind bg-black bg-opacity-50 */
+  z-index: 40; /* Below modal content, above page content */
+}
+.modal-content-wrapper {
+  position: relative; /* To allow z-index stacking within the modal if needed */
+  z-index: 51;      /* Above the backdrop */
+  /* ... other modal content styles ... */
+}

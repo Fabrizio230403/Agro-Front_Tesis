@@ -84,6 +84,8 @@ import { UserDetailsComponent } from './components/User/user-details/user-detail
 import { EditPermissionsModalComponent } from './components/User/edit-permissions-modal/edit-permissions-modal.component';
 import { EditRoleModalComponent } from './components/User/edit-role-modal/edit-role-modal.component';
 
+import { CustomPaginatorComponent } from '../app/shared/components/custom-paginator/custom-paginator.component'; 
+
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from './services/token.interceptor';
 
@@ -173,6 +175,7 @@ import { TokenInterceptor } from './services/token.interceptor';
     ReactiveFormsModule,
     NgApexchartsModule,
     NgxDatatableModule,
+    CustomPaginatorComponent
 
   ],
   providers: [

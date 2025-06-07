@@ -1,0 +1,45 @@
+<div class="pagination mt-6 flex flex-wrap justify-center items-center gap-2 sm:gap-3">
+    
+    <!-- Previous Button -->
+    <button
+        class="page-btn prev-btn flex items-center gap-1 px-3 py-1.5 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+        (click)="changePage(currentPage - 1)" 
+        [disabled]="currentPage === 1">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" class="fill-current">
+            <path d="M12.707 17.293 8.414 13H18v-2H8.414l4.293-4.293-1.414-1.414L4.586 12l6.707 6.707z"></path>
+        </svg>
+    </button>
+
+    <!-- Page Number Buttons -->
+    <div class="page-buttons flex items-center gap-1 sm:gap-2">
+        <ng-container *ngFor="let page of pageNumbers">
+            <!-- Si 'page' es '...', muestra un span no clicable. -->
+            <span *ngIf="page === '...'" class="px-3 py-1.5 text-sm font-medium text-gray-500">
+                ...
+            </span>
+
+            <!-- Si 'page' es un número, muestra un botón clicable. -->
+            <button *ngIf="page !== '...'"
+                class="px-3 py-1.5 border border-gray-300 rounded-md text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                [ngClass]="{
+                    'bg-blue-600 text-white border-blue-600 hover:bg-blue-700': currentPage === page, 
+                    'text-gray-700 bg-white border-gray-300 hover:bg-gray-100': currentPage !== page
+                }"
+                (click)="changePage($any(page))"  
+                [disabled]="currentPage === page">
+                {{ page }}
+            </button>
+        </ng-container>
+    </div>
+
+    <!-- Next Button -->
+    <button
+        class="page-btn prev-btn flex items-center gap-1 px-3 py-1.5 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+        (click)="changePage(currentPage + 1)" 
+        [disabled]="currentPage === totalPages">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" class="fill-current">
+            <path d="m11.293 17.293 1.414 1.414L19.414 12l-6.707-6.707-1.414 1.414L15.586 11H6v2h9.586z"></path>
+        </svg>
+    </button>
+
+</div>

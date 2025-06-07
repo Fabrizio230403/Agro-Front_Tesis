@@ -33,6 +33,7 @@ export class GestionProductosComponent implements OnInit {
   productoSeleccionado: any = {}; 
   productoVerDetalle: any = {} 
   newProduct: any = {};
+  p: number = 1;
 
   constructor(
     private http: HttpClient,

@@ -1,118 +1,132 @@
- <!-- inventario.component.html -->
-<div class="dashboard-layout">
+<!-- inventario.component.html -->
+<div class="dashboard-layout flex flex-col h-screen bg-gray-50">
   <div class="main-container flex flex-grow">
+    <!-- Sidebar -->
     <app-siderbang *ngIf="isSidebarVisible" class="siderbang w-64"></app-siderbang>
 
+    <!-- Main Content Area -->
     <div class="content-area flex flex-col flex-grow overflow-y-auto min-w-0">
       <app-header (sidebarToggle)="toggleSidebar()"></app-header>
-      <div class="p-4">
-      <h2 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6">Inventario</h2>
 
-      <div class="action-buttons d-flex justify-content-start gap-2 mb-3">
-        <button class="btn btn-primary" (click)="exportKardexToExcel()" title="Exportar Kardex a Excel">
-          <i class="fas fa-file-export"></i> Exportar Excel
-        </button>
-        <button class="btn btn-secondary" (click)="exportKardexToPDF()" title="Exportar Kardex a PDF">
-          <i class="fas fa-file-pdf"></i> Exportar PDF
-        </button>
-        <!-- Puedes añadir aquí filtros específicos para el Kardex si los necesitas (ej. por rango de fechas, etc.) -->
-      </div>
+      <!-- Content Padding Wrapper -->
+      <div class="p-4 md:p-6">
+        <!-- Page Title -->
+        <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6">Inventario</h1>
 
-      <table id="kardexTable" class="table table-striped table-bordered table-hover">
-        <thead>
-          <tr>
-            <th>Código</th>
-            <th>Nombre</th>
-            <th class="text-end">Stock Entrada</th>
-            <th class="text-end">Precio Compra</th>
-            <th class="text-end">Valor Entradas</th>
-            <th class="text-end">Stock Salida</th>
-            <th class="text-end">Precio Venta</th>
-            <th class="text-end">Valor Salidas</th>
-            <th class="text-end">Stock Actual</th>
-            <th class="text-end">Valor Stock</th>
-            <th>Último Mov.</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let kItem of displayedKardexSummaries | paginate: { itemsPerPage: kardexItemsPerPage, currentPage: kardexCurrentPage }">
-            <td>{{ kItem.productCode }}</td>
-            <td>{{ kItem.productName }}</td>
-            <td class="text-end">{{ kItem.totalQuantityEntrada | number:'1.0-0' }}</td>
-            <td class="text-end">{{ kItem.valorEntradas | currency:'S/':'symbol':'1.2-4' }}</td>
-            <td class="text-end">{{ kItem.valorTotalEntradas | currency:'S/':'symbol':'1.2-4' }}</td>
-            <td class="text-end">{{ kItem.totalQuantitySalidaPositiva | number:'1.0-0' }}</td>
-            <td class="text-end">{{ kItem.valorSalidas | currency:'S/':'symbol':'1.2-4' }}</td>
-            <td class="text-end">{{ kItem.valorTotalSalidas | currency:'S/':'symbol':'1.2-4' }}</td>
-            <td class="text-end">{{ kItem.stockActualEnTablaProduct }}</td>
-            <td class="text-end">{{ kItem.valorStockActualCalculadoTablaProduct | currency:'S/':'symbol':'1.2-2' }}</td>
-            <td>{{ kItem.fechaUltimoMovimiento | date:'dd/MM/yyyy HH:mm' }}</td>
-            <td>
-              <button class="btn btn-sm btn-outline-primary" (click)="openMovementHistoryModal(kItem.productId)" title="Ver Historial de Movimientos">
-                <i class="fas fa-history"></i>
-              </button>
-              <button class="btn btn-sm btn-outline-success" (click)="openAddStockModal(kItem)" title="Añadir Stock">
-                <i class="fas fa-plus-circle"></i> 
-              </button>
-            </td>
-          </tr>
-          <tr *ngIf="displayedKardexSummaries.length === 0">
-            <td colspan="11" class="text-center">No hay datos de kardex para mostrar.</td>
-          </tr>
-        </tbody>
-      </table>
+        <!-- Action Buttons & Filters -->
+        <div class="action-buttons flex flex-wrap items-center gap-3 mb-6">
+          <button class="bg-green-600 hover:bg-green-700 inline-flex items-center justify-center text-white font-medium py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out" (click)="exportKardexToExcel()" title="Exportar Kardex a Excel">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm-1 11.5c-1.38 0-2.5 1.12-2.5 2.5s1.12 2.5 2.5 2.5 2.5-1.12 2.5-2.5-1.12-2.5-2.5-2.5zM14 9V3.5L19.5 9H14zM4.75 17.5c0 .97.78 1.75 1.75 1.75h1.5v-1.5H6.5v-1h1.5v-1.5H6.5v-1h1.5V11h-2c-.97 0-1.75.78-1.75 1.75v4.75z"/></svg>
+            Exportar Excel
+          </button>
+          <button class="bg-red-600 hover:bg-red-700 inline-flex items-center justify-center text-white font-medium py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out" (click)="exportKardexToPDF()" title="Exportar Kardex a PDF">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm-1 11.5c-1.38 0-2.5 1.12-2.5 2.5s1.12 2.5 2.5 2.5 2.5-1.12 2.5-2.5-1.12-2.5-2.5-2.5zM14 9V3.5L19.5 9H14zM9.5 12c-1.38 0-2.5 1.12-2.5 2.5s1.12 2.5 2.5 2.5 2.5-1.12 2.5-2.5-1.12-2.5-2.5-2.5z"/></svg>
+            Exportar PDF
+          </button>
+          <!-- Aquí puedes añadir más filtros si es necesario, se alinearán correctamente -->
+        </div>
 
-      <div *ngIf="getTotalKardexPages() > 0" class="pagination mt-6 flex justify-center items-center space-x-2">
-  <button
-    class="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-150"
-    [disabled]="kardexCurrentPage === 1"
-    (click)="cambiarPaginaKardex('anterior')">
-    Anterior
-  </button>
+        <!-- Table Container -->
+        <div class="table-container bg-white shadow-md rounded-lg overflow-x-auto">
+          <table class="w-full min-w-full border-collapse">
+            <thead class="bg-gray-100">
+              <tr>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-300">Código</th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-300">Nombre</th>
+                <th scope="col" class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-300">Stock Entrada</th>
+                <th scope="col" class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-300">Precio Compra</th>
+                <th scope="col" class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-300">Valor Entradas</th>
+                <th scope="col" class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-300">Stock Salida</th>
+                <th scope="col" class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-300">Precio Venta</th>
+                <th scope="col" class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-300">Valor Salidas</th>
+                <th scope="col" class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-300">Stock Actual</th>
+                <th scope="col" class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-300">Valor Stock</th>
+                <th scope="col" class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-300">Último Mov.</th>
+                <th scope="col" class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider border border-gray-300">Acciones</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white">
+              <tr *ngFor="let kItem of displayedKardexSummaries | paginate: { itemsPerPage: kardexItemsPerPage, currentPage: kardexCurrentPage }" class="hover:bg-gray-50 transition-colors duration-150">
+                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700 border border-gray-300">{{ kItem.productCode }}</td>
+                <td class="px-4 py-3 text-sm text-gray-700 border border-gray-300 truncate max-w-xs" title="{{ kItem.productName }}">{{ kItem.productName }}</td>
+                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500 border border-gray-300 text-right">{{ kItem.totalQuantityEntrada | number:'1.0-0' }}</td>
+                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500 border border-gray-300 text-right">{{ kItem.valorEntradas | currency:'S/':'symbol':'1.2-4' }}</td>
+                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500 border border-gray-300 text-right">{{ kItem.valorTotalEntradas | currency:'S/':'symbol':'1.2-4' }}</td>
+                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500 border border-gray-300 text-right">{{ kItem.totalQuantitySalidaPositiva | number:'1.0-0' }}</td>
+                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500 border border-gray-300 text-right">{{ kItem.valorSalidas | currency:'S/':'symbol':'1.2-4' }}</td>
+                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500 border border-gray-300 text-right">{{ kItem.valorTotalSalidas | currency:'S/':'symbol':'1.2-4' }}</td>
+                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500 border border-gray-300 text-right">{{ kItem.stockActualEnTablaProduct }}</td>
+                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500 border border-gray-300 text-right">{{ kItem.valorStockActualCalculadoTablaProduct | currency:'S/':'symbol':'1.2-2' }}</td>
+                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-500 border border-gray-300 text-center">{{ kItem.fechaUltimoMovimiento | date:'dd/MM/yyyy HH:mm' }}</td>
+                <td class="px-4 py-3 whitespace-nowrap text-sm font-medium border border-gray-300 text-center">
+                  <div class="flex items-center justify-center space-x-2">
+                    <button class="p-1 text-blue-600 hover:text-blue-800 hover:bg-blue-100 rounded-full transition-colors duration-150" (click)="openMovementHistoryModal(kItem.productId)" title="Ver Historial de Movimientos">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M13 3a9 9 0 0 0-9 9H1l3.89 3.89.07.14L9 12H6a7 7 0 0 1 7-7 7 7 0 0 1 7 7 7 7 0 0 1-7 7v2a9 9 0 0 0 9-9 9 9 0 0 0-9-9z"/><path d="M12 8v5l4.25 2.52.75-1.23-3.5-2.07V8z"/></svg>
+                    </button>
+                    <button class="p-1 text-green-600 hover:text-green-800 hover:bg-green-100 rounded-full transition-colors duration-150" (click)="openAddStockModal(kItem)" title="Añadir Stock">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm5 11h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+              <tr *ngIf="displayedKardexSummaries.length === 0">
+                <td colspan="12" class="px-6 py-4 text-center text-gray-500 border border-gray-300">
+                  No hay datos de kardex para mostrar.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div><!-- End Table Container -->
 
-  <!-- Opcional: Mostrar números de página (lógica más compleja) -->
-  <!-- Aquí un ejemplo simple de cómo podrías empezar con los números de página -->
-  <!-- <ng-container *ngFor="let pageNum of getPageNumbers()">
+        <!-- Pagination -->
+<div class="pagination mt-6 flex flex-wrap justify-center items-center gap-2 sm:gap-3">
+    
+    <!-- Previous Button -->
     <button
-      class="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium hover:bg-gray-100"
-      [class.bg-blue-500]="pageNum === kardexCurrentPage"
-      [class.text-white]="pageNum === kardexCurrentPage"
-      [class.text-gray-700]="pageNum !== kardexCurrentPage"
-      (click)="cambiarPaginaKardex(pageNum)">
-      {{ pageNum }}
+        class="page-btn prev-btn flex items-center gap-1 px-3 py-1.5 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+        (click)="cambiarPaginaKardex(kardexCurrentPage - 1)" 
+        [disabled]="kardexCurrentPage === 1">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" class="fill-current">
+            <path d="M12.707 17.293 8.414 13H18v-2H8.414l4.293-4.293-1.414-1.414L4.586 12l6.707 6.707z"></path>
+        </svg>
     </button>
-  </ng-container> -->
 
-  <span class="px-3 py-1 text-sm text-gray-700">
-    Página {{ kardexCurrentPage }} de {{ getTotalKardexPages() }}
-  </span>
+    <!-- Page Number Buttons -->
+    <div class="page-buttons flex items-center gap-1 sm:gap-2">
+        <ng-container *ngFor="let page of getKardexPageNumbers()">
+            <!-- Si 'page' es '...', muestra un span no clicable. -->
+            <span *ngIf="page === '...'" class="px-3 py-1.5 text-sm font-medium text-gray-500">
+                ...
+            </span>
 
-  <button
-    class="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-150"
-    [disabled]="kardexCurrentPage === getTotalKardexPages() || getTotalKardexPages() === 0"
-    (click)="cambiarPaginaKardex('siguiente')">
-    Siguiente
-  </button>
-</div>
-
-    </div> <!-- Cierre de .container -->
+            <!-- Si 'page' es un número, muestra un botón clicable. -->
+            <button *ngIf="page !== '...'"
+                class="px-3 py-1.5 border border-gray-300 rounded-md text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                [ngClass]="{'bg-blue-500 text-white hover:bg-blue-600 border-blue-500': kardexCurrentPage === page, 'text-gray-700 hover:bg-gray-100': kardexCurrentPage !== page}"
+                (click)="cambiarPaginaKardex($any(page))"  
+                [disabled]="kardexCurrentPage === page">
+                {{ page }}
+            </button>
+        </ng-container>
     </div>
-  </div> <!-- Cierre de .main-container -->
 
-  <app-historial-movimientos-modal
-    *ngIf="showMovementHistoryModal"
-    [selectedProductForHistory]="selectedProductForHistory"
-    [productMovements]="productMovements"
-    [loadingMovements]="loadingMovements"
-    (closeModalEvent)="closeMovementHistoryModal()">
-  </app-historial-movimientos-modal>
+    <!-- Next Button -->
+    <button
+        class="page-btn next-btn flex items-center gap-1 px-3 py-1.5 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
+        (click)="cambiarPaginaKardex(kardexCurrentPage + 1)" 
+        [disabled]="kardexCurrentPage === getTotalKardexPages()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" class="fill-current">
+            <path d="m11.293 17.293 1.414 1.414L19.414 12l-6.707-6.707-1.414 1.414L15.586 11H6v2h9.586z"></path>
+        </svg>
+    </button>
 
-  <app-add-stock-modal
-    *ngIf="showAddStockModal"
-    [productSelectedForStock]="productSelectedForStock"
-    (closeModalEvent)="closeAddStockModal()"
-    (stockAddedEvent)="handleStockAdded($event)">
-  </app-add-stock-modal>
+</div><!-- End Pagination -->
 
-</div> <!-- Cierre de .dashboard-layout -->
+      </div><!-- End Content Padding Wrapper -->
+    </div><!-- End Main Content Area -->
+  </div><!-- End Main Container -->
+
+  <!-- Modals -->
+  <app-historial-movimientos-modal *ngIf="showMovementHistoryModal" [selectedProductForHistory]="selectedProductForHistory" [productMovements]="productMovements" [loadingMovements]="loadingMovements" (closeModalEvent)="closeMovementHistoryModal()"></app-historial-movimientos-modal>
+  <app-add-stock-modal *ngIf="showAddStockModal" [productSelectedForStock]="productSelectedForStock" (closeModalEvent)="closeAddStockModal()" (stockAddedEvent)="handleStockAdded($event)"></app-add-stock-modal>
+</div><!-- End Dashboard Layout -->

@@ -1,130 +1,126 @@
 <!-- dashboard.component.html -->
-<div class="dashboard-layout">
+<div class="dashboard-layout bg-gray-50">
 
   <!-- Contenedor principal -->
-  <div class="main-container">
+  <div class="main-container flex">
     <!-- Sidebar -->
     <app-siderbang *ngIf="isSidebarVisible" class="siderbang"></app-siderbang>
-    
+
     <!-- Contenedor de gráficos -->
     <div class="content-area flex-grow overflow-y-auto">
       <app-header (sidebarToggle)="toggleSidebar()"></app-header>
-      <div class="p-4" [ngClass]="{ 'expanded': !isSidebarVisible }">
-      <h1 class="dashboard-title">Dashboard</h1>
+      
+      <!-- Padding and main content area -->
+      <div class="p-6 md:p-8" [ngClass]="{ 'expanded': !isSidebarVisible }">
+        <h1 class="text-4xl font-bold text-gray-800 mb-8">Dashboard de Finanzas</h1>
 
-      <div *ngIf="isLoading" class="loading-indicator">
-        Cargando datos del dashboard...
-      </div>
-
-      <div *ngIf="!isLoading" class="grid-container">
-
-        <!-- Total Sales Chart -->
-        <div id="total-sales" class="card chart-card">
-          <h2>Total de ventas de los últimos 6 meses</h2>
-          <div class="card-content">
-            <apx-chart #totalSalesChart
-                       [series]="charts[0].series"
-                       [chart]="charts[0].chart"
-                       [xaxis]="charts[0].xaxis"
-                       [yaxis]="charts[0].yaxis"
-                       [stroke]="charts[0].stroke"
-                       [tooltip]="charts[0].tooltip"
-                       [dataLabels]="charts[0].dataLabels"
-                       [grid]="charts[0].grid">
-            </apx-chart>
-          </div>
+        <div *ngIf="isLoading" class="flex justify-center items-center h-64">
+          <p class="text-gray-500">Cargando datos del dashboard...</p>
         </div>
 
-        <!-- Sales Day Info Box -->
-        <div id="sales-day" class="card info-card card-small">
-          <h3>Ventas del día</h3>
-           <div class="card-content">
-             <!-- USA INTERPOLACIÓN Y PIPE CURRENCY -->
-             <p class="amount">{{ ventasDiaTotal | currency:'S/. ':'symbol':'1.2-2' }}</p>
-           </div>
-        </div>
+        <div *ngIf="!isLoading" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-        <!-- Sales Count Info Box -->
-        <div id="sales-count" class="card info-card card-small">
-          <h3>Cantidad de ventas</h3>
-           <div class="card-content">
-             <!-- USA INTERPOLACIÓN -->
-             <p class="amount">{{ ventasDiaCantidad }}</p>
-           </div>
-        </div>
-
-        <!-- Invoice Status Chart -->
-        <div id="invoice-status" class="card chart-card">
-          <h2>Estados de Facturas</h2>
-           <div class="card-content">
-             <apx-chart #invoiceStatusChart
-                        [series]="charts[1].series"
-                        [chart]="charts[1].chart"
-                        [labels]="charts[1].labels"
-                        [plotOptions]="charts[1].plotOptions"
-                        [legend]="charts[1].legend"
-                        [colors]="charts[1].colors"
-                        [tooltip]="charts[1].tooltip"
-                        [dataLabels]="charts[1].dataLabels">
-              </apx-chart>
-           </div>
-        </div>
-
-        <!-- Monthly In Info Box -->
-         <div id="monthly-in" class="card info-card card-small">
-           <h3>Entradas del mes</h3>
-           <div class="card-content">
-             <!-- USA INTERPOLACIÓN Y PIPE CURRENCY -->
-             <p>Monto: {{ entradaMonto | currency:'S/. ':'symbol':'1.2-2' }}<br>Productos: {{ entradaProducto }}</p>
+          <!-- Card 1: Resumen Financiero del Mes -->
+          <div class="bg-gray-100 p-6 rounded-2xl shadow-sm flex flex-col justify-center gap-4">
+            <!-- Ingreso del Mes -->
+            <div class="bg-white p-4 rounded-xl">
+              <h3 class="font-semibold text-gray-600 text-sm">Ingreso del Mes</h3>
+              <!-- ACTUALIZADO: Usa 'ingresoMes' -->
+              <p class="text-2xl font-bold text-gray-800 mt-1">{{ ingresoMes | currency:'S/. ':'symbol':'1.2-2' }}</p>
             </div>
-         </div>
+            <!-- Gasto del Mes -->
+            <div class="bg-white p-4 rounded-xl">
+              <h3 class="font-semibold text-gray-600 text-sm">Gasto del Mes</h3>
+              <!-- ACTUALIZADO: Usa 'gastoMes' -->
+              <p class="text-2xl font-bold text-gray-800 mt-1">{{ gastoMes | currency:'S/. ':'symbol':'1.2-2' }}</p>
+            </div>
+            <!-- Diferencia -->
+            <div class="bg-white p-4 rounded-xl">
+              <h3 class="font-semibold text-gray-600 text-sm">Diferencia</h3>
+              <!-- ACTUALIZADO: Usa 'diferenciaMes' para mayor precisión -->
+              <p class="text-2xl font-bold text-gray-800 mt-1" [ngClass]="ingresoMes > gastoMes ? 'text-green-500' : 'text-red-500'">{{ diferenciaMes | currency:'S/. ':'symbol':'1.2-2' }}</p>
+            </div>
+          </div>
 
-         <!-- Monthly Out Info Box -->
-         <div id="monthly-out" class="card info-card card-small">
-           <h3>Salidas del mes</h3>
+          <!-- Card 2: Comprobantes Emitidos (Pie Chart) -->
+          <div class="bg-gray-100 p-6 rounded-2xl shadow-sm">
+            <h2 class="text-center font-semibold text-gray-700 mb-4">Comprobantes Emitidos</h2>
             <div class="card-content">
-             <!-- USA INTERPOLACIÓN Y PIPE CURRENCY -->
-             <p>Monto: {{ salidaMonto | currency:'S/. ':'symbol':'1.2-2' }}<br>Productos: {{ salidaProducto }}</p>
+              <!-- Este HTML ya es compatible con el nuevo gráfico de barras verticales -->
+              <apx-chart
+                        [series]="charts[2].series"
+                        [chart]="charts[2].chart"
+                        [xaxis]="charts[2].xaxis"
+                        [yaxis]="charts[2].yaxis"
+                        [plotOptions]="charts[2].plotOptions"
+                        [dataLabels]="charts[2].dataLabels"
+                        [colors]="charts[2].colors"
+                        [grid]="charts[2].grid"
+                        [legend]="charts[2].legend"
+                        [tooltip]="charts[2].tooltip">
+              </apx-chart>
             </div>
-         </div>
-
-        <!-- Low Stock Chart -->
-        <div id="low-stock" class="card chart-card bajostock">
-          <h2>Productos con bajo stock</h2>
-          <div class="card-content">
-            <apx-chart #lowStockChart
-                       [series]="charts[2].series"
-                       [chart]="charts[2].chart"
-                       [xaxis]="charts[2].xaxis"
-                       [yaxis]="charts[2].yaxis"
-                       [plotOptions]="charts[2].plotOptions"
-                       [dataLabels]="charts[2].dataLabels"
-                       [colors]="charts[2].colors"
-                       [grid]="charts[2].grid">
-            </apx-chart>
           </div>
-        </div>
 
-        <!-- Top Selling Products Chart -->
-        <div id="top-products" class="card chart-card masvendidos">
-          <h2>Productos mas vendidos del mes</h2>
-          <div class="card-content">
-            <apx-chart #topProductsChart
-                       [series]="charts[3].series"
-                       [chart]="charts[3].chart"
-                       [xaxis]="charts[3].xaxis"
-                       [yaxis]="charts[3].yaxis"
-                       [plotOptions]="charts[3].plotOptions"
-                       [dataLabels]="charts[3].dataLabels"
-                       [colors]="charts[3].colors"
-                       [grid]="charts[3].grid"
-                       [legend]="charts[3].legend"
-                       [tooltip]="charts[3].tooltip">
-            </apx-chart>
+          <!-- Card 3: Formas de Pago (Donut Chart) -->
+          <div class="bg-gray-100 p-6 rounded-2xl shadow-sm">
+            <h2 class="text-center font-semibold text-gray-700 mb-4">Formas de Pago (Total)</h2>
+            <div class="card-content">
+              <!-- SIN CAMBIOS: Ya estaba correcto, usa charts[1] -->
+              <apx-chart
+                         [series]="charts[1].series"
+                         [chart]="charts[1].chart"
+                         [labels]="charts[1].labels"
+                         [plotOptions]="charts[1].plotOptions"
+                         [legend]="charts[1].legend"
+                         [colors]="charts[1].colors"
+                         [tooltip]="charts[1].tooltip"
+                         [dataLabels]="charts[1].dataLabels">
+              </apx-chart>
+            </div>
           </div>
-        </div>
 
-      </div> <!-- End grid-container -->
-    </div>
-  </div> <!-- End dashboard-content-area -->
-</div> <!-- End main-container -->
+          <!-- Card 4: Ingresos vs. Egresos (Últimos 6 meses) -->
+          <div class="lg:col-span-2 bg-gray-100 p-6 rounded-2xl shadow-sm">
+            <h2 class="text-center font-semibold text-gray-700 mb-4">Ingresos vs. Egresos (Últimos 6 Meses)</h2>
+            <div class="card-content">
+              <!-- SIN CAMBIOS: Ya estaba correcto, usa charts[0] -->
+              <apx-chart
+                         [series]="charts[0].series"
+                         [chart]="charts[0].chart"
+                         [xaxis]="charts[0].xaxis"
+                         [yaxis]="charts[0].yaxis"
+                         [stroke]="charts[0].stroke"
+                         [tooltip]="charts[0].tooltip"
+                         [dataLabels]="charts[0].dataLabels"
+                         [legend]="charts[0].legend"
+                         [grid]="charts[0].grid">
+              </apx-chart>
+            </div>
+          </div>
+          
+          <!-- Card 5: Top Ventas por Categoría (Mes Actual) -->
+          <div class="bg-gray-100 p-6 rounded-2xl shadow-sm">
+            <h2 class="text-center font-semibold text-gray-700 mb-4">Top Ventas por Categoría (Mes Actual)</h2>
+            <div class="card-content">
+              <!-- CORREGIDO: Ahora usa charts[3] y la configuración de un Horizontal Bar Chart -->
+              <apx-chart
+                         [series]="charts[3].series"
+                         [chart]="charts[3].chart"
+                         [xaxis]="charts[3].xaxis"
+                         [yaxis]="charts[3].yaxis"
+                         [plotOptions]="charts[3].plotOptions"
+                         [dataLabels]="charts[3].dataLabels"
+                         [colors]="charts[3].colors"
+                         [grid]="charts[3].grid"
+                         [legend]="charts[3].legend"
+                         [tooltip]="charts[3].tooltip">
+              </apx-chart>
+            </div>
+          </div>
+
+        </div> <!-- End grid-container -->
+      </div> <!-- End p-6 -->
+    </div> <!-- End content-area -->
+  </div> <!-- End main-container -->
+</div>

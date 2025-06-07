@@ -199,6 +199,46 @@ export class ClientesComponent {
     return Math.ceil(this.clientesFiltrados.length / this.pageSize);
   }
 
+  getPageNumbers(): (number | string)[] {
+    const totalPages = this.getTotalPaginas();
+    const pageRangeDisplayed = 2; // Cuántos números mostrar a cada lado de la página actual
+    const pageNumbers: (number | string)[] = [];
+
+    // Si no hay páginas, devuelve un array vacío
+    if (totalPages === 0) return [];
+    
+    // Si no hay suficientes páginas para necesitar "...", muestra todos los números
+    const totalPageNumbersToShow = (pageRangeDisplayed * 2) + 5; // (rango*2) + actual + primera + ultima + 2 "..."
+    if (totalPages <= totalPageNumbersToShow) {
+      for (let i = 1; i <= totalPages; i++) {
+        pageNumbers.push(i);
+      }
+      return pageNumbers;
+    }
+
+    // Lógica para añadir "..."
+    pageNumbers.push(1); // Siempre muestra la primera página
+
+    let startPage = Math.max(2, this.currentPage - pageRangeDisplayed);
+    let endPage = Math.min(totalPages - 1, this.currentPage + pageRangeDisplayed);
+
+    if (this.currentPage - pageRangeDisplayed > 2) {
+      pageNumbers.push('...');
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pageNumbers.push(i);
+    }
+
+    if (this.currentPage + pageRangeDisplayed < totalPages - 1) {
+      pageNumbers.push('...');
+    }
+    
+    pageNumbers.push(totalPages); // Siempre muestra la última página
+
+    return pageNumbers;
+  }
+
   onPage(event: any) {
     this.currentPage = event.page;  // Actualizar la página actual con la nueva página seleccionada
     this.pageSize = event.pageSize; // Actualizar el tamaño de página si se cambia

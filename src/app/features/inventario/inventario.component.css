@@ -1,206 +1,80 @@
-body {
-  font-family: Arial, sans-serif;
-  margin: 20px;
+/*
+  Most styles are now handled by Tailwind utility classes in the HTML.
+  The classes like .dashboard-layout, .main-container, .filter-section,
+  .table-container, .documents-table, etc., in the HTML are Tailwind classes.
+*/
+
+/* Specific styles for Angular Material Datepicker to blend with Tailwind */
+.custom-date-filter {
+  width: 100%; /* Ensure it takes available width in flex container */
 }
-.title {
-  font-size: 2.5rem; /* Tamaño de fuente mayor (ajusta según lo necesites) */
-  text-decoration: underline; /* Subraya el texto */
-  font-weight: bold; /* Opcional, para hacerlo más destacado */
+
+/* Styling for mat-form-field appearance="fill" to blend better with Tailwind */
+.custom-date-filter .mat-mdc-form-field-flex {
+  background-color: white !important; /* Override Angular Material default */
+  border: 1px solid #d1d5db; /* Tailwind's gray-300 */
+  border-radius: 0.5rem; /* Tailwind's rounded-lg */
+  /* Adjust padding to be similar to Tailwind inputs, !important might be needed */
+  padding: 0.05rem 0.75rem 0.05rem 0.75rem !important;
+  height: calc(2.25rem + 2px); /* Match common Tailwind input height (py-2 + border) */
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); /* Tailwind's shadow-sm */
+  align-items: center; /* Better vertical alignment */
+}
+
+.custom-date-filter:focus-within .mat-mdc-form-field-flex,
+.custom-date-filter.mat-focused .mat-mdc-form-field-flex {
+  border-color: #3b82f6 !important; /* Tailwind's blue-500 */
+  /* Tailwind's ring-1 ring-blue-500 */
+  box-shadow: 0 0 0 1px #3b82f6, 0 1px 2px 0 rgb(0 0 0 / 0.05) !important;
+}
+
+.custom-date-filter .mat-mdc-floating-label {
+  color: #4b5563 !important; /* Tailwind's text-gray-600 */
+  /* Adjust label positioning for better alignment within the custom height */
+  top: 50% !important;
+  transform: translateY(-55%) !important; /* Fine-tune vertical centering */
+  margin-left: 0.05rem; /* Slight adjustment */
+}
+
+.custom-date-filter.mat-focused .mat-mdc-floating-label,
+.custom-date-filter .mat-mdc-floating-label.mdc-floating-label--float-above {
+  transform: translateY(-125%) scale(0.75) !important; /* Standard float behavior */
+  background-color: white; /* Ensure label background matches for clean overlap */
+  padding: 0 0.25rem;
+}
+
+.custom-date-filter .mat-mdc-form-field-input-control {
+  color: #374151 !important; /* Tailwind's text-gray-700 */
+  caret-color: #3b82f6; /* Tailwind's blue-500 */
+  height: 1.5rem; /* Approximate line-height for py-2 text */
+  line-height: 1.5rem;
+  margin-top: auto; /* Helps center text if container is taller */
+  margin-bottom: auto;
+}
+
+.custom-date-filter .mat-mdc-form-field-icon-suffix .mdc-icon-button svg {
+  fill: #6b7280 !important; /* Tailwind's text-gray-500 */
+  height: 20px;
+  width: 20px;
+}
+.custom-date-filter .mat-mdc-form-field-icon-suffix .mdc-icon-button {
+    padding: 4px !important; /* Adjust padding for the icon button */
 }
 
 
-input[type="text"] {
-  padding: 10px;
-  margin-right: 10px;
-  font-size: 1em;
+.custom-date-filter .mat-mdc-form-field-subscript-wrapper {
+  display: none; /* Hide default Material underline/error space if not used */
 }
 
-button {
-  padding: 10px 20px;
-  font-size: 1em;
-  cursor: pointer;
+/* Ensure expanded class works as intended (if you have margin adjustments for sidebar) */
+/*
+.content-area .expanded {
+   Example: margin-left: 0 !important; if sidebar collapses to 0 width
 }
+*/
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-}
-
-th, td {
-  border: 1px solid #ddd;
-  padding: 8px;
-  text-align: left;
-}
-
-th {
-  background-color: #f4f4f4;
-}
-
-img {
-  max-width: 100px;
-  height: auto;
-}
-
-.loading {
-  font-size: 1.2em;
-  color: #555;
-}
-.delete-button {
-  background-color: #dc3545;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  font-size: 16px;
-  border-radius: 5px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
-
-.delete-button:hover {
-  background-color: #c82333;
-}
-
-.delete-button i {
-  font-size: 18px;
-}
-.category-search-container {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.search-category-button {
-  background-color: #007bff;
-  color: rgb(176, 28, 28);
-  border: none;
-  padding: 10px 20px;
-  cursor: pointer;
-}
-
-.search-category-button:hover {
-  background-color: #0056b3;
-}
-/* General Layout */
-.main-container {
-  display: flex;
-  flex-direction: row;
-  height: 100%;
-  background-color: #f8f9fa; /* Fondo claro */
-}
-
-.container {
-  flex-grow: 1;
-  padding: 20px;
-  background-color: #fff; /* Fondo blanco */
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.text-center {
-  font-size: 24px;
-  font-weight: bold;
-  color: #333;
-}
-
-/* Search and Action Buttons */
-.search-and-actions {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-  gap: 15px;
-}
-
-.search-container input {
-  padding: 8px 12px;
-  font-size: 14px;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-  width: 250px;
-}
-
-.search-container .btn {
-  padding: 8px 12px;
-  font-size: 14px;
-}
-
-.category-selector select {
-  padding: 8px;
-  font-size: 14px;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-  width: 200px;
-}
-
-.action-buttons button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px 12px;
-  font-size: 14px;
-  border-radius: 4px;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-}
-
-.action-buttons .btn-danger {
-  background-color: #dc3545;
-}
-
-.action-buttons .btn-primary {
-  background-color: #37af0c;
-}
-
-.action-buttons .btn-secondary {
-  background-color: #ff0000;
-}
-
-/* Table */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
-  font-size: 14px;
-  background-color: #fff;
-}
-
-table thead th {
-  background-color: #f1f3f5;
-  color: #495057;
-  text-align: center;
-  font-weight: bold;
-  padding: 10px;
-  border: 1px solid #dee2e6;
-}
-
-table tbody td {
-  text-align: center;
-  padding: 10px;
-  border: 1px solid #dee2e6;
-}
-
-table tbody img {
-  border-radius: 4px;
-}
-
-table tbody tr:nth-child(even) {
-  background-color: #f8f9fa;
-}
-
-table tbody tr:hover {
-  background-color: #e9ecef;
-}
-.action-buttons {
-  display: flex;
-  gap: 0.5rem; /* Espacio entre botones */
-  justify-content: flex-start; /* Opcional: Alinear los botones a la izquierda */
-}
-
-.delete-button {
-  margin-right: auto; /* Opcional: para separar el botón "Eliminar" del resto */
-}
-
+/*
+  The original CSS for .pagination, .page-btn, .page-buttons has been removed.
+  Styling for these elements is now directly applied via Tailwind classes
+  on the original HTML structure for pagination.
+*/

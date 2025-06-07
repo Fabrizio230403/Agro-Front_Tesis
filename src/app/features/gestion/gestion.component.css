@@ -1,233 +1,80 @@
- * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-}
-body {
-  background-color: #f5f5f5;
-}
-.dashboard-layout {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-.main-container {
-  display: flex;
-  flex-grow: 1;
-}
-.container {
-  width: 100%;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-}
-h1 {
-  font-size: 28px;
-  margin-bottom: 30px;
-  font-weight: bold;
-  color: #000;
-  padding-left: 10px;
-}
-.filters-container {
-  display: flex;
-  gap: 20px; 
-  align-items: center;
-  margin-bottom: 20px;
-}
-.search-container {
-  position: relative;
-  flex: 1;
-  max-width: 350px;
-}
-.search-input {
-  width: 100%;
-  padding: 12px 40px 12px 15px;
-  border-radius: 20px;
-  border: none;
-  background-color: #f3eef7;
-  font-size: 14px;
-  box-shadow: none;
-  outline: none;
-}
-.search-button {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-.search-button svg {
-  fill: #666;
-}
-.date-filter-container {
-  flex: 1;
-  position: relative;
-  max-width: 300px;
-}
+/*
+  Most styles are now handled by Tailwind utility classes in the HTML.
+  The classes like .dashboard-layout, .main-container, .filter-section,
+  .table-container, .documents-table, etc., in the HTML are Tailwind classes.
+*/
+
+/* Specific styles for Angular Material Datepicker to blend with Tailwind */
 .custom-date-filter {
-  width: 100%;
-}
-.custom-date-filter .mat-form-field-wrapper {
-  border-radius: 50px !important;
-  background-color: #f3eef7;
-  padding: 0 15px;
-}
-.custom-date-filter .mat-form-field-flex {
-  border-radius: 50px;
-  background-color: #f3eef7;
-}
-.custom-date-filter .mat-form-field-appearance-fill .mat-form-field-flex {
-  padding: 12px 20px;
-  border-radius: 50px;
-}
-.custom-date-filter .mat-form-field-appearance-fill .mat-form-field-outline {
-  border: none;
-  border-radius: 50px;
-}
-.mat-datepicker-toggle {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-}
-.mat-datepicker-toggle .mat-icon {
-  color: #666;
-}
-.table-section {
-  width: 100%;
-  background-color: #fff;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-  margin-top: -50px;
-}
-.table-header {
-  display: flex;
-  justify-content: flex-end;
-  margin-bottom: 20px;
-}
-.add-button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 10px 20px;
-  cursor: pointer;
-  font-weight: bold;
-}
-.documents-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-.documents-table th {
-  background-color: #212121;
-  color: white;
-  text-align: center;
-  padding: 12px 15px;
-  font-weight: 500;
-  font-size: 14px;
-}
-.documents-table tr {
-  border-bottom: 1px solid #eee;
-}
-.documents-table td {
-  padding: 12px 15px;
-  font-size: 14px;
-  color: #333;
-  text-align: center;
-}
-.actions {
-  display: flex;
-  gap: 8px;
-}
-.action-btn {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 5px;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.download-btn {
-  background-color: #ffd700;
-}
-.delete-btn {
-  font-size: 1.2rem;
-  background-color: #ff6b6b;
-}
-.edit-btn {
-  background-color: #4fc3f7;
-}
-.send-btn {
-  font-size: 1.2rem;
-  background-color: #66bb6a;
-}
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-top: 20px;
+  width: 100%; /* Ensure it takes available width in flex container */
 }
 
-.page-btn {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 8px 12px;
-  background-color: #f0f0f0;
-  color: #333;
-  border: 1px solid #ccc;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  font-weight: bold;
+/* Styling for mat-form-field appearance="fill" to blend better with Tailwind */
+.custom-date-filter .mat-mdc-form-field-flex {
+  background-color: white !important; /* Override Angular Material default */
+  border: 1px solid #d1d5db; /* Tailwind's gray-300 */
+  border-radius: 0.5rem; /* Tailwind's rounded-lg */
+  /* Adjust padding to be similar to Tailwind inputs, !important might be needed */
+  padding: 0.05rem 0.75rem 0.05rem 0.75rem !important;
+  height: calc(2.25rem + 2px); /* Match common Tailwind input height (py-2 + border) */
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05); /* Tailwind's shadow-sm */
+  align-items: center; /* Better vertical alignment */
 }
 
-.page-btn:hover {
-  background-color: #007bff;
-  color: #fff;
-  border-color: #007bff;
+.custom-date-filter:focus-within .mat-mdc-form-field-flex,
+.custom-date-filter.mat-focused .mat-mdc-form-field-flex {
+  border-color: #3b82f6 !important; /* Tailwind's blue-500 */
+  /* Tailwind's ring-1 ring-blue-500 */
+  box-shadow: 0 0 0 1px #3b82f6, 0 1px 2px 0 rgb(0 0 0 / 0.05) !important;
 }
 
-.page-btn svg {
-  fill: currentColor;
+.custom-date-filter .mat-mdc-floating-label {
+  color: #4b5563 !important; /* Tailwind's text-gray-600 */
+  /* Adjust label positioning for better alignment within the custom height */
+  top: 50% !important;
+  transform: translateY(-55%) !important; /* Fine-tune vertical centering */
+  margin-left: 0.05rem; /* Slight adjustment */
 }
 
-.page-buttons {
-  display: flex;
-  gap: 10px;
+.custom-date-filter.mat-focused .mat-mdc-floating-label,
+.custom-date-filter .mat-mdc-floating-label.mdc-floating-label--float-above {
+  transform: translateY(-125%) scale(0.75) !important; /* Standard float behavior */
+  background-color: white; /* Ensure label background matches for clean overlap */
+  padding: 0 0.25rem;
 }
 
-.page-buttons button {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: #e0e0e0;
-  border: 1px solid #a6a6a6;
-  font-weight: bold;
-  color: #333;
-  cursor: pointer;
-  transition: 0.2s ease;
+.custom-date-filter .mat-mdc-form-field-input-control {
+  color: #374151 !important; /* Tailwind's text-gray-700 */
+  caret-color: #3b82f6; /* Tailwind's blue-500 */
+  height: 1.5rem; /* Approximate line-height for py-2 text */
+  line-height: 1.5rem;
+  margin-top: auto; /* Helps center text if container is taller */
+  margin-bottom: auto;
 }
 
-.page-buttons button:hover:not([disabled]) {
-  background-color: #007bff;
-  color: #fff;
-  transform: scale(1.05);
+.custom-date-filter .mat-mdc-form-field-icon-suffix .mdc-icon-button svg {
+  fill: #6b7280 !important; /* Tailwind's text-gray-500 */
+  height: 20px;
+  width: 20px;
+}
+.custom-date-filter .mat-mdc-form-field-icon-suffix .mdc-icon-button {
+    padding: 4px !important; /* Adjust padding for the icon button */
 }
 
-.page-buttons button:disabled {
-  background-color: #007bff;
-  color: #ffffff;
-  cursor: not-allowed;
+
+.custom-date-filter .mat-mdc-form-field-subscript-wrapper {
+  display: none; /* Hide default Material underline/error space if not used */
 }
+
+/* Ensure expanded class works as intended (if you have margin adjustments for sidebar) */
+/*
+.content-area .expanded {
+   Example: margin-left: 0 !important; if sidebar collapses to 0 width
+}
+*/
+
+/*
+  The original CSS for .pagination, .page-btn, .page-buttons has been removed.
+  Styling for these elements is now directly applied via Tailwind classes
+  on the original HTML structure for pagination.
+*/

@@ -301,6 +301,51 @@ export class InventarioComponent implements OnInit {
     this.displayedKardexSummaries = filtered;
   }
 
+  getKardexPageNumbers(): (number | string)[] {
+    const totalPages = this.getTotalKardexPages();
+    const currentPage = this.kardexCurrentPage;
+    const maxPagesToShow = 5; // Máximo de números de página a mostrar (puedes ajustarlo)
+    const pages: (number | string)[] = [];
+
+    if (totalPages <= maxPagesToShow + 2) { // Si no hay muchas páginas, muéstralas todas
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      // Lógica para mostrar un subconjunto de páginas con "..."
+      pages.push(1); // Siempre mostrar la primera página
+
+      let startPage = Math.max(2, currentPage - 1);
+      let endPage = Math.min(totalPages - 1, currentPage + 1);
+
+      if (currentPage <= 3) {
+        startPage = 2;
+        endPage = 4;
+      }
+
+      if (currentPage >= totalPages - 2) {
+        startPage = totalPages - 3;
+        endPage = totalPages - 1;
+      }
+
+      if (startPage > 2) {
+        pages.push('...');
+      }
+
+      for (let i = startPage; i <= endPage; i++) {
+        pages.push(i);
+      }
+
+      if (endPage < totalPages - 1) {
+        pages.push('...');
+      }
+
+      pages.push(totalPages); // Siempre mostrar la última página
+    }
+
+    return pages;
+  }
+
   clearKardexFilters(): void {
     this.kardexSearchTerm = '';
     this.displayedKardexSummaries = [...this.kardexProductSummaries];

@@ -1,0 +1,14 @@
+:host {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw; /* Ensure it spans the entire viewport width */
+  height: 100vh;/* Ensure it spans the entire viewport height */
+  display: flex; /* To use for centering content if not using sub-overlay */
+  align-items: center;
+  justify-content: center;
+  /* This is the crucial part: The host of the modal component needs the highest z-index */
+  z-index: 1000;
+  /* The backdrop can be applied directly to the host if the content is then centered within it */
+  background-color: rgba(100, 100, 100, 0.007); /* Backdrop on the host itself */
+}
