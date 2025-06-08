@@ -65,7 +65,7 @@
         <div class="add-button-container mb-6 flex justify-end">
           <button
             class="inline-flex items-center justify-center bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg shadow transition duration-150 ease-in-out"
-            (click)="openAgregarUsuarioModal()"> <!-- Mantiene tu función original -->
+            (click)="openAgregarClienteModal()"> <!-- Mantiene tu función original -->
             <svg class="h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd"
                 d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
@@ -198,3 +198,25 @@
     </div> <!-- Fin content-area -->
   </div> <!-- Fin main-container -->
 </div> <!-- Fin dashboard-layout -->
+
+<app-agregar-usuario 
+    *ngIf="isAddingClient" 
+    (clientAdded)="handleClientAdded()" 
+    (cancel)="isAddingClient = false">
+</app-agregar-usuario>
+
+<!-- Modal para EDITAR Cliente -->
+<app-editar-cliente 
+    *ngIf="editingClient" 
+    [client]="editingClient" 
+    (clientUpdated)="handleClientUpdated()" 
+    (cancel)="editingClient = null">
+</app-editar-cliente>
+
+<!-- Modal para VER DETALLES de Cliente -->
+<app-cliente-detalle 
+    *ngIf="clientToView" 
+    [cliente]="clientToView" 
+    (close)="clientToView = null">
+</app-cliente-detalle>
+

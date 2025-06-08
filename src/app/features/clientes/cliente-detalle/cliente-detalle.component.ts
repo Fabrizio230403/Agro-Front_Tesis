@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Cliente } from '../../../models/client.model';
 
@@ -8,12 +8,15 @@ import { Cliente } from '../../../models/client.model';
   styleUrls: ['./cliente-detalle.component.css']
 })
 export class ClienteDetalleComponent {
-  constructor(
-    @Inject(MAT_DIALOG_DATA) public cliente: Cliente,
-    private dialogRef: MatDialogRef<ClienteDetalleComponent>
-  ) {}
 
-  cerrarModal(): void {
-    this.dialogRef.close();
+  @Input() cliente: Cliente | null = null;
+
+  @Output() close = new EventEmitter<void>();
+
+
+  constructor() {}
+
+  closeModal(): void {
+    this.close.emit();
   }
 }

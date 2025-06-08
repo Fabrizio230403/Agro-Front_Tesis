@@ -1,6 +1,7 @@
-import { Component, ViewChild, TemplateRef, Inject, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
+import { Component, ViewChild, TemplateRef, Inject, Output, EventEmitter, ViewEncapsulation, Input, OnChanges } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { HttpClient } from '@angular/common/http';
+import { Cliente } from '../../../models/client.model';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -10,53 +11,54 @@ import Swal from 'sweetalert2';
   encapsulation: ViewEncapsulation.None // Esto permitirá que los estilos sean globales
 
 })
-export class EditarClienteComponent {
-  @ViewChild('successModal') successModal!: TemplateRef<any>;
-  @ViewChild('errorModal') errorModal!: TemplateRef<any>;
+export class EditarClienteComponent implements OnChanges {
+  @Input() client: Cliente | null = null;
+  @Output() clientUpdated = new EventEmitter<void>();
+  @Output() cancel = new EventEmitter<void>();
 
-  @Output() clienteEdited = new EventEmitter<void>();
+  // Propiedades del formulario
+  id: number | null = null;
+  name: string = '';
+  typeCustomer: string = '';
+  documentType: string = '';
+  documentNumber: string = '';
+  address: string = '';
+  phone: string = '';
+  email: string = '';
 
-  name: string;
-  typeCustomer: string;
-  documentType: string;
-  documentNumber: string;
-  address: string;
-  phone: string;
-  email: string;
-  dialogRef!: MatDialogRef<any>;
+  // Constructor limpio, sin dependencias de MatDialog
+  constructor(private http: HttpClient) {}
 
-  constructor(
-    public dialog: MatDialog,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private parentDialogRef: MatDialogRef<any>,
-    private http: HttpClient
-  ) {
-    this.name = data.name;
-    this.typeCustomer = data.typeCustomer;
-    this.documentType = data.documentType;
-    this.documentNumber = data.documentNumber;
-    this.address = data.address;
-    this.phone = data.phone;
-    this.email = data.email;
+  ngOnChanges(): void {
+    if (this.client) {
+      this.id = this.client.id;
+      this.name = this.client.name ?? '';
+      this.typeCustomer = this.client.typeCustomer ?? '';
+      this.documentType = this.client.documentType ?? '';
+      this.documentNumber = this.client.documentNumber ?? '';
+      this.address = this.client.address ?? '';
+      this.phone = this.client.phone ?? '';
+      this.email = this.client.email ?? '';
+    }
   }
 
   onCancel(): void {
-    this.parentDialogRef.close();
+    this.cancel.emit();
   }
 
 
   onEdit(): void {
+    if (!this.id) {
+        console.error("No se puede actualizar un cliente sin ID.");
+        return;
+    }
+
     if (
-      this.name &&
-      this.typeCustomer &&
-      this.documentType &&
-      this.documentNumber &&
-      this.address &&
-      this.phone &&
-      this.email
+      this.name.trim() && this.typeCustomer.trim() && this.documentType.trim() &&
+      this.documentNumber.trim() && this.address.trim() && this.phone.trim() && this.email.trim()
     ) {
       const updatedCliente = {
-        id: this.data.id,
+        id: this.id,
         name: this.name,
         typeCustomer: this.typeCustomer,
         documentType: this.documentType,
@@ -67,55 +69,38 @@ export class EditarClienteComponent {
       };
 
       Swal.fire({
-        title: 'Editando cliente...',
-        html: 'Por favor, espera mientras se guarda la información.',
+        title: 'Actualizando cliente...',
         allowOutsideClick: false,
-        didOpen: () => {
-          Swal.showLoading();
-        },
+        didOpen: () => { Swal.showLoading(); },
       });
-
-      this.http.put(`http://localhost:8091/api/customers/${updatedCliente.id}`, updatedCliente, { responseType: 'text', withCredentials: true }).subscribe(
-        (response: string) => {
+      
+      this.http.put(`http://localhost:8091/api/customers/${updatedCliente.id}`, updatedCliente, { responseType: 'text', withCredentials: true }).subscribe({
+        next: (response: string) => {
           Swal.fire({
-            title: 'Cliente editado',
-            text: response,
+            title: '¡Actualizado!',
+            text: 'El cliente ha sido actualizado correctamente.',
             icon: 'success',
-            confirmButtonText: 'Aceptar',
           }).then(() => {
-            this.clienteEdited.emit();
-            this.parentDialogRef.close(updatedCliente);
+            // Emite el evento para que el padre sepa que debe recargar y cerrar
+            this.clientUpdated.emit();
           });
         },
-        (error) => {
+        error: (error) => {
           Swal.fire({
             title: 'Error',
-            text: `No se pudo editar el cliente. Detalles: ${error.message || 'Error desconocido'}`,
+            text: 'No se pudo actualizar el cliente.',
             icon: 'error',
-            confirmButtonText: 'Reintentar',
           });
+          console.error("Error al actualizar cliente:", error);
         }
-      );
+    });
     } else {
       Swal.fire({
         title: 'Campos incompletos',
-        text: 'Por favor, completa todos los campos obligatorios.',
+        text: 'Por favor, completa todos los campos.',
         icon: 'warning',
-        confirmButtonText: 'Aceptar',
       });
     }
-  }
-
-  closeSuccessModal(): void {
-    this.dialogRef.close();
-  }
-
-  closeErrorModal(): void {
-    this.dialogRef.close();
-  }
-
-  retryEdit(): void {
-    this.dialogRef.close();
   }
 
   // Validación de campo numero documento

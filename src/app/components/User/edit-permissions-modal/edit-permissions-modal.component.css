@@ -1,0 +1,32 @@
+
+  /* === BOTONES PARA MODALES (El estilo que pediste!) === */
+  .btn-primary-modal {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200 disabled:opacity-50;
+  }
+  .btn-secondary-modal {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 bg-white text-gray-700 border border-gray-300 text-sm font-semibold rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-colors duration-200;
+  }
+
+  /* === ESTILOS DE FORMULARIO DE MODAL === */
+  .modal-label {
+    @apply block text-sm font-medium text-gray-700 mb-1.5;
+  }
+  .modal-input {
+    @apply w-full px-3 py-2 text-gray-900 bg-white border border-gray-300 rounded-lg text-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 transition-shadow duration-200;
+  }
+
+  /* === ESTILOS PARA LA LISTA DE PERMISOS (CHECKBOXES PERSONALIZADOS) === */
+  .permission-label {
+    @apply inline-flex items-center gap-3 p-2 rounded-md cursor-pointer hover:bg-blue-50 transition-colors duration-200;
+  }
+  .permission-checkbox {
+    @apply flex-shrink-0 h-5 w-5 rounded border-2 border-gray-300 flex items-center justify-center transition-all duration-200 peer-checked:bg-blue-600 peer-checked:border-blue-600;
+  }
+  .permission-text {
+    @apply text-sm text-gray-700 select-none;
+  }
+  
+  /* === PAGINACIÓN PEQUEÑA (PARA DENTRO DE LAS TARJETAS) === */
+  .pagination-button-sm {
+    @apply h-7 w-7 flex items-center justify-center rounded-full bg-white border border-gray-300 text-gray-600 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200;
+  }

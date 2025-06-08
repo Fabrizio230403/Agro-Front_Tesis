@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SuppliersService } from '../../services/suppliers.service';
 // HttpClient no se usa directamente aquí, lo usa el servicio. Puedes quitarlo si no hay otra razón.
 // import { HttpClient } from '@angular/common/http';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-proveedores',
@@ -300,19 +301,28 @@ export class ProveedoresComponent implements OnInit {
       categorySuppliers: { id: Number(this.newProveedor.categorySuppliers.id) } // Asegurar que el ID sea número
     };
     // delete payload.selected; // Si la propiedad 'selected' existe y no debe ir al backend
-
     this.suppliersService.addSupplier(payload).subscribe(
       (response) => {
         this.isAddingInProgress = false;
         this.showFeedbackModal('success', 'Proveedor agregado exitosamente.');
+        Swal.fire({
+        title: 'Proveedor registrado',
+        text: 'El proveedor se ha registrado con éxito.',
+        icon: 'success',
+        confirmButtonText: 'Aceptar'
+        });
         this.loadProveedores(); // Recargar la lista
         this.closeAllModals();
       },
       (error) => {
         this.isAddingInProgress = false;
         console.error('Error al agregar proveedor:', error);
-        const errMsg = error.error?.message || error.message || 'Error desconocido al agregar proveedor.';
-        this.showFeedbackModal('error', `Error: ${errMsg}`);
+        Swal.fire({
+          title: 'Error',
+          text: 'No se pudo registrar el proveedor. Intenta nuevamente.',
+          icon: 'error',
+          confirmButtonText: 'Aceptar'
+        });
       }
     );
   }
@@ -328,7 +338,6 @@ export class ProveedoresComponent implements OnInit {
       return;
     }
 
-    this.isEditingInProgress = true;
     const proveedorId = this.proveedorActualEnModal.id;
     const payload = {
       ...this.proveedorActualEnModal,
@@ -339,14 +348,22 @@ export class ProveedoresComponent implements OnInit {
 
     this.suppliersService.editSupplier(proveedorId, payload).subscribe(
       (response) => {
-        this.isEditingInProgress = false;
-        this.showFeedbackModal('success', 'Proveedor editado exitosamente.');
+        Swal.fire({
+        title: 'Proveedor actualizado',
+        text: 'El proveedor se ha actualizado con éxito.',
+        icon: 'success',
+        confirmButtonText: 'Aceptar'
+        });
         this.loadProveedores();
         this.closeAllModals();
       },
       (error) => {
-        this.isEditingInProgress = false;
-        console.error('Error al editar proveedor:', error);
+        Swal.fire({
+          title: 'Error',
+          text: 'No se pudo actualizar el proveedor. Intenta nuevamente.',
+          icon: 'error',
+          confirmButtonText: 'Aceptar'
+        });
         const errMsg = error.error?.message || error.message || 'Error desconocido al editar proveedor.';
         this.showFeedbackModal('error', `Error: ${errMsg}`);
       }
@@ -375,6 +392,70 @@ export class ProveedoresComponent implements OnInit {
         }
       );
     }
+  }
+
+  openConfirmDeleteModal(proveedor: any): void { // Recibe el objeto completo para mostrar el nombre
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: `No podrás recuperar al proveedor "${proveedor.name}" después de eliminarlo.`, // Mensaje dinámico
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+      reverseButtons: true, // Pone el botón de confirmar a la derecha
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Si el usuario confirma, llamamos al método que ejecuta la eliminación
+        this.deleteProveedor(proveedor.id);
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        // Opcional: Mostrar un mensaje si el usuario cancela
+        Swal.fire(
+          'Cancelado',
+          'El proveedor no ha sido eliminado.',
+          'info'
+        );
+      }
+    });
+  }
+
+  // **NUEVO MÉTODO PARA EJECUTAR LA ELIMINACIÓN**
+  // Este método es privado o llamado solo por el de confirmación.
+  private deleteProveedor(proveedorId: number): void {
+    Swal.fire({
+      title: 'Eliminando...',
+      text: 'Por favor, espera mientras se elimina el proveedor.',
+      allowOutsideClick: false,
+      showConfirmButton: false, // Oculta el botón OK mientras carga
+      willOpen: () => {
+        Swal.showLoading(); // Muestra el spinner
+      }
+    });
+
+    this.suppliersService.deleteSupplier(proveedorId).subscribe({
+      next: (response) => {
+        // Actualizamos la lista localmente para una respuesta visual instantánea
+        // SIN necesidad de llamar a this.loadProveedores() de nuevo.
+        this.proveedores = this.proveedores.filter(p => p.id !== proveedorId);
+        this.applyFilters(); // Re-aplicamos los filtros sobre la nueva lista
+
+        Swal.fire(
+          '¡Eliminado!',
+          'El proveedor ha sido eliminado correctamente.',
+          'success'
+        );
+      },
+      error: (error) => {
+        const errMsg = error.error?.message || 'No se pudo eliminar el proveedor.';
+        Swal.fire(
+          'Error',
+          errMsg,
+          'error'
+        );
+        console.error('Error al eliminar proveedor:', error);
+      }
+    });
   }
 
   // --- Toggle Sidebar ---

@@ -4,6 +4,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { CurrentUserStateService, UserData, RoleData, PermissionData, ModuleData } from '../../../services/current-user-state.service';
 import { Router } from '@angular/router';
 
+import Swal from 'sweetalert2';
+
 @Component({
   selector: 'app-roles-list',
   templateUrl: './roles-list.component.html',
@@ -146,31 +148,40 @@ export class RolesListComponent implements OnInit {
     this.rolesService.createRole(this.newRole).subscribe(
       (response) => {
         console.log('Rol creado:', response);
-        this.isCreatingRole = false;
-        this.isCreateSuccessModalOpen = true;
-
-        setTimeout(() => {
-          this.isCreateSuccessModalOpen = false;
-          window.location.reload();
-        }, 3000);
+        Swal.fire({
+                  icon: 'success',
+                  title: 'Rol agregado exitosamente.',
+                  confirmButtonColor: '#3085d6',
+                  confirmButtonText: 'Aceptar'
+                });
+        this.isCreateRoleModalOpen = false;
+        this.fetchRoles();
+        this.fetchPermissions();
       },
       (error) => {
         if (error.status === 201) {
           console.log('Rol creado correctamente.');
-          this.isCreateSuccessModalOpen = true;
-          setTimeout(() => {
-            this.isCreateSuccessModalOpen = false;
-            window.location.reload();
-          }, 3000);
+          Swal.fire({
+                  icon: 'success',
+                  title: 'Rol agregado exitosamente.',
+                  confirmButtonColor: '#3085d6',
+                  confirmButtonText: 'Aceptar'
+                });
+          this.isCreateRoleModalOpen = false;
+          this.fetchRoles();
+          this.fetchPermissions();
         } else {
           console.error('Error al crear rol:', error);
-          this.isCreatingRole = false;
-          this.isCreateErrorModalOpen = true;
-
-          setTimeout(() => {
-            this.isCreateErrorModalOpen = false;
-            window.location.reload();
-          }, 3000);
+          Swal.fire({
+                    icon: 'error',
+                    title: 'Error al agregar el Rol',
+                    text: 'Ocurrió un problema al intentar agregar el rol.',
+                    confirmButtonColor: '#d33',
+                    confirmButtonText: 'Cerrar'
+                  });
+          this.isCreateRoleModalOpen = false;
+          this.fetchRoles();
+          this.fetchPermissions();
         }
       }
     );
@@ -268,7 +279,6 @@ export class RolesListComponent implements OnInit {
       return;
     }
 
-    this.isEditingRole = true;
 
     const roleData = {
       id: this.editedRole.id,
@@ -280,23 +290,31 @@ export class RolesListComponent implements OnInit {
     this.rolesService.updateRole(this.editedRole.id, roleData).subscribe(
       (response) => {
         console.log('Rol actualizado con éxito:', response);
-        this.isEditingRole = false;
-        this.isEditSuccessModalOpen = true;
+        Swal.fire({
+                  icon: 'success',
+                  title: 'Rol actualizado exitosamente.',
+                  text: 'La información del rol ha sido actualizada correctamente.',
+                  confirmButtonColor: '#3085d6',
+                  confirmButtonText: 'Aceptar'
+                });
 
-        setTimeout(() => {
-          this.isEditSuccessModalOpen = false;
-          window.location.reload();
-        }, 3000);
+        this.isEditRoleModalOpen = false;
+          this.fetchRoles();
+          this.fetchPermissions();
       },
       (error) => {
         console.error('Error al actualizar rol:', error);
-        this.isEditingRole = false;
-        this.isEditErrorModalOpen = true;
+        Swal.fire({
+                  icon: 'error',
+                  title: 'Error al actualizar',
+                  text: 'Ocurrió un problema al intentar actualizar el rol.',
+                  confirmButtonColor: '#d33',
+                  confirmButtonText: 'Cerrar'
+                });
 
-        setTimeout(() => {
-          this.isEditErrorModalOpen = false;
-          window.location.reload();
-        }, 3000);
+        this.isEditRoleModalOpen = false;
+          this.fetchRoles();
+          this.fetchPermissions();
       }
     );
   }

@@ -12,10 +12,9 @@ import Swal from 'sweetalert2';
 
 })
 export class AgregarUsuarioComponent {
-  @ViewChild('successModal') successModal!: TemplateRef<any>;
-  @ViewChild('errorModal') errorModal!: TemplateRef<any>;
 
-  @Output() clienteAdded = new EventEmitter<void>();
+  @Output() clientAdded = new EventEmitter<void>(); // Renombrado para más claridad
+  @Output() cancel = new EventEmitter<void>();
 
   name: string = '';
   typeCustomer: string = '';
@@ -24,16 +23,13 @@ export class AgregarUsuarioComponent {
   address: string = '';
   phone: string = '';
   email: string = '';
-  dialogRef!: MatDialogRef<any>;
 
   constructor(
-    public dialog: MatDialog,
-    @Inject(MatDialogRef) private parentDialogRef: MatDialogRef<any>,
     private clienteService: ClienteService
   ) {}
 
   onCancel(): void {
-    this.parentDialogRef.close();
+    this.cancel.emit();
   }
 
   async onAdd(): Promise<void> {
@@ -51,33 +47,40 @@ export class AgregarUsuarioComponent {
 
     Swal.fire({
       title: 'Agregando cliente...',
-      html: 'Por favor, espera mientras se registra el cliente.',
+      html: 'Por favor, espera.',
       allowOutsideClick: false,
-      didOpen: () => {
-        Swal.showLoading();
-      }
+      didOpen: () => { Swal.showLoading(); }
     });
 
     try {
-      const response = await this.clienteService.guardarCliente(cliente).toPromise();
-      
-      Swal.fire({
-        title: 'Cliente registrado',
-        text: 'El cliente se ha registrado con éxito.',
-        icon: 'success',
-        confirmButtonText: 'Aceptar'
-      }).then(() => {
-        this.clienteAdded.emit();
-        this.parentDialogRef.close();
+      // Usar .subscribe() es más común en Angular que .toPromise()
+      this.clienteService.guardarCliente(cliente).subscribe({
+        next: (response) => {
+          Swal.fire({
+            title: 'Cliente registrado',
+            text: 'El cliente se ha registrado con éxito.',
+            icon: 'success',
+            confirmButtonText: 'Aceptar'
+          }).then(() => {
+            // CORRECCIÓN 5: Emite el evento de éxito
+            this.clientAdded.emit(); // ANTES: this.clienteAdded.emit() y this.parentDialogRef.close()
+          });
+        },
+        error: (error) => {
+          Swal.fire({
+            title: 'Error',
+            text: 'No se pudo registrar el cliente. Intenta nuevamente.',
+            icon: 'error',
+            confirmButtonText: 'Aceptar'
+          });
+          console.error('Error al agregar cliente:', error);
+        }
       });
     } catch (error) {
-      Swal.fire({
-        title: 'Error',
-        text: 'No se pudo registrar el cliente. Intenta nuevamente.',
-        icon: 'error',
-        confirmButtonText: 'Aceptar'
-      });
-      console.error('Error al agregar cliente:', error);
+      // Este catch es por si la llamada al observable falla de forma síncrona,
+      // pero el manejo principal está en el bloque 'error' del subscribe.
+      Swal.close(); // Cierra el loader si hay un error inesperado
+      console.error('Error inesperado en onAdd:', error);
     }
   }
 
@@ -107,7 +110,7 @@ export class AgregarUsuarioComponent {
     };
   }
 
-  // Método modal de éxito
+  /* Método modal de éxito
   private showSuccessModal(response: any): void {
     console.log(response); 
     this.dialogRef = this.dialog.open(this.successModal, {
@@ -118,27 +121,7 @@ export class AgregarUsuarioComponent {
       this.clienteAdded.emit();
       this.parentDialogRef.close();
     });
-  }
-
-  // Método modal de error
-  private showErrorModal(): void {
-    this.dialogRef = this.dialog.open(this.errorModal, {
-      width: '400px',
-      height: 'auto'
-    });
-  }
-
-  closeSuccessModal(): void {
-    this.dialogRef.close();
-  }
-
-  closeErrorModal(): void {
-    this.dialogRef.close();
-  }
-
-  retryAdd(): void {
-    this.dialogRef.close();
-  }
+  }*/
 
   // Validación de campo numero documento
 

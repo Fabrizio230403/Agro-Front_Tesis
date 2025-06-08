@@ -23,6 +23,8 @@ export class SiderbangComponent implements OnInit, OnDestroy {
   created_at: string | null = null;
   enabled: boolean | null = null;
   telefono: string | null = null;
+  permissions: string[] = [];
+  modules: string[] = [];
   userProfileImageUrl: string = '../../../assets/images/perfilFoto.png';
   // Loading flag is not needed when using the reactive approach
   // loading: boolean = false;
@@ -58,6 +60,17 @@ export class SiderbangComponent implements OnInit, OnDestroy {
           this.created_at = currentUser.created_at ?? 'N/A'; // Assuming interface uses 'role'
           this.enabled = currentUser.enabled ?? 0; // Assuming interface uses 'role'
           this.telefono = currentUser.telefono ?? 'N/A'; // Assuming interface uses 'role'
+          const permissions = currentUser.rol?.permissions ?? [];
+
+          const permissionNames = permissions.map(p => p.permissionName);
+          this.permissions = [...new Set(permissionNames)];
+
+          const moduleNames = permissions.map(permission => permission?.module?.moduleName);
+
+          const validModuleNames = moduleNames.filter(Boolean) as string[];
+
+          this.modules = [...new Set(validModuleNames)];
+          //this.modules = currentUser.rol?.permissions?.module?.moduleName;
           // Optionally set profile image:
           // this.userProfileImageUrl = currentUser.profileImageUrl ?? '../../../assets/images/perfilFoto.png';
         } else {
@@ -68,6 +81,8 @@ export class SiderbangComponent implements OnInit, OnDestroy {
           this.created_at = null;
           this.enabled = null;
           this.telefono = null;
+          this.modules = [];
+          this.permissions = [];
           this.userProfileImageUrl = '../../../assets/images/perfilFoto.png'; // Reset image
         }
       }
@@ -103,4 +118,36 @@ export class SiderbangComponent implements OnInit, OnDestroy {
     this.currentUserStateService.clearUser();
      this.router.navigate(['/login']);
   }
+}
+
+export interface RoleData {
+  id: number;
+  roleName?: string;
+  description?: string; // Optional based on if it's always present
+  permissions?: PermissionData[]; // Use a more specific type if you know what's in permissions (e.g., string[])
+}
+
+export interface ModuleData {
+  id: number;
+  // Add other relevant fields from your Modules entity if they are included
+  // in the JSON response, e.g.:
+  moduleName?: string;
+  permissions?: PermissionData[];  // permisos incluidos en el módulo
+
+  // description?: string;
+}
+
+// TypeScript interface corresponding to the Java Permission entity
+export interface PermissionData {
+  id: number;
+  permissionName: string;
+  description?: string | null; // Optional or nullable, as it's not marked 'nullable = false'
+  module: ModuleData; // Represents the nested Modules object
+  assigned?: boolean;  // <-- esta propiedad extra que marca si está asignado
+
+
+  // --- ALTERNATIVE ---
+  // If your API only sends the module_id instead of the full module object,
+  // you would use this instead of the 'module' property above:
+  // moduleId?: number;
 }

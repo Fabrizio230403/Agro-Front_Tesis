@@ -194,45 +194,63 @@
 
 
     <!-- Roles Modal -->
-    <div *ngIf="userRolesPermissions" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
-      (click.self)="closeRolesModal()">
-      <div class="bg-white w-11/12 md:w-2/3 lg:w-1/2 rounded-lg shadow-lg max-h-[90vh] flex flex-col p-6">
+    <!-- =================================================================== -->
+<!-- MODAL ROLES Y PERMISOS (REDISEÑADO) -->
+<!-- =================================================================== -->
+<div *ngIf="userRolesPermissions" 
+    class="z-[10] fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
+    (click.self)="closeRolesModal()">
 
-        <!-- Título y botón cerrar -->
-        <div class="flex justify-between items-start mb-6">
-          <h3 class="text-2xl font-bold text-gray-800">Roles de {{ userRolesPermissions?.username }}</h3>
-          <button (click)="closeRolesModal()" class="text-blue-600 hover:text-blue-800">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-              stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
+    <div class="bg-white rounded-xl shadow-2xl w-full max-w-3xl m-4 transform transition-all" (click)="$event.stopPropagation()">
+      
+        <!-- 1. Encabezado del Modal -->
+        <div class="flex justify-between items-center p-6 border-b border-gray-200">
+            <h2 class="text-xl font-semibold text-gray-900">
+                Gestión de Rol para <span class="text-blue-600">{{ userRolesPermissions?.username }}</span>
+            </h2>
+            <button (click)="closeRolesModal()" type="button" class="text-gray-400 hover:text-gray-600">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
         </div>
 
-        <!-- Contenido del modal -->
-        <div class="flex flex-col gap-6 overflow-y-auto">
+        <!-- 2. Cuerpo del Modal con Layout de 2 Columnas -->
+        <div class="p-6">
+            <div class="flex flex-col md:flex-row gap-8">
 
-          <!-- Fila con info a la izquierda y foto a la derecha -->
-          <div class="flex justify-start items-center">
+                <!-- Columna Izquierda: Info del Usuario -->
+                <div class="flex-shrink-0 md:w-1/3 flex flex-col items-center text-center">
+                    <img src="../../../assets/images/perfilFoto.png" alt="Foto de {{ userRolesPermissions?.username }}"
+                         class="w-28 h-28 rounded-full object-cover border-4 border-gray-100 shadow-md">
+                    <h3 class="mt-4 text-lg font-bold text-gray-800">{{ userRolesPermissions?.username }}</h3>
+                    <p class="text-sm text-gray-500">{{ userRolesPermissions?.email }}</p>
+                </div>
 
-            <!-- Información del Rol (izquierda) -->
-            <div class="max-w-[70%]">
-              <h4 class="text-lg font-semibold text-gray-700 mb-3">Información del Rol:</h4>
-              <p class="mb-2"><span class="font-semibold text-gray-800">Nombre:</span>
-                {{ userRolesPermissions?.rol?.roleName ?? 'No asignado' }}</p>
-              <p><span class="font-semibold text-gray-800">Descripción:</span>
-                {{ userRolesPermissions?.rol?.description ?? 'Sin descripción' }}</p>
+                <!-- Columna Derecha: Info del Rol Asignado -->
+                <div class="flex-grow md:w-2/3 md:border-l md:pl-8 space-y-4">
+                    <h4 class="text-lg font-semibold text-gray-700">Información del Rol Asignado</h4>
+                    
+                    <div class="bg-gray-50 border border-gray-200 rounded-lg p-4 space-y-2">
+                        <div>
+                            <span class="block text-xs font-medium text-gray-500">Nombre del Rol</span>
+                            <p class="text-md font-semibold text-gray-800">{{ userRolesPermissions?.rol?.roleName ?? 'No asignado' }}</p>
+                        </div>
+                        <div>
+                            <span class="block text-xs font-medium text-gray-500">Descripción</span>
+                            <p class="text-sm text-gray-600">{{ userRolesPermissions?.rol?.description ?? 'Sin descripción disponible.' }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Mensaje si no hay rol asignado -->
+                    <div *ngIf="!userRolesPermissions?.rol" class="text-center py-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                        <p class="text-sm text-yellow-700">Este usuario no tiene un rol asignado.</p>
+                    </div>
+                </div>
+
             </div>
+        </div>
 
-            <!-- Imagen (derecha) -->
-            <div class="flex-shrink-0 ml-32">
-              <img src="https://via.placeholder.com/100" alt="Foto del rol"
-                class="w-24 h-24 rounded-full object-cover border border-gray-300" />
-            </div>
-          </div>
-
-          <!-- Botones debajo, centrados y en fila -->
-          <div class="flex justify-center gap-4 mt-8"> <!-- margen arriba para separar de la info+imagen -->
+        <!-- 3. Pie del Modal con Botones de Acción -->
+        <div class="flex justify-end items-center space-x-3 p-4 bg-gray-50 rounded-b-xl">
             <button
               class="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-1"
               (click)="openEditPermissionsModal(userRolesPermissions?.rol?.id, userRolesPermissions?.rol?.permissions)">
@@ -250,12 +268,10 @@
               </svg>
               Editar Rol
             </button>
-          </div>
-
-
         </div>
-      </div>
+
     </div>
+</div>
   </div>
 </div>
 

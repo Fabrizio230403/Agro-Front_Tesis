@@ -1,48 +1,69 @@
-<aside class="sidebar w-64 flex-shrink-0 h-full overflow-y-auto bg-gray-100 flex flex-col shadow-lg">
-    <div class="p-4 text-center">
-        <img src="../../../assets/images/perfilFoto.png" alt="Foto de perfil" class="rounded-3xl"
-            style="width: 180px; height: 180px;">
-        <h3 class="mt-2 font-semibold text-lg">{{ username }}</h3>
+<!-- aside.component.html -->
+<aside class="sidebar w-64 flex-shrink-0 h-full overflow-y-auto bg-gray-800 flex flex-col shadow-lg text-gray-300">
+    
+    <!-- Perfil de Usuario -->
+    <div class="p-4 text-center border-b border-gray-700">
+        <img src="../../../assets/images/perfilFoto.png" alt="Foto de perfil" 
+             class="rounded-full mx-auto border-4 border-gray-600"
+             style="width: 120px; height: 120px;">
+        <h3 class="mt-3 font-bold text-lg text-white">{{ username }}</h3>
         <p class="text-sm text-gray-400">{{ rol }}</p>
-        <a routerLink="/perfil" class="text-blue-400 text-sm underline">Ver Perfil</a>
+        <a routerLink="/perfil" class="text-blue-400 hover:text-blue-300 text-sm underline transition-colors duration-200">Ver Perfil</a>
     </div>
 
-    <nav class="mt-10 flex-1">
-        <a routerLink="/dashboard" class="sidebar-link" [class.active]="isActive('/dashboard')">
-            <i class="fas fa-tachometer-alt"></i> DASHBOARD
+    <!-- Navegación Principal -->
+    <nav class="flex-grow p-2">
+        <a routerLink="/dashboard" routerLinkActive="active" class="sidebar-link">
+            <i class="fas fa-tachometer-alt w-6 text-center"></i>
+            <span>DASHBOARD</span>
         </a>
-        <a routerLink="/user" class="sidebar-link" [class.active]="isActive('/user')">
-            <i class="fas fa-user-shield"></i> USUARIOS
+        <a  routerLink="/user" routerLinkActive="active" class="sidebar-link">
+            <i class="fas fa-user-shield w-6 text-center"></i>
+            <span>USUARIOS</span>
         </a>
-        <a routerLink="/roles" class="sidebar-link" [class.active]="isActive('/roles')">
-            <i class="fas fa-user-shield"></i> ROLES
+        <a  routerLink="/roles" routerLinkActive="active" class="sidebar-link">
+            <i class="fas fa-user-tag w-6 text-center"></i> <!-- Ícono cambiado para diferenciar -->
+            <span>ROLES</span>
         </a>
-        <a routerLink="/clientes" class="sidebar-link" [class.active]="isActive('/clientes')">
-            <i class="fas fa-users"></i> CLIENTES
+        <a  routerLink="/clientes" routerLinkActive="active" class="sidebar-link">
+            <i class="fas fa-users w-6 text-center"></i>
+            <span>CLIENTES</span>
         </a>
-        <a routerLink="/productos" class="sidebar-link" [class.active]="isActive('/productos')">
-            <i class="fas fa-box"></i> PRODUCTOS
+        <a  routerLink="/productos" routerLinkActive="active" class="sidebar-link">
+            <i class="fas fa-box w-6 text-center"></i>
+            <span>PRODUCTOS</span>
         </a>
-        <a routerLink="/categorias" class="sidebar-link" [class.active]="isActive('/categorias')">
-            <i class="fas fa-th-large"></i> CATEGORÍAS
+        <a  routerLink="/categorias" routerLinkActive="active" class="sidebar-link">
+            <i class="fas fa-th-large w-6 text-center"></i>
+            <span>CATEGORÍAS</span>
         </a>
-        <a routerLink="/inventario" class="sidebar-link" [class.active]="isActive('/inventario')">
-            <i class="fas fa-warehouse"></i> INVENTARIO
+        <a  routerLink="/inventario" routerLinkActive="active" class="sidebar-link">
+            <i class="fas fa-warehouse w-6 text-center"></i>
+            <span>INVENTARIO</span>
         </a>
-        <a routerLink="/proveedores" class="sidebar-link" [class.active]="isActive('/proveedores')">
-            <i class="fas fa-truck"></i> PROVEEDORES
+        <a  routerLink="/proveedores" routerLinkActive="active" class="sidebar-link">
+            <i class="fas fa-truck w-6 text-center"></i>
+            <span>PROVEEDORES</span>
         </a>
-        <a routerLink="/ventas" class="sidebar-link" [class.active]="isActive('/ventas')">
-            <i class="fas fa-shopping-cart"></i> NUEVA VENTA
+        <a  routerLink="/ventas" routerLinkActive="active" class="sidebar-link">
+            <i class="fas fa-shopping-cart w-6 text-center"></i>
+            <span>NUEVA VENTA</span>
         </a>
-        <a routerLink="/reportes" class="sidebar-link" [class.active]="isActive('/reportes')">
-            <i class="fas fa-chart-line"></i> REPORTES
+        <a  routerLink="/reportes" routerLinkActive="active" class="sidebar-link">
+            <i class="fas fa-chart-line w-6 text-center"></i>
+            <span>REPORTES</span>
         </a>
-         <a routerLink="/gestion" class="sidebar-link" [class.active]="isActive('/gestion')">
-            <i class="fas fa-cogs"></i> GESTIÓN
-        </a>
-        <a (click)="logout()" class="sidebar-link logout" [class.active]="isActive('/cerrarSesion')">
-            <i class="fas fa-sign-out-alt"></i>CERRAR SESIÓN
+         <a  routerLink="/gestion" routerLinkActive="active" class="sidebar-link">
+            <i class="fas fa-cogs w-6 text-center"></i>
+            <span>GESTIÓN</span>
         </a>
     </nav>
+
+    <!-- Botón de Cerrar Sesión -->
+    <div class="p-2 border-t border-gray-700">
+        <a (click)="logout()" class="sidebar-link logout-link">
+            <i class="fas fa-sign-out-alt w-6 text-center"></i>
+            <span>CERRAR SESIÓN</span>
+        </a>
+    </div>
 </aside>

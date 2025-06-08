@@ -11,134 +11,177 @@
         <!-- Área de Contenido Principal (con scroll si es necesario) -->
         <div class="content-area flex-grow overflow-y-auto"> <!-- Añadido overflow-y-auto -->
             <app-header (sidebarToggle)="toggleSidebar()"></app-header>
-            <div class="from-gray-50 to-gray-100 p-4">
+            <div class="from-gray-50 to-gray-100 p-4 md:p-6 lg:p-8">
+                
+                <div class="mb-8">
+            <h2 class="text-3xl font-bold tracking-tight text-gray-900 text-center md:text-left">Mi Perfil</h2>
+            <p class="mt-1 text-md text-gray-500 text-center md:text-left">Gestiona tu información personal y tus permisos.</p>
+        </div>
 
+                <div class="bg-white shadow-lg rounded-xl overflow-hidden border border-gray-200 mb-8">
+            <div class="p-6 flex flex-col md:flex-row items-center md:items-start gap-6">
 
-                <div class="profile-container">
-                    <h2>Mi Perfil</h2>
-
-                    <div class="user-details">
-                        <div class="profile-picture-container">
-                            <!-- IMPORTANTE:
-                        1. Asegúrate de que exista un archivo de imagen llamado 'foto_perfil.jpg'
-                           (o el nombre que uses) EN LA MISMA CARPETA que este archivo HTML.
-                        2. Si la imagen tiene otro nombre, cambia 'foto_perfil.jpg' aquí abajo.
-                        3. El texto en 'alt' es lo que se muestra si la imagen no carga.
-                   -->
-                            <img src="../../../assets/images/perfilFoto.png" alt="Foto de perfil de Mateo Fénandez"
-                                class="profile-picture">
-                        </div>
-                        <div class="user-info">
-                            <div class="info-column">
-                                <p><strong>Nombre de usuario:</strong><br> {{ user?.username }}</p>
-                                <p><strong>Fecha de Ingreso:</strong><br> {{ user?.created_at }}</p>
-                                <p><strong>Correo:</strong><br> <a href="mailto:example@gmail.com">{{ user?.email }}</a>
-                                </p>
-                            </div>
-                            <div class="info-column">
-                                <p><strong>Telefono:</strong><br> {{ user?.telefono }}</p>
-                                <p><strong>Estado:</strong><br> {{ user?.enabled }}</p>
-                                <p><strong>Rol:</strong><br> {{ user?.rol?.roleName ?? 'No asignado' }}</p>
-                            </div>
-                        </div>
+                <!-- Columna de la Imagen -->
+                <div class="flex-shrink-0 text-center">
+                    <img src="../../../assets/images/perfilFoto.png" alt="Foto de perfil de {{ user?.username }}"
+                         class="w-32 h-32 md:w-40 md:h-40 rounded-full object-cover border-4 border-white shadow-md mx-auto">
+                    <div class="mt-4">
+                        <h3 class="text-xl font-bold text-gray-800">{{ user?.username }}</h3>
+                        <p class="text-sm text-gray-500">{{ user?.rol?.roleName ?? 'No asignado' }}</p>
                     </div>
-
-                    <h3 class="text-center">Permisos Asignados por Módulo</h3>
-                    <div
-                        class="modules-permissions-container mt-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-6">
-                        <div *ngFor="let module of paginatedModules"
-                            class="rounded-xl shadow-md border p-6 bg-white flex flex-col justify-between h-64 w-full">
-                            <h4 class="font-semibold text-blue-600 text-lg mb-3 text-center">
-                                {{ module.moduleName || 'Módulo sin nombre' }}
-                            </h4>
-
-                            <div class="permissions-grid flex-1 overflow-y-auto space-y-1">
-                                <div *ngFor="let perm of module.permissions"
-                                    class="permission-item flex items-center gap-2 text-sm">
-                                    <span class="text-green-600 font-bold">✓</span>
-                                    <span>{{ perm.permissionName }}</span>
-                                </div>
-                                <p *ngIf="!module.permissions || module.permissions.length === 0"
-                                    class="text-sm text-gray-500">
-                                    Sin permisos en este módulo
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Paginación -->
-                    <div class="pagination-controls flex justify-center mt-4 gap-2">
-                        <button class="btn btn-secondary" (click)="goToPage(currentPage - 1)"
-                            [disabled]="currentPage === 1">
-                            Anterior
-                        </button>
-
-                        <button class="btn" *ngFor="let page of [].constructor(totalPages); let i = index"
-                            [class.bg-blue-500]="currentPage === i + 1" (click)="goToPage(i + 1)">
-                            {{ i + 1 }}
-                        </button>
-
-                        <button class="btn btn-secondary" (click)="goToPage(currentPage + 1)"
-                            [disabled]="currentPage === totalPages">
-                            Siguiente
-                        </button>
-                    </div>
-
-                    <div class="action-buttons justify-center">
-                        <button class="btn btn-edit" (click)="handleEditUser(user)">Editar Usuario</button>
-                        <button class="btn btn-password" (click)="showPasswordModal = true">Cambiar contraseña</button>
-                    </div>
-
                 </div>
+
+                <!-- Columna de la Información -->
+                <div class="flex-grow w-full border-t md:border-t-0 md:border-l border-gray-200 pt-6 md:pt-0 md:pl-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-5">
+                        <!-- Correo Electrónico -->
+                        <div class="info-item">
+                            <label class="text-sm font-medium text-gray-500">Correo Electrónico</label>
+                            <p class="text-md text-gray-800 break-words">
+                                <a href="mailto:{{ user?.email }}" class="text-blue-600 hover:underline">{{ user?.email }}</a>
+                            </p>
+                        </div>
+                        <!-- Teléfono -->
+                        <div class="info-item">
+                            <label class="text-sm font-medium text-gray-500">Teléfono</label>
+                            <p class="text-md text-gray-800">{{ user?.telefono }}</p>
+                        </div>
+                        <!-- Fecha de Ingreso -->
+                        <div class="info-item">
+                            <label class="text-sm font-medium text-gray-500">Miembro desde</label>
+                            <p class="text-md text-gray-800">{{ user?.created_at | date: 'dd/MM/yyyy' }}</p>
+                        </div>
+                        <!-- Estado -->
+                        <div class="info-item">
+                            <label class="text-sm font-medium text-gray-500">Estado</label>
+                            <div>
+                                <span *ngIf="user?.enabled" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    <span class="inline-block h-2 w-2 bg-green-500 rounded-full mr-1.5"></span>
+                                    Activo
+                                </span>
+                                <span *ngIf="!user?.enabled" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                    <span class="inline-block h-2 w-2 bg-red-500 rounded-full mr-1.5"></span>
+                                    Inactivo
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botones de Acción -->
+                    <div class="mt-8 flex flex-col sm:flex-row gap-3">
+                        <button (click)="handleEditUser(user)" class="w-full sm:w-auto flex items-center justify-center gap-2 bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-200 shadow-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" /><path fill-rule="evenodd" d="M2 15a1 1 0 011-1h11a1 1 0 110 2H3a1 1 0 01-1-1z" clip-rule="evenodd" /></svg>
+                            Editar Perfil
+                        </button>
+                        <button (click)="showPasswordModal = true" class="w-full sm:w-auto flex items-center justify-center gap-2 bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-200 shadow-sm">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M18 8a6 6 0 01-7.743 5.743L10 14l-1 1-1 1H6v-2l1-1 1-1-1.257-1.257A6 6 0 1118 8zm-6-4a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd" /></svg>
+                            Cambiar Contraseña
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección de Permisos -->
+        <div class="mb-8">
+            <h3 class="text-2xl font-bold tracking-tight text-gray-900 text-center">Permisos Asignados por Módulo</h3>
+        </div>
+
+        <!-- Grid de Permisos -->
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            <div *ngFor="let module of paginatedModules" class="bg-white shadow-lg rounded-xl border border-gray-200 flex flex-col transition-shadow hover:shadow-xl">
+                <!-- Título del Módulo -->
+                <div class="p-4 border-b border-gray-200">
+                    <h4 class="font-bold text-lg text-blue-700 text-center">
+                        {{ module.moduleName || 'Módulo sin nombre' }}
+                    </h4>
+                </div>
+                <!-- Lista de Permisos -->
+                <div class="p-5 flex-grow overflow-y-auto space-y-2" style="max-height: 200px;">
+                    <div *ngFor="let perm of module.permissions" class="flex items-center gap-3 text-gray-700">
+                        <svg class="h-5 w-5 text-green-500 flex-shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                        </svg>
+                        <span>{{ perm.permissionName }}</span>
+                    </div>
+                    <p *ngIf="!module.permissions || module.permissions.length === 0" class="text-sm text-gray-500 text-center italic py-4">
+                        Sin permisos en este módulo.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Paginación para Módulos -->
+        <div *ngIf="totalPages > 1" class="mt-8 flex justify-center items-center gap-2">
+            <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1" class="pagination-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
+            </button>
+            <ng-container *ngFor="let page of [].constructor(totalPages); let i = index">
+                <button (click)="goToPage(i + 1)" [ngClass]="{'active': currentPage === i + 1}" class="pagination-btn">
+                    {{ i + 1 }}
+                </button>
+            </ng-container>
+            <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages" class="pagination-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
+            </button>
+        </div>
+
+        <!--
+            TUS MODALES (app-edit-user y el modal de cambiar contraseña)
+            PERMANECEN AQUÍ, FUERA DEL ÁREA DE CONTENIDO PRINCIPAL
+        -->
+
+</div>
 
                 <app-edit-user *ngIf="editingUser" [user]="editingUser" (userUpdated)="handleUserUpdated($event)"
                     (cancel)="editingUser = null">
                 </app-edit-user>
 
                 <!-- Modal Cambiar Contraseña -->
-                <div *ngIf="showPasswordModal"
-                    class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-                    <div class="bg-white rounded-xl w-full max-w-md p-6 relative shadow-xl">
+<div *ngIf="showPasswordModal"
+    class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50" (click.self)="showPasswordModal = false">
 
-                        <!-- Botón cerrar -->
-                        <button (click)="showPasswordModal = false"
-                            class="absolute top-3 right-3 text-gray-500 hover:text-red-500 text-xl font-bold">
-                            ×
-                        </button>
+    <div class="bg-white rounded-xl shadow-2xl w-full max-w-md flex flex-col m-4" style="max-height: 90vh;">
 
-                        <!-- Título centrado -->
-                        <h2 class="text-center text-xl font-semibold mb-4">Actualizar Contraseña</h2>
+        <div class="flex-shrink-0 flex justify-between items-center p-5 border-b border-gray-200">
+            <h2 class="text-xl font-semibold text-gray-900">Actualizar Contraseña</h2>
+            <button (click)="showPasswordModal = false" type="button" class="text-gray-400 hover:text-gray-600 p-1 rounded-full transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
 
-                        <!-- Cuerpo gris del formulario -->
-                        <div class="bg-gray-100 p-4 rounded-lg space-y-4">
-                            <div>
-                                <label class="block text-sm font-medium">Antigua contraseña</label>
-                                <input type="password" [(ngModel)]="oldPassword"
-                                    class="w-full mt-1 p-2 border rounded" />
-                            </div>
+        <!-- 3. Cuerpo del Modal (sin cambios) -->
+        <div class="flex-grow p-6 space-y-5 overflow-y-auto">
+            <div>
+                <label for="oldPassword" class="block text-sm font-medium text-gray-700 mb-1.5">Antigua contraseña</label>
+                <input id="oldPassword" type="password" [(ngModel)]="oldPassword"
+                    class="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500" />
+            </div>
+            <div>
+                <label for="newPassword" class="block text-sm font-medium text-gray-700 mb-1.5">Nueva contraseña</label>
+                <input id="newPassword" type="password" [(ngModel)]="newPassword"
+                    class="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500" />
+            </div>
+            <div>
+                <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-1.5">Confirmar nueva contraseña</label>
+                <input id="confirmPassword" type="password" [(ngModel)]="confirmPassword"
+                    class="w-full px-3 py-2 bg-white border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500" />
+            </div>
+        </div>
 
-                            <div>
-                                <label class="block text-sm font-medium">Nueva contraseña</label>
-                                <input type="password" [(ngModel)]="newPassword"
-                                    class="w-full mt-1 p-2 border rounded" />
-                            </div>
-
-                            <div>
-                                <label class="block text-sm font-medium">Confirmar nueva contraseña</label>
-                                <input type="password" [(ngModel)]="confirmPassword"
-                                    class="w-full mt-1 p-2 border rounded" />
-                            </div>
-
-                            <div class="text-center">
-                                <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-                                    (click)="actualizarPassword()">
-                                    Actualizar
-                                </button>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
+        <!-- 4. Pie del Modal (sin cambios) -->
+        <div class="flex-shrink-0 flex justify-end items-center gap-3 p-5 bg-gray-50 border-t border-gray-200 rounded-b-xl">
+            <button type="button" (click)="showPasswordModal = false" 
+                class="inline-flex items-center justify-center px-4 py-2 bg-white text-gray-700 border border-gray-300 text-sm font-semibold rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300">
+                Cancelar
+            </button>
+            <button type="button" (click)="actualizarPassword()" 
+                class="inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                Actualizar
+            </button>
+        </div>
+    </div>
+</div>
 
             </div> <!-- Fin bg-gradient -->
 

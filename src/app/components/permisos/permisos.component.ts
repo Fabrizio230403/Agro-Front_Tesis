@@ -2,6 +2,8 @@
 import { RolesService } from '../../services/roles.service';
 import { Router } from '@angular/router';
 
+import Swal from 'sweetalert2';
+
 @Component({
   selector: 'app-permisos',
   templateUrl: './permisos.component.html',
@@ -130,37 +132,49 @@ export class PermisosComponent implements OnInit {
       return;
     }
   
-    this.isLoading = true; // Mostrar modal de carga
   
     this.rolesService.updatePermissions(this.selectedRoleId, this.selectedPermissions).subscribe(
       (response) => {
         console.log('✅ Permisos asignados correctamente:', response);
-        this.isLoading = false;
-        this.showSuccessModal = true;
-  
-        setTimeout(() => {
-          this.showSuccessModal = false;
-          window.location.reload();
-        }, 3000);
+        Swal.fire({
+                  icon: 'success',
+                  title: 'Permisos asignados exitosamente.',
+                  text: 'Los permisos se asignaron al rol correctamente.',
+                  confirmButtonColor: '#3085d6',
+                  confirmButtonText: 'Aceptar'
+                });
+        this.fetchPermissions();
+        this.fetchRoles();
+        this.selectedRoleId = null;
+        this.selectedPermissions = [];
       },
       (error) => {
         if (error.status === 201) { // Si es 201, no es error
           console.log('✅ Permisos asignados correctamente.');
-          this.showSuccessModal = true;
-  
-          setTimeout(() => {
-            this.showSuccessModal = false;
-            window.location.reload();
-          }, 3000);
+          Swal.fire({
+                  icon: 'success',
+                  title: 'Permisos asignados exitosamente.',
+                  text: 'Los permisos se asignaron al rol correctamente.',
+                  confirmButtonColor: '#3085d6',
+                  confirmButtonText: 'Aceptar'
+                });
+        this.fetchPermissions();
+        this.fetchRoles();
+        this.selectedRoleId = null;
+        this.selectedPermissions = [];
         } else {
           console.error('❌ Error al actualizar permisos:', error);
-          this.isLoading = false;
-          this.showErrorModal = true;
-  
-          setTimeout(() => {
-            this.showErrorModal = false;
-            window.location.reload();
-          }, 3000);
+          Swal.fire({
+                    icon: 'error',
+                    title: 'Error al asignar los permisos',
+                    text: 'Ocurrió un problema al intentar asignar los permisos al rol.',
+                    confirmButtonColor: '#d33',
+                    confirmButtonText: 'Cerrar'
+                  });
+          this.fetchPermissions();
+          this.fetchRoles();
+          this.selectedRoleId = null;
+          this.selectedPermissions = [];
         }
       }
     );

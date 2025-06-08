@@ -2,9 +2,6 @@ import { Component,  ViewEncapsulation } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ClienteService } from '../../services/cliente.service';
 import { ConfirmDeleteModalComponent } from '../../features/clientes/confirm-delete-modal/confirm-delete-modal.component';
-import { AgregarUsuarioComponent } from '../../features/clientes/agregar-usuario/agregar-usuario.component';
-import { EditarClienteComponent } from '../../features/clientes/editar-cliente/editar-cliente.component';
-import { ClienteDetalleComponent } from '../../features/clientes/cliente-detalle/cliente-detalle.component';
 import { Cliente } from '../../models/client.model';
 import Swal from 'sweetalert2';
 
@@ -30,9 +27,17 @@ export class ClientesComponent {
   currentPage: number = 1;
   pageSize: number = 10; // Número de clientes por página
 
+  /*isAgregarClienteModalOpen = false;
+  isEditarClienteModalOpen = false;
+  clienteParaEditar: any = null;*/
+
+  isAddingClient = false;
+  editingClient: Cliente | null = null;
+  clientToView: Cliente | null = null;
+  //clientToDeleteId: number | null = null;
+
 
   constructor(
-    private dialog: MatDialog,
     private clienteService: ClienteService
   ) { }
 
@@ -140,45 +145,27 @@ export class ClientesComponent {
     this.isSidebarVisible = !this.isSidebarVisible;
   }
 
-  openAgregarUsuarioModal(): void {
-    const dialogRef = this.dialog.open(AgregarUsuarioComponent, {
-      width: '600px',
-    });
-    
-    dialogRef.componentInstance.clienteAdded.subscribe(() => {
-      this.onClienteAdded();
-    });
+  openAgregarClienteModal(): void {
+    this.isAddingClient = true;
   }
 
   openEditarClienteModal(cliente: Cliente): void {
-    const dialogRef = this.dialog.open(EditarClienteComponent, {
-      width: '600px',
-      data: cliente
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        if (result.id) {
-          this.clienteService.actualizarCliente(result.id, result).subscribe(
-            (response) => {
-              this.listarClientes();
-            },
-            (error) => {
-              console.error('Error al actualizar cliente:', error);
-            }
-          );
-        } else {
-          console.error('El cliente no tiene un ID válido');
-        }
-      }
-    });
+    // Pasamos una copia para no modificar el objeto original en la tabla
+    this.editingClient = { ...cliente };
+  }
+  
+  openDetalleClienteModal(cliente: Cliente): void {
+    this.clientToView = cliente;
   }
 
-  openDetalleClienteModal(cliente: Cliente): void {
-    this.dialog.open(ClienteDetalleComponent, {
-      width: '400px',
-      data: cliente
-    });
+  handleClientAdded(): void {
+    this.listarClientes();
+    this.isAddingClient = false; // Cierra el modal
+  }
+
+  handleClientUpdated(): void {
+    this.listarClientes();
+    this.editingClient = null; // Cierra el modal
   }
 
   getClientesPorPagina(): Cliente[] {

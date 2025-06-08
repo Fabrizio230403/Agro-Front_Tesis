@@ -36,7 +36,7 @@ export interface PermissionData {
   id: number;
   permissionName: string;
   description?: string | null; // Optional or nullable, as it's not marked 'nullable = false'
-  module: ModuleData; // Represents the nested Modules object
+  module?: ModuleData; // Represents the nested Modules object
   assigned?: boolean;  // <-- esta propiedad extra que marca si está asignado
 
 

@@ -29,16 +29,6 @@
   overflow: hidden;
 }
 
-h2, h3 {
-  color: #111;
-  margin-bottom: 1em;
-}
-
-h2 {
-  font-size: 1.8em;
-  margin-bottom: 1.5em;
-  font-weight: bold; /* Asegura que sea negrita como en la imagen */
-}
 
 h3 {
   font-size: 1.3em;

@@ -9,7 +9,6 @@ header {
     padding: 0 20px; /* Espaciado interno a los lados */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra para profundidad */
     position: relative; /* Posicionamiento relativo */
-    z-index: 1000; /* Asegúrate de que esté por encima de otros elementos */
 }
 
 /* Opcional: Resetear márgenes y paddings por defecto del body */

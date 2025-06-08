@@ -1,124 +1,141 @@
-<div class="modal-content">
-  <h2>Agregar Cliente</h2>
+<!-- 1. Contenedor principal del modal: fondo oscuro, centrado y con efecto blur -->
+<!-- (click.self) permite cerrar el modal al hacer clic en el fondo, pero no en la tarjeta -->
+<div class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 p-4" (click.self)="onCancel()">
 
+    <!-- 2. Tarjeta del Modal: blanca, con sombra, bordes redondeados y scroll interno -->
+    <div class="bg-white rounded-xl shadow-2xl w-full max-w-3xl flex flex-col m-4" style="max-height: 90vh;" (click)="$event.stopPropagation()">
 
-  <form #userForm="ngForm" class="form-content">
+        <!-- ================================================================== -->
+        <!-- Encabezado del Modal -->
+        <!-- ================================================================== -->
+        <div class="flex-shrink-0 flex justify-between items-center p-5 border-b border-gray-200">
+            <h2 class="text-xl font-semibold text-gray-800 flex items-center gap-2">
+                Agregar Nuevo Cliente
+            </h2>
+            <button (click)="onCancel()" type="button" 
+                    class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 inline-flex items-center">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+            </button>
+        </div>
 
-    <!-- Fila 1: Razón Social y Tipo de Cliente -->
-    <div class="form-row">
-      <mat-form-field appearance="fill" class="input-half">
-        <mat-label>Razón Social</mat-label>
-        <input matInput name="name" required minlength="3" [(ngModel)]="name" #nameField="ngModel">
-        <mat-error *ngIf="nameField.invalid && nameField.touched">
-          La razón social es requerida y debe tener al menos 3 caracteres.
-        </mat-error>
-      </mat-form-field>
+        <!-- ================================================================== -->
+        <!-- Cuerpo del Modal (Formulario con scroll) -->
+        <!-- ================================================================== -->
+        <div class="flex-grow p-6 overflow-y-auto">
+            <!-- Usamos ngForm para la validación del botón de guardar -->
+            <form #clientForm="ngForm" class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
+                
+                <!-- Razón Social -->
+                <div class="md:col-span-2">
+                    <label for="name" class="block mb-1.5 text-sm font-medium text-gray-700">Razón Social</label>
+                    <input id="name" type="text" name="name" required minlength="3" [(ngModel)]="name" #nameField="ngModel"
+                           class="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" />
+                    <div *ngIf="nameField.invalid && (nameField.dirty || nameField.touched)" class="text-red-600 text-xs mt-1">
+                        <span *ngIf="nameField.errors?.['required']">La razón social es requerida.</span>
+                        <span *ngIf="nameField.errors?.['minlength']">Debe tener al menos 3 caracteres.</span>
+                    </div>
+                </div>
 
-      <mat-form-field appearance="fill" class="input-half">
-        <mat-label>Tipo de Cliente</mat-label>
-        <mat-select name="typeCustomer" required [(ngModel)]="typeCustomer" #typeCustomerField="ngModel">
-          <mat-option value="INDIVIDUAL">INDIVIDUAL</mat-option>
-          <mat-option value="EMPRESA">EMPRESA</mat-option>
-        </mat-select>
-        <mat-error *ngIf="typeCustomerField.invalid && typeCustomerField.touched">
-          El tipo de cliente es requerido.
-        </mat-error>
-      </mat-form-field>
+                <!-- Tipo de Cliente -->
+                <div>
+                    <label for="typeCustomer" class="block mb-1.5 text-sm font-medium text-gray-700">Tipo de Cliente</label>
+                    <div class="relative">
+                        <select id="typeCustomer" name="typeCustomer" required [(ngModel)]="typeCustomer" #typeCustomerField="ngModel"
+                                class="appearance-none w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition pr-10">
+                            <option value="" disabled>Seleccione un tipo</option>
+                            <option value="INDIVIDUAL">INDIVIDUAL</option>
+                            <option value="EMPRESA">EMPRESA</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
+                            <svg class="fill-current h-4 w-4" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
+                        </div>
+                    </div>
+                     <div *ngIf="typeCustomerField.invalid && (typeCustomerField.dirty || typeCustomerField.touched)" class="text-red-600 text-xs mt-1">
+                        El tipo de cliente es requerido.
+                    </div>
+                </div>
+                
+                <!-- Tipo Documento -->
+                <div>
+                    <label for="documentType" class="block mb-1.5 text-sm font-medium text-gray-700">Tipo Documento</label>
+                     <div class="relative">
+                        <select id="documentType" name="documentType" required [(ngModel)]="documentType" #documentTypeField="ngModel" (ngModelChange)="limpiarNumeroDocumento()"
+                                class="appearance-none w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition pr-10">
+                            <option value="" disabled>Seleccione un documento</option>
+                            <option value="DNI">DNI</option>
+                            <option value="RUC">RUC</option>
+                            <option value="Carné de Extranjería">Carné de Extranjería</option>
+                            <option value="Pasaporte">Pasaporte</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
+                            <svg class="fill-current h-4 w-4" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
+                        </div>
+                    </div>
+                    <div *ngIf="documentTypeField.invalid && (documentTypeField.dirty || documentTypeField.touched)" class="text-red-600 text-xs mt-1">
+                        El tipo de documento es requerido.
+                    </div>
+                </div>
+
+                <!-- Nro. Documento -->
+                <div>
+                    <label for="documentNumber" class="block mb-1.5 text-sm font-medium text-gray-700">Nro. Documento</label>
+                    <input id="documentNumber" name="documentNumber" required [(ngModel)]="documentNumber" #documentNumberField="ngModel" [pattern]="getDocumentoPattern()" [maxlength]="getDocumentoMaxLength()" (keypress)="onKeyPress($event)" (paste)="onPaste($event)"
+                           class="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" />
+                    <div *ngIf="documentNumberField.invalid && (documentNumberField.dirty || documentNumberField.touched)" class="text-red-600 text-xs mt-1">
+                        <span *ngIf="documentNumberField.errors?.['required']">El número es requerido.</span>
+                        <span *ngIf="documentNumberField.errors?.['pattern']">El formato del número no es válido.</span>
+                    </div>
+                </div>
+
+                <!-- Teléfono -->
+                <div>
+                    <label for="phone" class="block mb-1.5 text-sm font-medium text-gray-700">Teléfono</label>
+                    <input id="phone" type="tel" name="phone" required [(ngModel)]="phone" #phoneField="ngModel" pattern="^\d{9}$" maxlength="9" (keypress)="onTelefonoKeyPress($event)" (paste)="onTelefonoPaste($event)"
+                           class="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" />
+                    <div *ngIf="phoneField.invalid && (phoneField.dirty || phoneField.touched)" class="text-red-600 text-xs mt-1">
+                        <span *ngIf="phoneField.errors?.['required']">El teléfono es requerido.</span>
+                        <span *ngIf="phoneField.errors?.['pattern']">Debe tener 9 dígitos.</span>
+                    </div>
+                </div>
+
+                <!-- Dirección -->
+                <div class="md:col-span-2">
+                    <label for="address" class="block mb-1.5 text-sm font-medium text-gray-700">Dirección</label>
+                    <input id="address" type="text" name="address" required [(ngModel)]="address" #addressField="ngModel"
+                           class="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" />
+                    <div *ngIf="addressField.invalid && (addressField.dirty || addressField.touched)" class="text-red-600 text-xs mt-1">
+                        La dirección es requerida.
+                    </div>
+                </div>
+
+                <!-- Correo -->
+                <div class="md:col-span-2">
+                    <label for="email" class="block mb-1.5 text-sm font-medium text-gray-700">Correo Electrónico</label>
+                    <input id="email" type="email" name="email" required [(ngModel)]="email" #emailField="ngModel" email
+                           class="w-full px-3 py-2 bg-gray-50 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" />
+                    <div *ngIf="emailField.invalid && (emailField.dirty || emailField.touched)" class="text-red-600 text-xs mt-1">
+                        <span *ngIf="emailField.errors?.['required']">El correo es requerido.</span>
+                        <span *ngIf="emailField.errors?.['email']">El formato del correo no es válido.</span>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+        <!-- ================================================================== -->
+        <!-- Pie del Modal (Botones de Acción) -->
+        <!-- ================================================================== -->
+        <div class="flex-shrink-0 flex justify-end items-center gap-3 p-5 bg-gray-50 border-t border-gray-200 rounded-b-xl">
+            <button type="button" (click)="onCancel()"
+                    class="py-2.5 px-5 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200">
+              Cancelar
+            </button>
+            <button type="button" (click)="onAdd()" [disabled]="clientForm.invalid"
+                    class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center disabled:opacity-50 disabled:cursor-not-allowed">
+              Agregar Cliente
+            </button>
+        </div>
     </div>
-
-    <!-- Fila 2: Tipo de Documento y Número de Documento -->
-    <div class="form-row">
-      <mat-form-field appearance="fill" class="input-half">
-        <mat-label>Tipo Documento</mat-label>
-        <mat-select name="documentType" required [(ngModel)]="documentType" #tipoDocumentoField="ngModel"
-          (ngModelChange)="limpiarNumeroDocumento()">
-          <mat-option *ngIf="typeCustomer === 'EMPRESA'" value="RUC">RUC</mat-option>
-          <mat-option *ngIf="typeCustomer === 'INDIVIDUAL'" value="DNI">DNI</mat-option>
-          <mat-option *ngIf="typeCustomer === 'INDIVIDUAL'" value="Carné de Extranjería">Carné de
-            Extranjería</mat-option>
-          <mat-option *ngIf="typeCustomer === 'INDIVIDUAL'" value="Pasaporte">Pasaporte</mat-option>
-        </mat-select>
-        <mat-error *ngIf="tipoDocumentoField.invalid && tipoDocumentoField.touched">
-          El tipo de documento es requerido.
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field appearance="fill" class="input-half">
-        <mat-label>Nro. Documento</mat-label>
-        <input matInput name="documentNumber" required [(ngModel)]="documentNumber" #documentNumberField="ngModel"
-          [pattern]="getDocumentoPattern()" [maxlength]="getDocumentoMaxLength()" (keypress)="onKeyPress($event)"
-          (paste)="onPaste($event)">
-        <mat-error *ngIf="documentNumberField.invalid && documentNumberField.touched">
-          <ng-container *ngIf="documentType === 'RUC'">El RUC debe tener 11 dígitos.</ng-container>
-          <ng-container *ngIf="documentType === 'DNI'">El DNI debe tener 8 dígitos.</ng-container>
-          <ng-container *ngIf="documentType === 'Carné de Extranjería'">Debe ser válido (alfanumérico).</ng-container>
-          <ng-container *ngIf="documentType === 'Pasaporte'">Debe ser válido (alfanumérico).</ng-container>
-        </mat-error>
-      </mat-form-field>
-    </div>
-
-    <!-- Fila 3: Dirección y Teléfono -->
-    <div class="form-row">
-      <mat-form-field appearance="fill" class="input-half">
-        <mat-label>Dirección</mat-label>
-        <input matInput name="address" required [(ngModel)]="address" #addressField="ngModel">
-        <mat-error *ngIf="addressField.invalid && addressField.touched">
-          La dirección es requerida.
-        </mat-error>
-      </mat-form-field>
-
-      <mat-form-field appearance="fill" class="input-half">
-        <mat-label>Teléfono</mat-label>
-        <input matInput type="tel" name="phone" required [(ngModel)]="phone" #phoneField="ngModel" pattern="^\d{9}$"
-          maxlength="9" (keypress)="onTelefonoKeyPress($event)" (paste)="onTelefonoPaste($event)">
-        <mat-error *ngIf="phoneField.invalid && phoneField.touched">
-          El teléfono es requerido y debe tener 9 dígitos.
-        </mat-error>
-      </mat-form-field>
-    </div>
-
-    <!-- Fila 4: Correo centrado -->
-    <div class="form-row single-center">
-      <mat-form-field appearance="fill" class="input-full">
-        <mat-label>Correo</mat-label>
-        <input matInput type="email" name="email" required [(ngModel)]="email" #emailField="ngModel" email>
-        <mat-error *ngIf="emailField.invalid && emailField.touched">
-          El correo electrónico es requerido y debe ser válido.
-        </mat-error>
-      </mat-form-field>
-    </div>
-
-    <!-- Botones -->
-    <div class="modal-actions">
-      <button mat-button (click)="onCancel()" class="cancel-button">Cancelar</button>
-      <button mat-raised-button (click)="onAdd()" class="confirm-button">Agregar Cliente</button>
-    </div>
-
-  </form>
-
-
-
-
-  <!-- Modales de éxito y error -->
-  <ng-template #successModal>
-    <div class="success-message">
-      <i class="material-icons success-icon">check_circle</i>
-      <p>Registro guardado</p>
-      <p>El cliente ha sido guardado correctamente.</p>
-      <button mat-button (click)="closeSuccessModal()">Ok</button>
-    </div>
-  </ng-template>
-
-  <ng-template #errorModal>
-    <div class="error-message">
-      <i class="material-icons error-icon">error</i>
-      <p>Cliente no Agregado!</p>
-      <p>Faltan campos por completar</p>
-      <p>¿Rellenar de nuevo?</p>
-      <div class="modal-actions">
-        <button mat-button (click)="closeErrorModal()" class="cancel-button">No, Cancelar</button>
-        <button mat-raised-button (click)="retryAdd()" class="confirm-button">Sí, Agregar</button>
-      </div>
-    </div>
-  </ng-template>
 </div>
+
+<!-- Ya no hay nada más aquí. Los ng-template han sido eliminados. -->

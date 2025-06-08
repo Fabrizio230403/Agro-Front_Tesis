@@ -143,7 +143,7 @@
                         </path>
                       </svg>
                     </button>
-                    <button (click)="openDeleteModal(proveedor)" title="Eliminar"
+                    <button (click)="openConfirmDeleteModal(proveedor)" title="Eliminar"
                       class="p-1 text-red-600 hover:text-red-800 hover:bg-red-100 rounded transition-colors duration-150">
                       <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd"
@@ -181,108 +181,117 @@
       </div> <!-- Fin Content Padding -->
     </div> <!-- Fin Content Area -->
   </div> <!-- Fin Main Container -->
-
+</div>
   <!-- Modals -->
   <div *ngIf="showAddModal"
-    class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-60 backdrop-blur-sm">
-    <div class="bg-white rounded-lg p-6 w-full max-w-lg shadow-xl m-4 overflow-y-auto" style="max-height: 90vh;">
-      <!-- Aumentado max-w y añadido overflow -->
-      <div class="flex justify-between items-center mb-6">
-        <h2 class="text-xl font-semibold text-gray-800">Agregar Proveedor</h2>
-        <button (click)="closeAllModals()" class="text-gray-400 hover:text-gray-600">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-          </svg>
-        </button>
-      </div>
-      <form (submit)="addProveedorSubmit()">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <!-- RUC -->
-          <div class="mb-4">
-            <label for="addRuc" class="block text-sm font-medium text-gray-700 mb-1">RUC</label>
-            <input id="addRuc" type="text" placeholder="RUC (11 dígitos)"
-              class="mt-1 w-full border border-gray-300 rounded-md p-2 shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              [(ngModel)]="newProveedor.ruc" name="ruc" required maxlength="11" pattern="^\d{11}$"
-              (keypress)="allowOnlyNumbers($event)" />
-            <small *ngIf="newProveedor.ruc && newProveedor.ruc.length > 0 && newProveedor.ruc.length !== 11"
-              class="text-red-500 text-xs italic mt-1">Debe ser exactamente 11 dígitos.</small>
-          </div>
-          <!-- Nombre -->
-          <div class="mb-4">
-            <label for="addName" class="block text-sm font-medium text-gray-700 mb-1">Nombre Proveedor</label>
-            <input id="addName" type="text" placeholder="Nombre del Proveedor"
-              class="mt-1 w-full border border-gray-300 rounded-md p-2 shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              [(ngModel)]="newProveedor.name" name="nombre" required maxlength="50" />
-          </div>
-          <!-- Email -->
-          <div class="mb-4">
-            <label for="addEmail" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-            <input id="addEmail" type="email" placeholder="correo@ejemplo.com"
-              class="mt-1 w-full border border-gray-300 rounded-md p-2 shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              [(ngModel)]="newProveedor.contact" name="email" required />
-            <small
-              *ngIf="newProveedor.contact && newProveedor.contact.length > 0 && !isEmailValid(newProveedor.contact)"
-              class="text-red-500 text-xs italic mt-1">Formato de correo inválido.</small>
-          </div>
-          <!-- Teléfono -->
-          <div class="mb-4">
-            <label for="addPhone" class="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
-            <input id="addPhone" type="text" placeholder="Teléfono (9 dígitos)"
-              class="mt-1 w-full border border-gray-300 rounded-md p-2 shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              [(ngModel)]="newProveedor.phone" name="telefono" required maxlength="9" pattern="^\d{9}$"
-              (keypress)="allowOnlyNumbers($event)" />
-            <small *ngIf="newProveedor.phone && newProveedor.phone.length > 0 && newProveedor.phone.length !== 9"
-              class="text-red-500 text-xs italic mt-1">Debe ser exactamente 9 dígitos.</small>
-          </div>
-          <!-- Dirección Fiscal -->
-          <div class="md:col-span-2 mb-4"> <!-- Ocupa dos columnas en md -->
-            <label for="addAddress" class="block text-sm font-medium text-gray-700 mb-1">Dirección Fiscal</label>
-            <input id="addAddress" type="text" placeholder="Dirección Fiscal"
-              class="mt-1 w-full border border-gray-300 rounded-md p-2 shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              [(ngModel)]="newProveedor.addres" name="direccion" required maxlength="100" />
-          </div>
-          <!-- Categoría -->
-          <div class="mb-4">
-            <label for="addCategory" class="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
-            <select id="addCategory" [(ngModel)]="newProveedor.categorySuppliers.id" name="category" required
-              class="mt-1 w-full border border-gray-300 rounded-md p-2 shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white">
-              <option value="" disabled>Seleccione una categoría</option>
-              <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
-            </select>
-          </div>
-          <!-- Fecha Registro -->
-          <div class="mb-4">
-            <label for="addRegDate" class="block text-sm font-medium text-gray-700 mb-1">Fecha Registro</label>
-            <input id="addRegDate" type="date"
-              class="mt-1 w-full border border-gray-300 rounded-md p-2 shadow-sm focus:ring-blue-500 focus:border-blue-500"
-              [(ngModel)]="newProveedor.registration_date" name="fechaRegistro" required />
-          </div>
-          <!-- Estado -->
-          <div class="md:col-span-2 mb-4">
-            <label for="addState" class="block text-sm font-medium text-gray-700 mb-1">Estado</label>
-            <select id="addState"
-              class="mt-1 w-full border border-gray-300 rounded-md p-2 shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white"
-              [(ngModel)]="newProveedor.state" name="estado" required>
-              <option value="Activo">Activo</option>
-              <option value="Inactivo">Inactivo</option>
-            </select>
-          </div>
+    class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 p-4">
+    
+    <!-- Contenedor del Modal con nuevo estilo -->
+    <div class="bg-white rounded-xl shadow-2xl p-6 w-full max-w-4xl m-4 overflow-y-auto" style="max-height: 90vh;">
+
+        <!-- 1. Encabezado del Modal (Título y Botón Cerrar) -->
+        <div class="flex justify-between items-center pb-4 mb-6 border-b border-gray-200">
+            <h2 class="text-xl font-semibold text-gray-800">Agregar Nuevo Proveedor</h2>
+            <button (click)="closeAllModals()" type="button" class="text-gray-400 hover:text-gray-600 p-1 rounded-full transition-colors duration-200">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
         </div>
 
-        <div class="flex justify-end space-x-3 mt-8 border-t border-gray-200 pt-4">
-          <button type="button"
-            class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-md shadow-sm transition duration-150"
-            (click)="closeAllModals()">Cancelar</button>
-          <button type="submit"
-            class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md shadow-sm transition duration-150">Guardar
-            Proveedor</button>
-        </div>
-      </form>
+        <!-- 2. Formulario Principal -->
+        <form (ngSubmit)="addProveedorSubmit()">
+            <!-- Grid para los campos del formulario -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
+                
+                <!-- RUC -->
+                <div>
+                    <label for="addRuc" class="block text-sm font-medium text-gray-700 mb-1">RUC</label>
+                    <input id="addRuc" type="text" placeholder="RUC (11 dígitos)" class="w-full border border-gray-300 rounded-md p-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                           [(ngModel)]="newProveedor.ruc" name="ruc" required maxlength="11" pattern="^\d{11}$" 
+                           (keypress)="allowOnlyNumbers($event)" />
+                    <small *ngIf="newProveedor.ruc && newProveedor.ruc.length > 0 && newProveedor.ruc.length !== 11" 
+                           class="text-red-500 text-xs italic mt-1">Debe contener 11 dígitos.</small>
+                </div>
+
+                <!-- Nombre Proveedor -->
+                <div>
+                    <label for="addName" class="block text-sm font-medium text-gray-700 mb-1">Nombre Proveedor</label>
+                    <input id="addName" type="text" placeholder="Nombre de la empresa o persona" class="w-full border border-gray-300 rounded-md p-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                           [(ngModel)]="newProveedor.name" name="nombre" required maxlength="50" />
+                </div>
+
+                <!-- Email -->
+                <div>
+                    <label for="addEmail" class="block text-sm font-medium text-gray-700 mb-1">Email de Contacto</label>
+                    <input id="addEmail" type="email" placeholder="correo@ejemplo.com" class="w-full border border-gray-300 rounded-md p-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                           [(ngModel)]="newProveedor.contact" name="email" required />
+                    <small *ngIf="newProveedor.contact && newProveedor.contact.length > 0 && !isEmailValid(newProveedor.contact)" 
+                           class="text-red-500 text-xs italic mt-1">Formato de correo inválido.</small>
+                </div>
+
+                <!-- Teléfono -->
+                <div>
+                    <label for="addPhone" class="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
+                    <input id="addPhone" type="text" placeholder="Teléfono (9 dígitos)" class="w-full border border-gray-300 rounded-md p-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                           [(ngModel)]="newProveedor.phone" name="telefono" required maxlength="9" pattern="^\d{9}$" 
+                           (keypress)="allowOnlyNumbers($event)" />
+                    <small *ngIf="newProveedor.phone && newProveedor.phone.length > 0 && newProveedor.phone.length !== 9" 
+                           class="text-red-500 text-xs italic mt-1">Debe contener 9 dígitos.</small>
+                </div>
+
+                <!-- Dirección Fiscal (ocupa toda la fila) -->
+                <div class="md:col-span-2">
+                    <label for="addAddress" class="block text-sm font-medium text-gray-700 mb-1">Dirección Fiscal</label>
+                    <input id="addAddress" type="text" placeholder="Ej: Av. Principal 123, Distrito" class="w-full border border-gray-300 rounded-md p-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                           [(ngModel)]="newProveedor.addres" name="direccion" required maxlength="100" />
+                </div>
+
+                <!-- Categoría -->
+                <div>
+                    <label for="addCategory" class="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
+                    <select id="addCategory" [(ngModel)]="newProveedor.categorySuppliers.id" name="category" required 
+                            class="w-full border border-gray-300 rounded-md p-2 shadow-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <option [ngValue]="null" disabled>Seleccione una categoría</option>
+                        <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+                    </select>
+                </div>
+
+                <!-- Fecha Registro -->
+                <div>
+                    <label for="addRegDate" class="block text-sm font-medium text-gray-700 mb-1">Fecha de Registro</label>
+                    <input id="addRegDate" type="date" class="w-full border border-gray-300 rounded-md p-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                           [(ngModel)]="newProveedor.registration_date" name="fechaRegistro" required />
+                </div>
+
+                <!-- Estado (ocupa toda la fila) -->
+                <div class="md:col-span-2">
+                    <label for="addState" class="block text-sm font-medium text-gray-700 mb-1">Estado</label>
+                    <select id="addState" class="w-full border border-gray-300 rounded-md p-2 shadow-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                            [(ngModel)]="newProveedor.state" name="estado" required>
+                        <option value="Activo">Activo</option>
+                        <option value="Inactivo">Inactivo</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 3. Botones de Acción (Pie del Modal) -->
+            <div class="flex justify-end space-x-4 mt-8 pt-6 border-t border-gray-200">
+                <button type="button" (click)="closeAllModals()"
+                    class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg shadow-sm transition-colors duration-200">
+                    Cancelar
+                </button>
+                <button type="submit"
+                    class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm transition-colors duration-200 disabled:opacity-50">
+                    Guardar Proveedor
+                </button>
+            </div>
+        </form>
     </div>
-  </div>
+</div>
   <!-- ... (Otros modales: Edit, Delete, View - aplica estilos similares, usando grid para los forms) ... -->
   <div *ngIf="showEditModal"
-    class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-60 backdrop-blur-sm p-4">
+    class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 p-4">
     <div class="bg-white rounded-lg p-6 w-full max-w-lg shadow-xl m-0 sm:m-4 overflow-y-auto" style="max-height: 90vh;">
       <div class="flex justify-between items-center mb-6">
         <h2 class="text-xl font-semibold text-gray-800">Editar Proveedor</h2>
@@ -372,7 +381,7 @@
 
   <!-- MODAL CONFIRMAR ELIMINACIÓN -->
   <div *ngIf="showDeleteConfirmModal"
-    class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-60 backdrop-blur-sm p-4">
+    class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 p-4">
     <div class="bg-white rounded-lg p-6 w-full max-w-md shadow-xl m-0 sm:m-4">
       <div class="flex justify-between items-center mb-4">
         <h2 class="text-xl font-semibold text-red-700">Confirmar Eliminación</h2>
@@ -405,7 +414,7 @@
 
   <!-- MODAL VER DETALLES (Ejemplo simple, puedes expandirlo) -->
   <div *ngIf="showViewDetailsModal"
-    class="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-60 backdrop-blur-sm p-4">
+    class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 p-4">
     <div class="bg-white rounded-lg p-6 w-full max-w-lg shadow-xl m-0 sm:m-4 overflow-y-auto" style="max-height: 90vh;">
       <div class="flex justify-between items-center mb-6">
         <h2 class="text-xl font-semibold text-gray-800">Detalles del Proveedor</h2>
@@ -437,4 +446,3 @@
       </div>
     </div>
   </div>
-</div>

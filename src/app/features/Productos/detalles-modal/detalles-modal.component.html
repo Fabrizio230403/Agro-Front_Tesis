@@ -1,60 +1,89 @@
-<!-- Modal para Detalles del Producto -->
-<div *ngIf="verDetalleVisible" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50">
-  <div class="bg-white p-6 rounded-lg shadow-lg w-full sm:max-w-4xl mx-auto flex flex-col sm:flex-row relative">
+<div *ngIf="verDetalleVisible" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm p-4" (click.self)="cerrarDetallesModal()">
     
-    <!-- Botón para cerrar el modal -->
-    <button (click)="cerrarDetallesModal()" class="absolute top-4 right-4 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-red-600">
-      &times;
-    </button>
-    
-    <!-- Imagen del producto -->
-    <div class="flex flex-col items-center space-y-4 w-full sm:w-1/3 mb-4 sm:mb-0">
-      <img [src]="producto.image" alt="Imagen del producto" class="w-36 sm:w-48 h-auto rounded-lg object-cover">
-      <span class="text-gray-500 font-semibold">Stock: {{ producto.amount }}</span>
-      <span [ngClass]="getClasePorStock(producto.amount)" class="text-white px-3 py-1 rounded-full">{{ getEstadoPorStock(producto.amount) }}</span>
-      
-      <!-- Composición -->
-      <div class="bg-gray-100 rounded-lg p-4 mt-8 w-full">
+    <!-- Tarjeta del Modal -->
+    <div class="bg-white rounded-xl shadow-2xl w-full max-w-4xl flex flex-col m-4" style="max-height: 90vh;" (click)="$event.stopPropagation()">
         
-      </div>
+        <!-- Encabezado -->
+        <div class="flex-shrink-0 flex justify-between items-center p-5 border-b border-gray-200">
+            <h2 class="text-xl font-semibold text-gray-800 flex items-center gap-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                </svg>
+                Detalles del Producto
+            </h2>
+            <button (click)="cerrarDetallesModal()" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 inline-flex items-center">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+            </button>
+        </div>
+
+        <!-- Cuerpo del Modal -->
+        <div class="flex-grow p-6 overflow-y-auto">
+            <div *ngIf="productoSeleccionado" class="flex flex-col md:flex-row gap-8">
+                
+                <!-- Columna Izquierda: Imagen y Estado -->
+                <div class="md:w-1/3 flex flex-col items-center text-center">
+                    <img [src]="productoSeleccionado.image || 'assets/placeholder-image.png'" alt="Imagen de {{ productoSeleccionado.nombre }}" class="w-48 h-48 rounded-lg object-cover border-2 border-gray-200 shadow-md mb-4">
+                    <div class="text-lg">
+                        <span class="font-medium text-gray-600">Stock:</span>
+                        <span class="font-bold text-gray-900">{{ producto.amount }}</span>
+                    </div>
+                    <span [ngClass]="getClasePorStock(productoSeleccionado.amount)" class="mt-2 text-white text-sm font-semibold px-3 py-1 rounded-full">
+                        {{ getEstadoPorStock(producto.amount) }}
+                    </span>
+                </div>
+
+                <!-- Columna Derecha: Detalles -->
+                <div class="md:w-2/3">
+                    <h3 class="text-2xl font-bold text-gray-900">{{ productoSeleccionado.nombre }}</h3>
+                    <p class="text-md text-gray-500 mb-4">{{ productoSeleccionado.categoria }}</p>
+
+                    <!-- Grid de Detalles -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 text-sm">
+                        <div><strong class="text-gray-600">Código:</strong> {{ producto.codeProduct }}</div>
+                        <div><strong class="text-gray-600">Costo Inicial:</strong> {{ producto.purchasePrice | currency:'S/ ' }}</div>
+                        <div><strong class="text-gray-600">Precio Venta:</strong> {{ producto.salePrice | currency:'S/ ' }}</div>
+                        <div><strong class="text-gray-600">Proveedor:</strong> {{ producto.supplier?.name || 'N/A' }}</div>
+                        <div><strong class="text-gray-600">Ubicación:</strong> {{ producto.ubicacion }}</div>
+                        <div><strong class="text-gray-600">Fecha Ingreso:</strong> {{ producto.fechaIngreso | date:'dd/MM/yyyy' }}</div>
+                        <div class="sm:col-span-2"><strong class="text-gray-600">Descripción:</strong> {{ producto.description }}</div>
+                    </div>
+
+                    <!-- Tabla de Composición -->
+                    <div class="mt-6 border-t pt-4">
+                        <h4 class="font-semibold text-lg mb-2 text-gray-800">Composición</h4>
+                        <table class="w-full text-sm text-left">
+                            <tbody>
+                                <tr class="border-b">
+                                    <td class="py-2 pr-4 font-medium text-gray-600">Isoprothiolane</td>
+                                    <td class="py-2 text-gray-800">{{ producto.composicionIsoprothiolane }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="py-2 pr-4 font-medium text-gray-600">Aditivos</td>
+                                    <td class="py-2 text-gray-800">{{ producto.composicionAditivos }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pie del Modal -->
+        <div class="flex-shrink-0 flex justify-end items-center gap-3 p-5 bg-gray-50 border-t border-gray-200 rounded-b-xl">
+            <button type="button" (click)="abrirEditarModal(producto)"
+                    class="py-2.5 px-5 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700">
+                Editar
+            </button>
+            <button type="button" (click)="abrirConfirmarEliminar()"
+                    class="py-2.5 px-5 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700">
+                Eliminar
+            </button>
+            <button type="button" (click)="cerrarDetallesModal()"
+                    class="py-2.5 px-5 text-sm font-medium text-gray-900 bg-white rounded-lg border border-gray-200 hover:bg-gray-100">
+              Cancelar
+            </button>
+        </div>
     </div>
-    
-    <!-- Detalles del Producto -->
-    <div class="flex-1 sm:ml-6">
-      <h3 class="text-xl font-semibold text-gray-900 mb-3">{{ producto.nombre }}</h3>
-      <p class="text-gray-500">{{ producto.categoria }}</p>
-      <p class="text-sm text-gray-600 mt-2">Codígo de producto: <span class="font-bold">{{ producto.codeProduct }}</span></p>
-      <p class="text-sm text-gray-600 mt-2">Costo Inicial: <span class="font-bold">{{ producto.purchasePrice }}</span></p>
-      <p class="text-sm text-gray-600 mt-2">Precio de Venta: <span class="font-bold">{{ producto.salePrice }}</span></p>
-      <p class="text-sm text-gray-600 mt-2">Proveedor: <span class="font-bold">{{ producto.supplier.name }}</span></p>
-      <p class="text-sm text-gray-600 mt-2">Ubicación: <span class="font-bold">{{ producto.ubicacion }}</span></p>
-      <p class="text-sm text-gray-600 mt-2">Fecha de Ingreso: <span class="font-bold">{{ producto.fechaIngreso }}</span></p>
-      <p class="text-sm text-gray-600 mt-2">Descripción: <span class="font-bold">{{ producto.description }}</span></p>
-      <h4 class="font-semibold text-lg mb-2">Composición</h4>
-      <table class="w-full border border-gray-300 text-gray-700">
-        <tr>
-          <td class="border px-4 py-2 font-semibold">Isoprothiolane</td>
-          <td class="border px-4 py-2">{{ producto.composicionIsoprothiolane }}</td>
-        </tr>
-        <tr>
-          <td class="border px-4 py-2 font-semibold">Aditivos</td>
-          <td class="border px-4 py-2">{{ producto.composicionAditivos }}</td>
-        </tr>
-      </table>
-      <!-- Acciones -->
-      <div class="flex items-center space-x-2 mt-6">
-        <button (click)="abrirEditarModal(producto)" class="bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-600">
-          Editar
-        </button>
-        <button (click)="abrirEliminarModal(producto)" class="bg-red-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-600">
-          Eliminar
-        </button>
-        <button (click)="cerrarDetallesModal()" class="bg-gray-300 text-black px-4 py-2 rounded-lg hover:bg-gray-400">
-          Cerrar
-        </button>
-      </div>
-    </div>
-  </div>
 </div>
 
 <!-- Modal de edición -->
