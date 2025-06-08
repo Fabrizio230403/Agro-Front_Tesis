@@ -34,6 +34,10 @@ export class GestionProductosComponent implements OnInit {
   productoVerDetalle: any = {} 
   newProduct: any = {};
   p: number = 1;
+  
+  productosPorPagina1: number = 16;
+  currentPageCategorias: number = 1;
+  itemsPerPageCategorias: number = 4;
 
   constructor(
     private http: HttpClient,
@@ -59,7 +63,8 @@ export class GestionProductosComponent implements OnInit {
   filtrarPorCategoria(categoria: string) {
     this.selectedCategoria = categoria;
     this.productosFiltrados = this.productos.filter(producto => producto.categoryProducts.name === categoria);
-    this.paginaActual = 0; 
+    this.paginaActual = 0;
+    this.applyFilters();
   }
 
 
@@ -68,6 +73,7 @@ export class GestionProductosComponent implements OnInit {
     this.selectedCategoria = null;
     this.productosFiltrados = this.productos;
     this.paginaActual = 0; 
+    this.applyFilters();
   }
   itemsPerPage = 4;
   currentPage = 1;
@@ -81,7 +87,7 @@ export class GestionProductosComponent implements OnInit {
     );
   }
 
-  // Método para calcular las páginas según las categorías filtradas
+  /*// Método para calcular las páginas según las categorías filtradas
   getPages(): number[] {
     return Array(Math.ceil(this.categorias.length / this.itemsPerPage))
       .fill(0)
@@ -90,12 +96,18 @@ export class GestionProductosComponent implements OnInit {
   // Método para cambiar la página actual
   setPage(page: number) {
     this.currentPage = page;
-  }
+  }*/
 
   // Método para obtener las categorías paginadas según las categorías filtradas
-  categoriasPaginadas() {
-    const start = (this.currentPage - 1) * this.itemsPerPage;
-    return this.categorias.slice(start, start + this.itemsPerPage);
+  categoriasPaginadas(): any[] {
+    const start = (this.currentPageCategorias - 1) * this.itemsPerPageCategorias;
+    return this.categorias.slice(start, start + this.itemsPerPageCategorias);
+  }
+  getPages(): number[] {
+    return Array(Math.ceil(this.categorias.length / this.itemsPerPageCategorias)).fill(0).map((_, i) => i + 1);
+  }
+  setPage(page: number): void {
+    this.currentPageCategorias = page;
   }
 
 
@@ -107,9 +119,9 @@ export class GestionProductosComponent implements OnInit {
     this.modalVisible = true; // Abre el modal para agregar productos
   }
 
-  cerrar() {
+  /*cerrar() {
     this.cerrarModal.emit();
-  }
+  }*/
   cerrarModals() {
 
     this.modalVisible = false; // Cierra el modal
@@ -146,15 +158,15 @@ export class GestionProductosComponent implements OnInit {
 
 
 
-  agregarProducto(): void {
+  agregarProducto(nuevoProducto: any): void {
     // Lógica para agregar el nuevo producto
-    console.log('Producto agregado:', this.newProduct);
+    console.log('Un nuevo producto fue agregado, actualizando la lista...', nuevoProducto);
 
     // Agregar el nuevo producto a la lista
-    this.productos.push(this.newProduct);
+    //this.productos.push(this.newProduct);
 
     // Emitir el nuevo producto
-    this.productoAgregado.emit(this.newProduct);
+    //this.productoAgregado.emit(this.newProduct);
 
     // Cierra el modal de agregar producto
     this.modalVisible = false;
@@ -167,6 +179,34 @@ export class GestionProductosComponent implements OnInit {
 
     // Resetea el formulario después de agregar el producto
     this.resetForm();
+
+    this.getCategorias();
+    this.loadProducts();
+    this.cargarCategorias();
+    this.applyFilters();
+  }
+
+  onProductoAgregado(nuevoProducto: any) {
+    console.log('Se agregó un producto, actualizando la lista...', nuevoProducto);
+    
+    // 1. Muestra una confirmación de éxito al usuario.
+    Swal.fire({
+      title: '¡Éxito!',
+      text: 'El producto se ha registrado correctamente.',
+      icon: 'success',
+      timer: 2000,
+      showConfirmButton: false
+    });
+    
+    // 2. Llama a tu método para recargar la lista de productos desde el servicio.
+    //    Esta es la forma correcta de refrescar los datos sin recargar la página.
+    this.loadProducts();
+    
+    // 3. (Opcional) Recarga también las categorías si es necesario.
+    //    this.cargarCategorias();
+    
+    // 4. Cierra el modal de "Agregar".
+    this.cerrarModals(); 
   }
 
 
@@ -189,75 +229,68 @@ export class GestionProductosComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadProducts();
-    this.cargarCategorias();
-    this.productosFiltrados = this.productos;
+  // Solo necesitas estas dos llamadas al iniciar
+  this.loadProducts();
+  this.cargarCategorias();
 
-    this.productsService.getProductos().subscribe({
-      next: (productos) => {
-        this.productos = productos;
-        this.productosFiltrados = productos;
-        this.productsService.setProductos(productos);
-      },
-      error: (err) => {
-        console.error('Error al cargar productos:', err);
-      },
-    });
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        if (this.activatedRoute.snapshot.routeConfig?.path === 'productos') {
-          this.cargarCategorias();
-          this.loadProducts();
-        }
+  // El resto de la lógica (como los eventos del router) está bien
+  this.router.events.subscribe((event) => {
+    if (event instanceof NavigationEnd) {
+      if (this.activatedRoute.snapshot.routeConfig?.path === 'productos') {
+        this.cargarCategorias();
+        this.loadProducts();
       }
-    });
-    this.productosFiltrados = this.productosFiltrados.sort((a, b) => {
-  
-      return a.id - b.id; 
+    }
+  });
+}
+  loadProducts(): void {
+  this.productsService.getProductos().subscribe({
+    next: (data) => {
+      console.log('Productos cargados desde el servidor.');
+      // 1. Actualiza la lista principal de productos
+      this.productos = data ?? [];
+      
+      // 2. Aplica los filtros actuales (búsqueda y categoría) a la lista nueva
+      this.applyFilters(); 
+      
+      // Opcional pero recomendado: notificar a Angular que verifique los cambios
+      this.cdr.markForCheck();
+    },
+    error: (error) => {
+      console.error('Error al cargar los productos', error);
+      this.productos = [];
+      this.productosFiltrados = [];
+    }
+  });
+}
+
+  cargarCategorias(): void {
+    this.categoryProductsService.getcategoryProducts().subscribe({
+      next: (data) => { this.categorias = data ?? []; },
+      error: (error) => { console.error('Error al cargar categorías:', error); }
     });
   }
-  loadProducts(): void {
-    // (Optional but good) Indicate loading started
-    // this.isLoading = true;
-    // this.errorLoading = false; // Reset error flag
 
-    this.productsService.getProductos().subscribe(
-      // Success path (next callback)
-      (data) => {
-        // **Potential Issue 1: Service successfully returns null/undefined**
-        // If 'data' itself can be null or undefined even on success,
-        // assigning it directly can cause problems later.
-        this.productos = data ?? []; // Use nullish coalescing: if data is null/undefined, use []
-        // Create a fresh copy for filtering
-        this.productosFiltrados = [...this.productos];
+  applyFilters(): void {
+    let tempProductos = [...this.productos];
 
-        // Indicate loading finished successfully
-        // this.isLoading = false;
-      },
-      // Error path (error callback)
-      (error) => {
-        console.error('Error loading products', error);
+    // Filtrar por categoría seleccionada
+    if (this.selectedCategoria) {
+      tempProductos = tempProductos.filter(p => p.categoryProducts?.name === this.selectedCategoria);
+    }
+    
+    // Filtrar por texto de búsqueda
+    if (this.searchText && this.searchText.trim() !== '') {
+      const searchTermLower = this.searchText.toLowerCase();
+      tempProductos = tempProductos.filter(p => 
+        p.name.toLowerCase().includes(searchTermLower) ||
+        (p.codeProduct && p.codeProduct.toLowerCase().includes(searchTermLower))
+      );
+    }
 
-        // **Potential Issue 2: State after error**
-        // Currently, if an error occurs, 'this.productos' and
-        // 'this.productosFiltrados' are NOT updated. They keep
-        // their previous value (which might be undefined, null, or stale data).
-        // This can lead to unexpected behavior or errors in the template (*ngFor)
-        // or other functions relying on these arrays.
-
-        // **Solution:** Reset the arrays to a known safe state (empty array) on error.
-        this.productos = [];
-        this.productosFiltrados = [];
-
-        // Indicate loading finished with an error
-        // this.isLoading = false;
-        // this.errorLoading = true; // Set error flag for UI feedback
-      }
-      // (Optional) Complete callback - runs after next OR error
-      // () => {
-      //   this.isLoading = false; // Ensure loading is always turned off
-      // }
-    );
+    this.productosFiltrados = tempProductos;
+    // NO resetees la paginación aquí, solo cuando el filtro cambia activamente.
+    // Lo haremos en los métodos que inician el filtro.
   }
 
   filterProducts(searchText: string): void {
@@ -284,7 +317,7 @@ export class GestionProductosComponent implements OnInit {
 
 
 
-  cargarCategorias() {
+  /*cargarCategorias() {
     this.categoryProductsService.getcategoryProducts().subscribe({
       next: (categorias) => {
         this.categorias = categorias;
@@ -294,7 +327,7 @@ export class GestionProductosComponent implements OnInit {
         console.error('Error al cargar categorías:', err);
       }
     });
-  }
+  }*/
 
 
   getCategorias(): Observable<any> {
@@ -453,6 +486,7 @@ export class GestionProductosComponent implements OnInit {
   }
 
   cerrarDetallesModal() {
+    console.log('producto actualizado o eliminado');
     this.detallesModalAbierto = false;
     this.productoSeleccionado = null;
   }
@@ -464,14 +498,15 @@ export class GestionProductosComponent implements OnInit {
     this.productosPorPagina = event.pageSize;
   }
 
+  abrirConfirmarEliminar(producto: any){
+    console.log('Actualizacion: '+producto);
+    this.loadProducts();
+    this.cerrarDetallesModal(); 
+  }
+
   get productosPagina() {
-    const startIndex = this.paginaActual * this.productosPorPagina;
-    const endIndex = startIndex + this.productosPorPagina;
-    if(this.productosFiltrados == null){
-      return null;
-    }else{
-      return this.productosFiltrados.slice(startIndex, endIndex);
-    }
+    const startIndex = (this.p - 1) * this.productosPorPagina;
+    return this.productosFiltrados.slice(startIndex, startIndex + this.productosPorPagina);
   }
 }
 

@@ -17,8 +17,11 @@
           </button>
 
           <!-- Modal para Agregar Producto -->
-          <app-agregar-modal *ngIf="modalVisible" (cerrarModal)="cerrarModals()"
-            (agregarProductoEvent)="agregarProducto()"></app-agregar-modal>
+          <app-agregar-modal 
+            *ngIf="modalVisible" 
+            (cerrarModal)="cerrarModals()"
+            (productoAgregado)="onProductoAgregado($event)"> <!-- ¡Así debe estar! -->
+          </app-agregar-modal>
           <!-- Modal de éxito (opcional) -->
           <div *ngIf="successModalVisible"
             class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50">
@@ -107,8 +110,8 @@
           </button>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
-            <ng-container *ngIf="productosPagina">
-              <div *ngFor="let producto of productosPagina" class="bg-white rounded-xl shadow-md overflow-hidden flex flex-col group transition-shadow duration-300 hover:shadow-lg">
+            <ng-container *ngIf="productosFiltrados">
+              <div *ngFor="let producto of productosFiltrados" class="bg-white rounded-xl shadow-md overflow-hidden flex flex-col group transition-shadow duration-300 hover:shadow-lg">
               <div class="relative h-48 bg-gray-100 flex items-center justify-center cursor-pointer" (click)="abrirDetallesModal(producto)">
                 <img [src]="producto.image" alt="Producto" class="max-w-full max-h-full object-contain p-2 group-hover:scale-105 transition-transform duration-300" />
                 <div *ngIf="producto.descuento" class="absolute top-2 right-2 bg-yellow-400 text-yellow-900 text-xs font-bold px-2 py-1 rounded-full">{{ producto.descuento }}% OFF</div>
@@ -129,7 +132,7 @@
           </div>
         </section>
 
-        <div *ngIf="productosFiltrados " class="mt-6">
+        <div *ngIf="productosFiltrados && productosFiltrados.length > 0" class="mt-6">
             <app-custom-paginator
                 [currentPage]="p"
                 [totalItems]="productosFiltrados.length"
@@ -141,7 +144,9 @@
 
         <!-- Modal de Detalles del Producto -->
         <app-detalles-modal *ngIf="detallesModalAbierto" [producto]="productoSeleccionado"
-          (cerrarModal)="cerrarDetallesModal()">
+          (cerrarModal)="cerrarDetallesModal()"
+          (eliminarProductoEvento)="abrirConfirmarEliminar($event)"
+          (productoEditado)="abrirConfirmarEliminar($event)">
         </app-detalles-modal>
 
       </div>

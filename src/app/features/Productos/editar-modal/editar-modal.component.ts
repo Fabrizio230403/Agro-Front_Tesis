@@ -14,7 +14,7 @@ export class EditarModalComponent {
   @Input() productoSeleccionado: any;
   @Input() editarModalVisible: boolean = false;
   @Output() cerrarModal = new EventEmitter<void>();
-  @Output() productoEditado = new EventEmitter<any>();
+  @Output() actualizarProducto = new EventEmitter<any>();
 
   categorias: any[] = [];
   suppliers: any[] = [];
@@ -135,10 +135,8 @@ export class EditarModalComponent {
                       text: 'El producto se ha editado con éxito.',
                       icon: 'success',
                       confirmButtonText: 'Aceptar'
-                    }).then(() => {
-                      window.location.reload();
                     });
-          this.productoEditado.emit(response.body);
+          this.actualizarProducto.emit(response.body);
           this.cerrarEditarModal();
           
         }

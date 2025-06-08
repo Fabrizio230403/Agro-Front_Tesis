@@ -13,9 +13,10 @@ export class DetallesModalComponent implements OnInit {
 
   @Input() producto: any = {};  
   @Output() cerrarModal = new EventEmitter<void>();
-  @Output() actualizarProducto = new EventEmitter<any>(); 
+  @Output() productoEditado = new EventEmitter<any>(); 
   @Input() verDetalleVisible: boolean = true; 
   @Output() eliminarProductoEvento = new EventEmitter<number>();
+  
   eliminarModalAbierto: boolean = false;
   editarModalVisible: boolean = false;
   detallesModalAbierto: boolean = true;
@@ -43,8 +44,8 @@ export class DetallesModalComponent implements OnInit {
   }
 
   guardarProductoEditado() {
-    this.actualizarProducto.emit(this.productoSeleccionado); 
-    this.cerrarEditarModal(); 
+    this.cerrarEditarModal();
+    this.productoEditado.emit(this.producto);
   }
 
   abrirEliminarModal(producto: any) {
@@ -66,7 +67,7 @@ export class DetallesModalComponent implements OnInit {
   }
 
   eliminarProducto() {
-    if (this.productoSeleccionado && this.productoSeleccionado.id) {
+    if (this.producto && this.producto.id) {
       Swal.fire({
         title: 'Eliminando...',
         text: 'Por favor, espera mientras se elimina el producto.',
@@ -77,22 +78,22 @@ export class DetallesModalComponent implements OnInit {
         }
       });
   
-      this.productsService.eliminarProducto(this.productoSeleccionado.id).subscribe({
+      this.productsService.eliminarProducto(this.producto.id).subscribe({
         next: (response) => {
-          this.productos = this.productos.filter(p => p.id !== this.productoSeleccionado.id);
+          this.productos = this.productos.filter(p => p.id !== this.producto.id);
 
           Swal.fire({
             title: 'Producto Eliminado',
             text: 'El producto se ha eliminado correctamente.',
             icon: 'success',
             confirmButtonText: 'Aceptar'
-          }).then(() => {
-            window.location.reload();
           });
   
           this.cargarProductos(); 
 
           this.cerrarEliminarModal(); 
+
+          this.eliminarProductoEvento.emit(this.producto);
 
         },
         error: (error) => {
@@ -113,7 +114,7 @@ export class DetallesModalComponent implements OnInit {
 
   onActualizarProducto(productoActualizado: any) {
     console.log('Producto actualizado:', productoActualizado);
-    
+    this.productoEditado.emit(this.producto);
   }
 
   abrirConfirmarEliminar(): void {
@@ -126,11 +127,8 @@ export class DetallesModalComponent implements OnInit {
       cancelButtonColor: '#3085d6',
       confirmButtonText: 'Sí, eliminar',
       cancelButtonText: 'Cancelar'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.eliminarProducto();
-      }
     });
+        this.eliminarProducto();
   }
   
 }

@@ -1,5 +1,5 @@
 
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import Swal from 'sweetalert2';
 import { CategoryProductsService } from '../../../services/category-products.service';
@@ -37,7 +37,7 @@ interface Producto {
   templateUrl: './agregar-modal.component.html',
   styleUrls: ['./agregar-modal.component.css']
 })
-export class AgregarModalComponent {
+export class AgregarModalComponent implements OnInit {
   @Output() cerrarModal: EventEmitter<void> = new EventEmitter();
   @Output() agregarProductoEvent: EventEmitter<any> = new EventEmitter();
   @Output() productoAgregado = new EventEmitter<any>();
@@ -153,10 +153,7 @@ export class AgregarModalComponent {
             text: 'El producto se ha registrado con éxito.',
             icon: 'success',
             confirmButtonText: 'Aceptar'
-          }).then(() => {
-            window.location.reload();
           });
-          this.productos.push(response.body);
           this.productoAgregado.emit(response.body);
           this.resetForm();
           this.cerrar();
@@ -170,9 +167,8 @@ export class AgregarModalComponent {
             text: 'El producto se ha registrado con éxito.',
             icon: 'info',
             confirmButtonText: 'Aceptar'
-          }).then(() => {
-            window.location.reload();
           });
+          this.productoAgregado.emit(err.response.body);
           this.resetForm();
           this.cerrar();
         } else {
