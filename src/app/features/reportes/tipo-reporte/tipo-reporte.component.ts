@@ -11,6 +11,8 @@ export class TipoReporteComponent {
   @Output() onClose = new EventEmitter<void>();
   @Output() onSelect = new EventEmitter<string>();
 
+  date: string = '';
+
   // Solo los tipos de reporte "Finanzas" y "Venta"
   reportTypes = [
     { name: 'Finanzas' },
@@ -34,6 +36,18 @@ export class TipoReporteComponent {
 
   ngOnChanges() {
     this.extractDropdownValues();
+    const timeZone = 'America/Lima';
+
+    const peruDateString = new Date().toLocaleString('en-CA', {
+      timeZone: timeZone,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    });
+
+    // ¡CAMBIO CLAVE AQUÍ!
+    // Asigna la fecha directamente al modelo del input 'Desde'
+    this.filter.startDate = peruDateString;
   }
 
   extractDropdownValues() {

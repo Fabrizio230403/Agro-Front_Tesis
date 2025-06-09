@@ -34,8 +34,18 @@ export class AgregarReporteComponent {
   constructor(private http: HttpClient, private reportesService: ReportesService) { }
 
   ngOnInit() {
-    const today = new Date();
-    this.report.date = today.toISOString().split('T')[0];
+    const timeZone = 'America/Lima';
+
+    // Obtiene la fecha actual en la zona horaria de Perú y la formatea como YYYY-MM-DD
+    const peruDateString = new Date().toLocaleString('en-CA', {
+      timeZone: timeZone,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    });
+
+    // Asigna el valor al modelo que está enlazado con el input
+    this.report.date = peruDateString;
   }
 
   // Recibe el tipo de reporte seleccionado desde el componente TipoReporteComponent

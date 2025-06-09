@@ -164,15 +164,6 @@ export class ReportesComponent implements OnInit {
 
   addReportToTable(newReport: any) {
     // Validar si el formulario de reporte es válido
-    if (!this.isFormValid(newReport)) {
-      Swal.fire({
-        title: 'Error',
-        text: 'Por favor, completa todos los campos obligatorios.',
-        icon: 'warning',
-        confirmButtonText: 'Aceptar'
-      });
-      return;
-    }
 
     newReport.id = Date.now().toString(); // solo lo vuelve string sin comilla
     this.reports.push(newReport);
@@ -207,15 +198,6 @@ export class ReportesComponent implements OnInit {
 
   updateReport(updatedReport: any) {
     // Validar si el formulario es válido
-    if (!this.isFormValid(updatedReport)) {
-      Swal.fire({
-        title: 'Error',
-        text: 'Por favor, completa todos los campos obligatorios.',
-        icon: 'warning',
-        confirmButtonText: 'Aceptar'
-      });
-      return;
-    }
 
     const index = this.reports.findIndex((r) => r.id === updatedReport.id);
 

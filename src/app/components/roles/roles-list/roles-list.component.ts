@@ -116,7 +116,8 @@ export class RolesListComponent implements OnInit {
     // Aquí podrías actualizar el usuario localmente o refrescar permisos
     console.log('Permisos actualizados recibidos del modal:', updatedModules);
     this.showEditPermissionsModal = false;
-
+    this.fetchRoles();
+    this.fetchPermissions();
     // Opcional: actualizar los permisos en el backend o en el usuario actual
   }
 

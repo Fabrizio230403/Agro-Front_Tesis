@@ -24,23 +24,23 @@
                 <div>
                     <label for="filtroModulo" class="modal-label">Buscar Módulo</label>
                     <div class="relative">
-                        <input id="filtroModulo" type="text" [(ngModel)]="filtroModulo" placeholder="Escriba para filtrar..." class="modal-input pl-10" />
+                        <input id="filtroModulo" type="text" (input)="applyFilters()" [(ngModel)]="filtroModulo" placeholder="Escriba para filtrar..." class="modal-input pl-10" />
                     </div>
                 </div>
                 <!-- Filtro Permiso -->
                 <div>
                     <label for="filtroPermiso" class="modal-label">Buscar Permiso</label>
                     <div class="relative">
-                        <input id="filtroPermiso" type="text" [(ngModel)]="filtroPermiso" placeholder="Escriba para filtrar..." class="modal-input pl-10" />
+                        <input id="filtroPermiso" type="text" (input)="applyFilters()" [(ngModel)]="filtroPermiso" placeholder="Escriba para filtrar..." class="modal-input pl-10" />
                     </div>
                 </div>
-                <!-- Botón Crear (Opcional) -->
+                <!-- Botón Crear (Opcional) 
                 <div class="border-t pt-6">
                      <button type="button" class="btn-secondary-modal w-full">
                          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" /></svg>
                          <span>Crear Nuevo Permiso</span>
                     </button>
-                </div>
+                </div>-->
             </div>
 
             <!-- Columna Derecha: Lista de Módulos (con scroll propio) -->

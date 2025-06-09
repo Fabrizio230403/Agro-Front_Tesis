@@ -29,6 +29,7 @@ export class EditarReporteComponent {
   isTipoReporteModalOpen: boolean = false;
   selectedReportType: string = '';
   tableData: any[] = [];
+  activeTab: string = 'facturas';
 
   constructor(private reportesService: ReportesService) { }
 

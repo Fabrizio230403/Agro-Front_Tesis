@@ -62,6 +62,9 @@ export class UsersComponent implements OnInit {
     // Aquí podrías actualizar el usuario localmente o refrescar permisos
     console.log('Permisos actualizados recibidos del modal:', updatedModules);
     this.showEditPermissionsModal = false;
+    this.userRolesPermissions = false;
+    this.loadUsers();
+    this.loadRoles();
 
     // Opcional: actualizar los permisos en el backend o en el usuario actual
   }
@@ -196,7 +199,8 @@ export class UsersComponent implements OnInit {
     } else {
       console.warn(`User with ID ${updatedUser.id} not found in the local array.`);
     }
-
+    this.loadUsers();
+    this.loadRoles();
     this.editingUser = null;
   }
 
