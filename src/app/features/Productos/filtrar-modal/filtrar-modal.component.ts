@@ -118,6 +118,15 @@ export class FiltrarModalComponent implements OnInit {
 
   cerrarAgregarCategoriaModal(): void {
     this.agregarCategoriaModalVisible = false;
+    this.cargarCategorias();
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        if (this.activatedRoute.snapshot.routeConfig?.path === 'productos') {
+          this.cargarCategorias();
+
+        }
+      }
+    });
   }
 
   abrirEditarCategoriaModal(categoria: any): void {
@@ -126,6 +135,15 @@ export class FiltrarModalComponent implements OnInit {
   }
 
   cerrarEditarCategoriaModal(): void {
+    this.cargarCategorias();
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        if (this.activatedRoute.snapshot.routeConfig?.path === 'productos') {
+          this.cargarCategorias();
+
+        }
+      }
+    });
     this.editarCategoriaModalVisible = false;
   }
 
@@ -157,12 +175,17 @@ export class FiltrarModalComponent implements OnInit {
           text: 'La categoría se ha eliminado correctamente.',
           icon: 'success',
           confirmButtonText: 'Aceptar'
-        }).then(() => {
-          window.location.reload();
         });
 
-        // Filtramos la categoría eliminada de la lista
-        this.categorias = this.categorias.filter(c => c.id !== categoriaSeleccionada.id);
+        this.cargarCategorias();
+        this.router.events.subscribe((event) => {
+          if (event instanceof NavigationEnd) {
+            if (this.activatedRoute.snapshot.routeConfig?.path === 'productos') {
+              this.cargarCategorias();
+
+            }
+          }
+        });
 
         // Cerramos el modal de eliminación
         this.cerrarDeleteModal();

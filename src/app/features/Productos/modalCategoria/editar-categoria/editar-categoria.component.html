@@ -1,24 +1,85 @@
-<div class="modal">
-    <form (ngSubmit)="editarCategoria()">
-      <h2>Editar Categoría</h2>
-      <label for="name">Nombre de la Categoría</label>
-      <input id="name" [(ngModel)]="categoriaSeleccionada.name" name="name" required />
-  
-      <label for="description">Descripción</label>
-      <textarea id="description" [(ngModel)]="categoriaSeleccionada.description" name="description" required></textarea>
-  
-      
-  
-      <label for="image">Imagen</label>
-      <input id="image" type="file" (change)="onFileSelected($event)" />
-  
-      <div *ngIf="imagePreview">
-        <h4>Vista Previa:</h4>
-        <img [src]="imagePreview" alt="Vista previa de la imagen" style="max-width: 200px;" />
+<!-- Modal para Editar Categoría -->
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm p-4">
+  <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-3xl relative">
+    
+    <!-- Encabezado del Modal -->
+    <div class="flex justify-between items-center pb-4 border-b border-gray-200">
+      <h2 class="text-2xl font-bold text-gray-800">Editar Categoría</h2>
+      <button (click)="cerrarEditarCategoriaModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Formulario -->
+    <form (ngSubmit)="editarCategoria()" class="mt-6">
+      <div class="space-y-6">
+
+        <!-- Campo para subir/cambiar la foto -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Imagen de la Categoría</label>
+          <input type="file" (change)="onFileSelected($event)" id="edit-category-image-upload" class="hidden" accept="image/*" />
+          <label for="edit-category-image-upload" 
+                 class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md cursor-pointer hover:border-blue-500 transition-colors duration-200 bg-gray-50 hover:bg-gray-100">
+            <div class="space-y-1 text-center">
+              
+              <!-- Muestra la nueva imagen seleccionada (imagePreview) o la imagen actual de la categoría -->
+              <img *ngIf="imagePreview || categoriaSeleccionada.image" 
+                   [src]="imagePreview || categoriaSeleccionada.image" 
+                   alt="Vista previa de la categoría" 
+                   class="mx-auto h-24 w-auto object-contain mb-2 rounded">
+              
+              <!-- Muestra el ícono de carga si no hay ni imagen nueva ni actual -->
+              <div *ngIf="!imagePreview && !categoriaSeleccionada.image">
+                  <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                      <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+              </div>
+
+              <div class="flex text-sm text-gray-600">
+                <p class="relative font-semibold text-blue-600">
+                  <!-- El texto cambia si ya hay una imagen cargada -->
+                  <span>{{ (imagePreview || categoriaSeleccionada.image) ? 'Cambiar imagen' : 'Subir un archivo' }}</span>
+                </p>
+                <p class="pl-1">o arrastrar y soltar</p>
+              </div>
+              <p class="text-xs text-gray-500">PNG, JPG, GIF hasta 10MB</p>
+            </div>
+          </label>
+        </div>
+
+        <!-- Nombre de la Categoría -->
+        <div>
+          <label for="edit-name" class="block text-sm font-medium text-gray-700">Nombre de la Categoría</label>
+          <div class="mt-1">
+            <input id="edit-name" name="name" [(ngModel)]="categoriaSeleccionada.name" required
+                   class="w-full border border-gray-300 px-3 py-2 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
+          </div>
+        </div>
+
+        <!-- Descripción -->
+        <div>
+          <label for="edit-description" class="block text-sm font-medium text-gray-700">Descripción</label>
+          <div class="mt-1">
+            <textarea id="edit-description" name="description" [(ngModel)]="categoriaSeleccionada.description" rows="4" required
+                      class="w-full border border-gray-300 px-3 py-2 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out"></textarea>
+          </div>
+        </div>
       </div>
-  
-      <button type="submit">Actualizar Categoría</button>
-      <button type="button" (click)="cerrarEditarCategoriaModal()">Cancelar</button>
+
+      <!-- Botones de Acción -->
+      <div class="mt-8 pt-5 border-t border-gray-200 flex justify-end gap-x-3">
+        <button type="button" (click)="cerrarEditarCategoriaModal()" 
+                class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+          Cancelar
+        </button>
+        <button type="submit" 
+                class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                [disabled]="!categoriaSeleccionada.name || !categoriaSeleccionada.description">
+          Guardar Cambios
+        </button>
+      </div>
     </form>
   </div>
-  
+</div>

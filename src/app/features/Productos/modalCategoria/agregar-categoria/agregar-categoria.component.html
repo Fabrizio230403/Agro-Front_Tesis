@@ -1,59 +1,83 @@
-<div class="modal">
-  <form (ngSubmit)="agregarCategoria()" class="modal-form">
-    <!-- Campo para el nombre de la categoría -->
-    <h2>Agregar Categoría</h2>
-    <div class="form-group">
-      <label for="name">Nombre de la Categoría</label>
-      <input
-        id="name"
-        [(ngModel)]="nuevaCategoria.name"
-        name="name"
-        required
-        placeholder="Ingrese el nombre de la categoría"
-        class="border border-gray-300 rounded-md w-full p-2 focus:ring-blue-500 focus:border-blue-500"
-      />
+<!-- Modal para Agregar Categoría -->
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm p-4">
+  <div class="bg-white rounded-lg shadow-lg p-6 w-full max-w-3xl relative">
+    
+    <!-- Encabezado del Modal -->
+    <div class="flex justify-between items-center pb-4 border-b border-gray-200">
+      <h2 class="text-2xl font-bold text-gray-800">Agregar Nueva Categoría</h2>
+      <button (click)="cerrar()" class="text-gray-400 hover:text-gray-600 transition-colors">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
     </div>
 
-    <!-- Campo para la descripción -->
-    <div class="form-group">
-      <label for="description">Descripción</label>
-      <textarea
-        id="description"
-        [(ngModel)]="nuevaCategoria.description"
-        name="description"
-        required
-        placeholder="Ingrese la descripción"
-        class="form-control"
-      ></textarea>
-    </div>
+    <!-- Formulario -->
+    <form (ngSubmit)="agregarCategoria()" class="mt-6">
+      <div class="space-y-6">
 
+        <!-- Campo para subir la foto -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Imagen de la Categoría</label>
+          <!-- El input real está oculto, el label es el área clickeable -->
+          <input type="file" (change)="onFileSelected($event)" id="category-image-upload" class="hidden" accept="image/*" />
+          <label for="category-image-upload" 
+                 class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md cursor-pointer hover:border-blue-500 transition-colors duration-200 bg-gray-50 hover:bg-gray-100">
+            <div class="space-y-1 text-center">
+              <!-- Muestra la imagen de previsualización si existe -->
+              <img *ngIf="imagePreview" [src]="imagePreview" alt="Vista previa de la categoría" class="mx-auto h-24 w-auto object-contain mb-2 rounded">
+              
+              <!-- Muestra un ícono y texto si no hay imagen -->
+              <div *ngIf="!imagePreview">
+                  <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
+                      <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+              </div>
 
+              <div class="flex text-sm text-gray-600">
+                <p class="relative font-semibold text-blue-600">
+                  <span>{{ imagePreview ? 'Cambiar imagen' : 'Subir un archivo' }}</span>
+                </p>
+                <p class="pl-1">o arrastrar y soltar</p>
+              </div>
+              <p class="text-xs text-gray-500">PNG, JPG, GIF hasta 10MB</p>
+            </div>
+          </label>
+        </div>
 
-    <!-- Campo para la imagen -->
-    <div class="form-group">
-      <label for="image">Imagen</label>
-      <input
-        id="image"
-        type="file"
-        (change)="onFileSelected($event)"
-        class="form-control-file"
-      />
-    </div>
+        <!-- Nombre de la Categoría -->
+        <div>
+          <label for="name" class="block text-sm font-medium text-gray-700">Nombre de la Categoría</label>
+          <div class="mt-1">
+            <input id="name" name="name" [(ngModel)]="nuevaCategoria.name" required
+                   placeholder="Ej: Fertilizantes, Herbicidas, etc."
+                   class="w-full border border-gray-300 px-3 py-2 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out">
+          </div>
+        </div>
 
-    <!-- Vista previa de la imagen -->
-    <div *ngIf="imagePreview" class="image-preview">
-      <h4>Vista Previa:</h4>
-      <img
-        [src]="imagePreview"
-        alt="Vista previa de la imagen"
-        class="max-w-[200px] border border-gray-300 p-2.5 mt-2.5"
-      />
-    </div>
+        <!-- Descripción -->
+        <div>
+          <label for="description" class="block text-sm font-medium text-gray-700">Descripción</label>
+          <div class="mt-1">
+            <textarea id="description" name="description" [(ngModel)]="nuevaCategoria.description" rows="4" required
+                      placeholder="Breve descripción de los productos que pertenecen a esta categoría."
+                      class="w-full border border-gray-300 px-3 py-2 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 transition duration-150 ease-in-out"></textarea>
+          </div>
+        </div>
+      </div>
 
-    <!-- Botones -->
-    <div class="form-actions">
-      <button type="submit" class="btn btn-primary">Agregar Categoría</button>
-      <button type="button" class="btn btn-secondary" (click)="cerrar()">Cancelar</button>
-    </div>
-  </form>
+      <!-- Botones de Acción -->
+      <div class="mt-8 pt-5 border-t border-gray-200 flex justify-end gap-x-3">
+        <button type="button" (click)="cerrar()" 
+                class="bg-white py-2 px-4 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+          Cancelar
+        </button>
+        <button type="submit" 
+                class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                [disabled]="!nuevaCategoria.name || !nuevaCategoria.description">
+          Guardar Categoría
+        </button>
+      </div>
+    </form>
+  </div>
 </div>

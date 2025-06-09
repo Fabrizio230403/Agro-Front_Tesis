@@ -99,8 +99,6 @@ export class AgregarCategoriaComponent {
             text: response.body || 'La categoría se ha registrado con éxito.',
             icon: 'success',
             confirmButtonText: 'Aceptar'
-          }).then(() => {
-            window.location.reload();
           });
     
           this.categoriaAgregada.emit(response.body); 

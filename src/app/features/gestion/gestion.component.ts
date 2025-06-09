@@ -6,7 +6,7 @@
   ViewChild,
 } from '@angular/core';
 import { DocumentService, Documento } from '../../services/document.service';
-import { EnviarGesComponent } from '../gestion/enviar-ges/enviar-ges.component';
+import { EnviarGesComponent, DocumentoParaCompartir } from '../gestion/enviar-ges/enviar-ges.component';
 import Swal from 'sweetalert2';
 import 'jspdf-autotable';
 @Component({
@@ -89,6 +89,29 @@ export class GestionComponent {
     }
     this.paginaActual = 1;
     this.actualizarDocumentosPaginados();
+  }
+  abrirModalDeEnvio(documento: Documento) {
+    if (!documento || !documento.urlDocumento) {
+        Swal.fire({
+            icon: 'error',
+            title: 'No se puede compartir',
+            text: 'El documento seleccionado no tiene una URL válida para ser compartido.',
+        });
+        return;
+    }
+
+    // 1. Mapea los datos de tu 'documento' al formato que el modal espera.
+    const documentoAEnviar: DocumentoParaCompartir = {
+        nombre: `${documento.tipoDocumento} ${documento.numeroDocumento}`,
+        url: documento.urlDocumento, // Usamos la URL que ya tiene el documento
+        resumen: `Cliente: ${documento.cliente}`
+    };
+
+    // 2. Asigna el objeto al @Input del componente modal.
+    this.modalEnviarGes.documentoAEnviar = documentoAEnviar;
+
+    // 3. Llama al método público del modal para que se muestre.
+    this.modalEnviarGes.abrirModal();
   }
   /*updateFormattedDate(): void {
       if (this.selectedDate) {

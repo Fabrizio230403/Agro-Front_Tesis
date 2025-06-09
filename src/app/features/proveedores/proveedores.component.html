@@ -290,94 +290,118 @@
     </div>
 </div>
   <!-- ... (Otros modales: Edit, Delete, View - aplica estilos similares, usando grid para los forms) ... -->
-  <div *ngIf="showEditModal"
-    class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 p-4">
-    <div class="bg-white rounded-lg p-6 w-full max-w-lg shadow-xl m-0 sm:m-4 overflow-y-auto" style="max-height: 90vh;">
-      <div class="flex justify-between items-center mb-6">
-        <h2 class="text-xl font-semibold text-gray-800">Editar Proveedor</h2>
-        <button (click)="closeAllModals()" type="button" class="text-gray-400 hover:text-gray-600">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-          </svg>
-        </button>
-      </div>
-      <!-- IMPORTANTE: Asegúrate que el formulario exista y esté correctamente enlazado -->
-      <form *ngIf="proveedorActualEnModal" (ngSubmit)="editProveedorSubmit()"> <!-- Añadido *ngIf aquí por si acaso -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <!-- RUC -->
-          <div class="mb-4">
-            <label for="editRuc" class="block text-sm font-medium text-gray-700 mb-1">RUC</label>
-            <input id="editRuc" type="text" class="mt-1 w-full border border-gray-300 rounded-md p-2 shadow-sm"
-              [(ngModel)]="proveedorActualEnModal.ruc" name="editRuc" required maxlength="11" pattern="^\d{11}$"
-              (keypress)="allowOnlyNumbers($event)" />
-          </div>
-          <!-- Nombre -->
-          <div class="mb-4">
-            <label for="editName" class="block text-sm font-medium text-gray-700 mb-1">Nombre Proveedor</label>
-            <input id="editName" type="text" class="mt-1 w-full border border-gray-300 rounded-md p-2 shadow-sm"
-              [(ngModel)]="proveedorActualEnModal.name" name="editName" required maxlength="50" />
-          </div>
-          <!-- Email -->
-          <div class="mb-4">
-            <label for="editEmail" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-            <input id="editEmail" type="email" class="mt-1 w-full border border-gray-300 rounded-md p-2 shadow-sm"
-              [(ngModel)]="proveedorActualEnModal.contact" name="editEmail" required />
-          </div>
-          <!-- Teléfono -->
-          <div class="mb-4">
-            <label for="editPhone" class="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
-            <input id="editPhone" type="text" class="mt-1 w-full border border-gray-300 rounded-md p-2 shadow-sm"
-              [(ngModel)]="proveedorActualEnModal.phone" name="editPhone" required maxlength="9" pattern="^\d{9}$"
-              (keypress)="allowOnlyNumbers($event)" />
-          </div>
-          <!-- Dirección -->
-          <div class="md:col-span-2 mb-4">
-            <label for="editAddress" class="block text-sm font-medium text-gray-700 mb-1">Dirección Fiscal</label>
-            <input id="editAddress" type="text" class="mt-1 w-full border border-gray-300 rounded-md p-2 shadow-sm"
-              [(ngModel)]="proveedorActualEnModal.addres" name="editAddress" required maxlength="100" />
-          </div>
-          <!-- Categoría -->
-          <div class="mb-4">
-            <label for="editCategory" class="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
-            <select id="editCategory" [(ngModel)]="proveedorActualEnModal.categorySuppliers.id" name="editCategory"
-              required class="mt-1 w-full border border-gray-300 rounded-md p-2 shadow-sm bg-white">
-              <option [ngValue]="null" disabled>Seleccione una categoría</option>
-              <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
-            </select>
-          </div>
-          <!-- Fecha Registro -->
-          <div class="mb-4">
-            <label for="editRegDate" class="block text-sm font-medium text-gray-700 mb-1">Fecha Registro</label>
-            <input id="editRegDate" type="date" class="mt-1 w-full border border-gray-300 rounded-md p-2 shadow-sm"
-              [(ngModel)]="proveedorActualEnModal.registration_date" name="editRegDate" required />
-          </div>
-          <!-- Estado -->
-          <div class="md:col-span-2 mb-4">
-            <label for="editState" class="block text-sm font-medium text-gray-700 mb-1">Estado</label>
-            <select id="editState" class="mt-1 w-full border border-gray-300 rounded-md p-2 shadow-sm bg-white"
-              [(ngModel)]="proveedorActualEnModal.state" name="editState" required>
-              <option value="Activo">Activo</option>
-              <option value="Inactivo">Inactivo</option>
-            </select>
-          </div>
+  <div *ngIf="showEditModal" 
+     class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50 p-4 animate-fade-in">
+
+    <!-- Contenedor del Modal con el nuevo estilo -->
+    <div class="bg-white rounded-xl shadow-2xl p-6 w-full max-w-4xl m-4 overflow-y-auto" style="max-height: 90vh;">
+
+        <!-- 1. Encabezado del Modal -->
+        <div class="flex justify-between items-center pb-4 mb-6 border-b border-gray-200">
+            <h2 class="text-xl font-semibold text-gray-800">Editar Proveedor</h2>
+            <button (click)="closeAllModals()" type="button" class="text-gray-400 hover:text-gray-600 p-1 rounded-full transition-colors duration-200">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
         </div>
 
-        <div class="flex justify-end space-x-3 mt-8 border-t border-gray-200 pt-4">
-          <button type="button"
-            class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-md shadow-sm"
-            (click)="closeAllModals()">Cancelar</button>
-          <button type="submit" [disabled]="isEditingInProgress"
-            class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-md shadow-sm disabled:opacity-50">
-            <span *ngIf="!isEditingInProgress">Actualizar Proveedor</span>
-            <span *ngIf="isEditingInProgress">Actualizando...</span>
-          </button>
+        <!-- 2. Formulario Principal -->
+        <!-- *ngIf para asegurar que el objeto proveedorActualEnModal existe antes de renderizar el form -->
+        <form *ngIf="proveedorActualEnModal" (ngSubmit)="editProveedorSubmit()">
+            <!-- Grid para los campos del formulario -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
+                
+                <!-- RUC -->
+                <div>
+                    <label for="editRuc" class="block text-sm font-medium text-gray-700 mb-1">RUC</label>
+                    <input id="editRuc" type="text" placeholder="RUC (11 dígitos)" class="w-full border border-gray-300 rounded-md p-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                           [(ngModel)]="proveedorActualEnModal.ruc" name="editRuc" required maxlength="11" pattern="^\d{11}$" 
+                           (keypress)="allowOnlyNumbers($event)" />
+                </div>
+
+                <!-- Nombre Proveedor -->
+                <div>
+                    <label for="editName" class="block text-sm font-medium text-gray-700 mb-1">Nombre Proveedor</label>
+                    <input id="editName" type="text" placeholder="Nombre de la empresa o persona" class="w-full border border-gray-300 rounded-md p-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                           [(ngModel)]="proveedorActualEnModal.name" name="editName" required maxlength="50" />
+                </div>
+
+                <!-- Email de Contacto -->
+                <div>
+                    <label for="editEmail" class="block text-sm font-medium text-gray-700 mb-1">Email de Contacto</label>
+                    <input id="editEmail" type="email" placeholder="correo@ejemplo.com" class="w-full border border-gray-300 rounded-md p-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                           [(ngModel)]="proveedorActualEnModal.contact" name="editEmail" required />
+                </div>
+
+                <!-- Teléfono -->
+                <div>
+                    <label for="editPhone" class="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
+                    <input id="editPhone" type="text" placeholder="Teléfono (9 dígitos)" class="w-full border border-gray-300 rounded-md p-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                           [(ngModel)]="proveedorActualEnModal.phone" name="editPhone" required maxlength="9" pattern="^\d{9}$" 
+                           (keypress)="allowOnlyNumbers($event)" />
+                </div>
+
+                <!-- Dirección Fiscal (ocupa toda la fila) -->
+                <div class="md:col-span-2">
+                    <label for="editAddress" class="block text-sm font-medium text-gray-700 mb-1">Dirección Fiscal</label>
+                    <input id="editAddress" type="text" placeholder="Ej: Av. Principal 123, Distrito" class="w-full border border-gray-300 rounded-md p-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                           [(ngModel)]="proveedorActualEnModal.addres" name="editAddress" required maxlength="100" />
+                </div>
+
+                <!-- Categoría -->
+                <div>
+                    <label for="editCategory" class="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
+                    <select id="editCategory" [(ngModel)]="proveedorActualEnModal.categorySuppliers.id" name="editCategory" required 
+                            class="w-full border border-gray-300 rounded-md p-2 shadow-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <option [ngValue]="null" disabled>Seleccione una categoría</option>
+                        <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+                    </select>
+                </div>
+
+                <!-- Fecha Registro -->
+                <div>
+                    <label for="editRegDate" class="block text-sm font-medium text-gray-700 mb-1">Fecha de Registro</label>
+                    <input id="editRegDate" type="date" class="w-full border border-gray-300 rounded-md p-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                           [(ngModel)]="proveedorActualEnModal.registration_date" name="editRegDate" required />
+                </div>
+
+                <!-- Estado (ocupa toda la fila) -->
+                <div class="md:col-span-2">
+                    <label for="editState" class="block text-sm font-medium text-gray-700 mb-1">Estado</label>
+                    <select id="editState" class="w-full border border-gray-300 rounded-md p-2 shadow-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" 
+                            [(ngModel)]="proveedorActualEnModal.state" name="editState" required>
+                        <option value="Activo">Activo</option>
+                        <option value="Inactivo">Inactivo</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 3. Botones de Acción (Pie del Modal) -->
+            <div class="flex justify-end space-x-4 mt-8 pt-6 border-t border-gray-200">
+                <button type="button" (click)="closeAllModals()"
+                    class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded-lg shadow-sm transition-colors duration-200">
+                    Cancelar
+                </button>
+                <button type="submit" [disabled]="isEditingInProgress"
+                    class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-sm transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center">
+                    <span *ngIf="isEditingInProgress" class="animate-spin mr-2">
+                        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                    </span>
+                    <span>{{ isEditingInProgress ? 'Actualizando...' : 'Actualizar Proveedor' }}</span>
+                </button>
+            </div>
+        </form>
+        
+        <!-- Mensaje por si el proveedor no se carga -->
+        <div *ngIf="!proveedorActualEnModal" class="text-center py-8 text-gray-500">
+            Cargando datos del proveedor...
         </div>
-      </form>
-      <div *ngIf="!proveedorActualEnModal" class="text-center py-8 text-gray-500">
-        No se ha seleccionado ningún proveedor para editar.
-      </div>
     </div>
-  </div>
+</div>
 
   <!-- MODAL CONFIRMAR ELIMINACIÓN -->
   <div *ngIf="showDeleteConfirmModal"
